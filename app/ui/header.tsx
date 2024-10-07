@@ -11,7 +11,7 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <div className="flex flex-row justify-between items-center py-2">
+    <div className="flex flex-row justify-between items-center py-2 mx-48">
       <div className="flex flex-row justify-between gap-8">
         <button>
           <FontAwesomeIcon icon={faBagShopping} style={{ fontSize: 20 }} />

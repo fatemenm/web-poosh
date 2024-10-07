@@ -18,7 +18,7 @@ export default function RootLayout({
       <link rel="icon" href="/icon.ico" sizes="any" />
       <body className={vazirmatn.className}>
         <PromotionalBanner />
-        <div className="flex flex-col px-48">
+        <div className="flex flex-col ">
           <Header />
           {children}
         </div>
