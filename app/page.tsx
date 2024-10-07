@@ -1,9 +1,12 @@
 import Carousel from "./ui/carousel ";
+import { getImages } from "./lib/images";
+import path from "path";
 
-export default function Home() {
+export default async function Page() {
+  const categoryImages = await getImages("category");
   return (
-    <div className="bg-slate-50">
-      <Carousel />
+    <div className="px-10 pt-10">
+      <Carousel images={categoryImages} imageType="category" />
     </div>
   );
 }
