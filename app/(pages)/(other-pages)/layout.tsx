@@ -6,9 +6,16 @@ import { Roboto, Roboto_Mono, Vazirmatn } from "next/font/google";
 import PromotionalBanner from "../../components/promotional-banner";
 import Header from "../../components/header";
 import Footer from "../../components/footer";
+import { Metadata } from "next";
+import { Head } from "next/document";
 
 const vazirmatn = Vazirmatn({ subsets: ["latin"] });
 export const roboto = Roboto({ subsets: ["latin"], weight: ["400", "700"] });
+export const metadata: Metadata = {
+  title: "👔 لباس مردانه | فروشگاه اینترنتی پوشاک و خرید لباس مردانه | وب پوش",
+  description:
+    "فروشگاه اینترنتی لباس مردانه وب‌پوش : خرید اینترنتی جدیدترین مدل لباس‌ مجلسی، اسپرت و شیک مردانه | پوشاک مردانه webpoosh. خرید اقساطی لباس مردانه در وبپوش",
+};
 const footerContent = "";
 export default function RootLayout({
   children,
@@ -17,7 +24,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${vazirmatn.className} `}>
-      <link rel="icon" href="/icon.ico" sizes="any" />
+      <Head>
+        <link rel="icon" href="/icon.ico" sizes="any" />
+      </Head>
       <body className={`${vazirmatn.className} min-h-screen flex flex-col`}>
         <PromotionalBanner />
         <Header />
