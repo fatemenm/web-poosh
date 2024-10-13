@@ -10,7 +10,7 @@ export default function Carousel({
   imageType: string;
 }) {
   return (
-    <div className="flex overflow-x-auto items-center justify-start gap-4  ">
+    <div className="flex overflow-x-auto items-center justify-start gap-6 px-10  ">
       {images.map((img, index) => (
         <div key={index} className="bg-pink-50">
           <Image
