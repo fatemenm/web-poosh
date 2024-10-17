@@ -1,14 +1,26 @@
 import Link from "next/link";
 
-export default function PromotionalBanner() {
+interface promotionalBannerData {
+  promotionalText: string;
+  slogan: string;
+  url: string;
+  text: string;
+}
+
+export default function PromotionalBanner({
+  data,
+}: {
+  data: promotionalBannerData;
+}) {
+  const { promotionalText, slogan, url, text } = data;
   return (
-    <div className="bg-blue-900 w-full p-2 flex flex-row justify-start text-white text-md">
-      <span className="text-sm basis-1/3">وب پوش پوشاک اقایان</span>
+    <div className="bg-stone-800 w-full p-2 flex flex-row justify-start text-white text-sm font-light ">
+      <span className="basis-1/3">{slogan}</span>
       <div className="basis-1/3 text-center">
-        <Link href="/" className="underline">
-          مشاهده محصولات
+        {promotionalText} &nbsp;&nbsp;&nbsp;
+        <Link href={url} className="underline">
+          {text}
         </Link>
-        &nbsp;&nbsp;&nbsp;جین برای تمام سلیقه ها
       </div>
     </div>
   );

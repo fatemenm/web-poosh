@@ -1,17 +1,18 @@
-import { promises as fs } from "fs";
-import path from "path";
+// import { promises as fs } from "fs";
+// import path from "path";
 
-type ImageArray = string[] | undefined;
+// type ImageArray = string[] | undefined;
 
-export async function getImages(folderName: string): Promise<ImageArray> {
-  try {
-    const imageFileNames: ImageArray = await fs.readdir(
-      path.join(process.cwd(), "/public/images/", folderName)
-    );
+// export async function getImages(folderName: string): Promise<ImageArray> {
+//   try {
+//     const imageFileNames: ImageArray = await fs.readdir(
+//       path.join(process.cwd(), "/public/images/", folderName)
+//     );
+//     return imageFileNames;
+//   } catch (err: any) {
+//     console.log(err);
+//     return err;
+//   }
+// }
 
-    return imageFileNames;
-  } catch (err: any) {
-    console.log(err);
-    return err;
-  }
-}
+// async function getImages(url: string) {}

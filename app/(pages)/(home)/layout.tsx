@@ -3,7 +3,6 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 // config.autoAddCss = false;
 import "../../globals.css";
 import { Roboto, Vazirmatn } from "next/font/google";
-import PromotionalBanner from "../../components/promotional-banner";
 import Header from "../../components/header";
 import Footer from "../../components/footer";
 import { Metadata } from "next";
@@ -65,7 +64,6 @@ export default function RootLayout({
         <link rel="icon" href="/icon.ico" sizes="any" />
       </Head>
       <body className={`${vazirmatn.className} min-h-screen flex flex-col`}>
-        <PromotionalBanner />
         <Header />
         <div className="grow">{children}</div>
         <Footer>{footerContent}</Footer>
