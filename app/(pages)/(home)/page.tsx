@@ -2,7 +2,6 @@
 // import { getImages } from "../../lib/utils";
 import Link from "next/link";
 import Image from "next/image";
-import { categoriesNames } from "../../lib/data";
 
 export default function Page() {
   // const categoryImages = await getImages("category");
