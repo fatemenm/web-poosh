@@ -1,22 +1,40 @@
-import qs from "qs";
+import { Banner, NavbarItem } from "./definitions";
 
-export async function getHeaderData(path: string) {
-  const query = qs.stringify(
-    {
-      populate: ["promotionalBanner", "promotionalBanner.promotionalLink"],
-    },
-    {
-      encodeValuesOnly: true,
-    }
-  );
-  const baseUrl = "http://localhost:1337";
+const baseUrl = "http://localhost:1337";
+
+export async function getBannerData(path: string) {
   const url = new URL(path, baseUrl);
-  url.search = query;
   try {
     const response = await fetch(url.href, { cache: "no-store" });
-    const data = await response.json();
-    // console.log(data.flatten(data));
-    return data;
+    const strapiData = await response.json();
+    const data: Array<Banner> = strapiData.data;
+    let now: Date = new Date();
+    now = new Date(now.getFullYear(), now.getMonth(), now.getDay());
+    const activeBanners: Array<Banner> = data.filter((banner: Banner) => {
+      const startDate: Date = new Date(banner.startDate);
+      const endDate: Date = new Date(banner.endDate);
+      return startDate < now && endDate > now && banner;
+    });
+    const selectedBanner: Banner = activeBanners.reduce(
+      (formerBanner: Banner, currentBanner: Banner) => {
+        return currentBanner.endDate > formerBanner.endDate
+          ? currentBanner
+          : formerBanner;
+      }
+    );
+    return selectedBanner;
+    // TODO: handle errors
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getNavarItems(path: string) {
+  const url = new URL(path, baseUrl);
+  try {
+    const response = await fetch(url.href, { cache: "no-store" });
+    const strapiData = await response.json();
+    const data: Array<NavbarItem> = strapiData.data;
   } catch (error) {
     console.log(error);
   }

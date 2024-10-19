@@ -1,25 +1,14 @@
 import Link from "next/link";
-
-interface promotionalBannerData {
-  promotionalText: string;
-  slogan: string;
-  url: string;
-  text: string;
-}
-
-export default function PromotionalBanner({
-  data,
-}: {
-  data: promotionalBannerData;
-}) {
-  const { promotionalText, slogan, url, text } = data;
+// Q: is there any alternative to the any type here?
+export default function PromotionalBanner({ data }: { data: any }) {
+  const { dynamicText, staticText, ctaUrl, ctaText } = data;
   return (
     <div className="bg-stone-800 w-full p-2 flex flex-row justify-start text-white text-sm font-light ">
-      <span className="basis-1/3">{slogan}</span>
+      <span className="basis-1/3">{staticText}</span>
       <div className="basis-1/3 text-center">
-        {promotionalText} &nbsp;&nbsp;&nbsp;
-        <Link href={url} className="underline">
-          {text}
+        {dynamicText} &nbsp;&nbsp;&nbsp;
+        <Link href={ctaUrl} className="underline">
+          {ctaText}
         </Link>
       </div>
     </div>
