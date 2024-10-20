@@ -8,12 +8,16 @@ export async function getBannerData(path: string) {
     const response = await fetch(url.href, { cache: "no-store" });
     const strapiData = await response.json();
     const data: Array<Banner> = strapiData.data;
-    let now: Date = new Date();
-    now = new Date(now.getFullYear(), now.getMonth(), now.getDay());
+    let nowDate: Date = new Date();
+    nowDate = new Date(
+      nowDate.getFullYear(),
+      nowDate.getMonth(),
+      nowDate.getDay()
+    );
     const activeBanners: Array<Banner> = data.filter((banner: Banner) => {
       const startDate: Date = new Date(banner.startDate);
       const endDate: Date = new Date(banner.endDate);
-      return startDate < now && endDate > now && banner;
+      return startDate < nowDate && endDate > nowDate && banner;
     });
     const selectedBanner: Banner = activeBanners.reduce(
       (formerBanner: Banner, currentBanner: Banner) => {
@@ -29,12 +33,13 @@ export async function getBannerData(path: string) {
   }
 }
 
-export async function getNavarItems(path: string) {
+export async function getNavbarItems(path: string) {
   const url = new URL(path, baseUrl);
   try {
     const response = await fetch(url.href, { cache: "no-store" });
     const strapiData = await response.json();
-    const data: Array<NavbarItem> = strapiData.data;
+    const navbarItems: Array<NavbarItem> = strapiData.data;
+    return navbarItems;
   } catch (error) {
     console.log(error);
   }

@@ -1,6 +1,7 @@
+import { Banner } from "@/lib/definitions";
 import Link from "next/link";
 // Q: is there any alternative to the any type here?
-export default function PromotionalBanner({ data }: { data: any }) {
+export default function PromotionalBanner({ data }: { data: Banner }) {
   const { dynamicText, staticText, ctaUrl, ctaText } = data;
   return (
     <div className="bg-stone-800 w-full p-2 flex flex-row justify-start text-white text-sm font-light ">
