@@ -25,8 +25,9 @@ export type Banner = {
 };
 // TODO: how to replace null with sth else?
 export type NavbarItem = {
+  id: number;
   linkText: string;
-  linkUrl: string | null;
-  subLinks: Object;
+  linkUrl: string;
+  subLinks: Object | null;
   isExpandable: boolean;
 };
