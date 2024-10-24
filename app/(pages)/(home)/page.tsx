@@ -3,10 +3,13 @@
 import Link from "next/link";
 import Image from "next/image";
 
-export default function Page() {
+export default async function Page() {
   // const categoryImages = await getImages("category");
   return (
-    <div className="pt-10 flex flex-col gap-10">
+    <div className="pt-10 flex flex-col gap-10 items-center">
+      <div className="bg-purple-200 w-screen p-14 text-center">
+        we are the content in the page!!! 🐴
+      </div>
       {/* <Carousel images={categoryImages} imageType="category" /> */}
       {/* sets */}
       {/* <div className="flex flex-col gap-12 mb-20">

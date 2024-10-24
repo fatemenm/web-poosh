@@ -23,11 +23,28 @@ export type Banner = {
   ctaText: string;
   ctaUrl: string;
 };
-// TODO: how to replace null with sth else?
+
 export type NavbarItem = {
   id: number;
   linkText: string;
   linkUrl: string;
-  subLinks: Object | null;
+  subLinks?: { items: NavigationLink[] } | null;
   isExpandable: boolean;
+  order: number;
+  image?: Image | null;
+};
+
+export type NavigationLink = {
+  linkText: string;
+  linkUrl: string;
+  row: number;
+  col: number;
+};
+
+export type Image = {
+  id: number;
+  alternativeText: string;
+  url: string;
+  width: number;
+  height: number;
 };

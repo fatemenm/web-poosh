@@ -2,27 +2,33 @@
 import { MouseEvent, useState } from "react";
 import { NavbarItem } from "@/lib/definitions";
 import Link from "next/link";
-import { render } from "react-dom";
 
-export default function Navbar({ items }: { items: Array<NavbarItem> }) {
+export default function Navbar({
+  items,
+  onLinkHover,
+}: {
+  items: Array<NavbarItem>;
+  onLinkHover: Function;
+}) {
   const [hoveredLinkId, setHoveredLinkId] = useState<number | null>(null);
-  const [isSubMenuVisible, setIsSubMenuVisible] = useState<boolean>(false);
   const initialLinkClass = "flex items-center border-b-2 border-b-transparent";
   function handleMouseOver(
     event: MouseEvent<HTMLAnchorElement>,
     item: NavbarItem
   ) {
     setHoveredLinkId((hoveredLinkId) => (hoveredLinkId = item.id));
-    if (item.isExpandable)
-      setIsSubMenuVisible((isSubMenuVisible) => (isSubMenuVisible = true));
+    if (item.isExpandable) {
+      onLinkHover(item);
+    }
   }
   function handleMouseOut(
     event: MouseEvent<HTMLAnchorElement>,
     item: NavbarItem
   ) {
     setHoveredLinkId((hoveredLinkId) => (hoveredLinkId = null));
-    if (item.isExpandable)
-      setIsSubMenuVisible((isSubMenuVisible) => (isSubMenuVisible = false));
+    if (item.isExpandable) {
+      onLinkHover(null);
+    }
   }
   function setHoveredClass(item: NavbarItem) {
     let hoveredClass = "flex items-center cursor-pointer border-b-2";
@@ -32,14 +38,6 @@ export default function Navbar({ items }: { items: Array<NavbarItem> }) {
       return (hoveredClass += " " + "border-gray-900");
     }
   }
-  //   function renderSubMenu() {
-  //     return (
-  //       <div className="absolute bg-slate-200 w-screen">
-  //         <span>this is gonna be tough!</span>
-  //       </div>
-  //     );
-  //   }
-
   return (
     <>
       <nav className="flex flex-row justify-between gap-8 text-sm ">
@@ -63,7 +61,6 @@ export default function Navbar({ items }: { items: Array<NavbarItem> }) {
             })
           : "No Navbar Available"}
       </nav>
-      {/* {isSubMenuVisible ? subMenu : null} */}
     </>
   );
 }
