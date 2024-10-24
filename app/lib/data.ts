@@ -1,8 +1,10 @@
+import Navbar from "@/components/navbar";
 import { Banner, NavbarItem } from "./definitions";
+import config from "@/lib/config";
 
-const baseUrl = "http://localhost:1337";
-
-export async function getBannerData(path: string) {
+const baseUrl = config.apiUrl;
+export async function getBannerData() {
+  const path: string = "/api/banners";
   const url = new URL(path, baseUrl);
   try {
     const response = await fetch(url.href, { cache: "no-store" });
@@ -32,13 +34,14 @@ export async function getBannerData(path: string) {
     console.log(error);
   }
 }
-
-export async function getNavbarItems(path: string) {
+// Q:should I use type definition to create objects from DB?
+export async function getNavbarItems() {
+  const path = "/api/navbar-items?sort=order:desc&populate=image";
   const url = new URL(path, baseUrl);
   try {
     const response = await fetch(url.href, { cache: "no-store" });
     const strapiData = await response.json();
-    const navbarItems: Array<NavbarItem> = strapiData.data;
+    let navbarItems: NavbarItem[] = strapiData.data;
     return navbarItems;
   } catch (error) {
     console.log(error);
