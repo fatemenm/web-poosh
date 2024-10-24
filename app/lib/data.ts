@@ -1,35 +1,27 @@
-import Navbar from "@/components/navbar";
-import { Banner, NavbarItem } from "./definitions";
 import config from "@/lib/config";
 
+import { Banner, NavbarItem, ResponseBody } from "./definitions";
+
 const baseUrl = config.apiUrl;
-export async function getBannerData() {
-  const path: string = "/api/banners";
-  const url = new URL(path, baseUrl);
+const urls = {
+  getBanner: new URL("/api/banners", baseUrl),
+};
+
+export async function getBanner() {
   try {
-    const response = await fetch(url.href, { cache: "no-store" });
-    const strapiData = await response.json();
-    const data: Array<Banner> = strapiData.data;
-    let nowDate: Date = new Date();
-    nowDate = new Date(
-      nowDate.getFullYear(),
-      nowDate.getMonth(),
-      nowDate.getDay()
-    );
-    const activeBanners: Array<Banner> = data.filter((banner: Banner) => {
-      const startDate: Date = new Date(banner.startDate);
-      const endDate: Date = new Date(banner.endDate);
-      return startDate < nowDate && endDate > nowDate && banner;
-    });
-    const selectedBanner: Banner = activeBanners.reduce(
-      (formerBanner: Banner, currentBanner: Banner) => {
-        return currentBanner.endDate > formerBanner.endDate
-          ? currentBanner
-          : formerBanner;
-      }
-    );
-    return selectedBanner;
-    // TODO: handle errors
+    const response = await fetch(urls.getBanner.href, { cache: "no-store" });
+    const body: ResponseBody = await response.json();
+    const data = body.data.map((item) => ({
+      ...item,
+      startDate: new Date(item.startDate as string),
+      endDate: new Date(item.endDate as string),
+    })) as Banner[];
+    const now = new Date();
+    const earliestActiveBanner = data
+      .filter(({ startDate, endDate }) => startDate < now && endDate > now)
+      .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+      .pop();
+    return earliestActiveBanner;
   } catch (error) {
     console.log(error);
   }
@@ -41,7 +33,7 @@ export async function getNavbarItems() {
   try {
     const response = await fetch(url.href, { cache: "no-store" });
     const strapiData = await response.json();
-    let navbarItems: NavbarItem[] = strapiData.data;
+    const navbarItems: NavbarItem[] = strapiData.data;
     return navbarItems;
   } catch (error) {
     console.log(error);

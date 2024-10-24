@@ -1,59 +1,54 @@
 "use client";
-import { MouseEvent, useState } from "react";
-import { NavbarItem } from "@/lib/definitions";
-import Link from "next/link";
 
-export default function Navbar({
+import Link from "next/link";
+import { useState } from "react";
+
+interface NavbarItem {
+  id: number;
+  isExpandable: boolean;
+  linkUrl: string;
+  linkText: string;
+}
+interface NavbarParams<T extends NavbarItem> {
+  items: Array<T>;
+  onLinkHover: (item: T | null) => void;
+}
+
+function getLinkClasses(item: NavbarItem, isHovered: boolean) {
+  if (!isHovered) return "flex items-center border-b-2 border-b-transparent";
+  if (item.isExpandable) {
+    return "flex items-center border-b-2  cursor-pointer border-b-transparent";
+  } else {
+    return "flex items-center border-b-2  cursor-pointer border-gray-900";
+  }
+}
+
+export default function Navbar<T extends NavbarItem>({
   items,
   onLinkHover,
-}: {
-  items: Array<NavbarItem>;
-  onLinkHover: Function;
-}) {
+}: NavbarParams<T>) {
   const [hoveredLinkId, setHoveredLinkId] = useState<number | null>(null);
-  const initialLinkClass = "flex items-center border-b-2 border-b-transparent";
-  function handleMouseOver(
-    event: MouseEvent<HTMLAnchorElement>,
-    item: NavbarItem
-  ) {
-    setHoveredLinkId((hoveredLinkId) => (hoveredLinkId = item.id));
-    if (item.isExpandable) {
-      onLinkHover(item);
-    }
+  function handleMouseEnter(item: T) {
+    setHoveredLinkId(item.id);
+    onLinkHover(item);
   }
-  function handleMouseOut(
-    event: MouseEvent<HTMLAnchorElement>,
-    item: NavbarItem
-  ) {
-    setHoveredLinkId((hoveredLinkId) => (hoveredLinkId = null));
-    if (item.isExpandable) {
-      onLinkHover(null);
-    }
+  function handleMouseLeave() {
+    setHoveredLinkId(null);
+    onLinkHover(null);
   }
-  function setHoveredClass(item: NavbarItem) {
-    let hoveredClass = "flex items-center cursor-pointer border-b-2";
-    if (item.isExpandable) {
-      return (hoveredClass += " " + "border-b-transparent");
-    } else {
-      return (hoveredClass += " " + "border-gray-900");
-    }
-  }
+
   return (
     <>
       <nav className="flex flex-row justify-between gap-8 text-sm ">
         {items
-          ? items.map((item: NavbarItem) => {
+          ? items.map((item: T) => {
               return (
                 <Link
-                  className={
-                    hoveredLinkId === item.id
-                      ? setHoveredClass(item)
-                      : initialLinkClass
-                  }
+                  className={getLinkClasses(item, hoveredLinkId === item.id)}
                   key={item.id}
                   href={item.linkUrl}
-                  onMouseOver={(event) => handleMouseOver(event, item)}
-                  onMouseOut={(event) => handleMouseOut(event, item)}
+                  onMouseEnter={() => handleMouseEnter(item)}
+                  onMouseLeave={() => handleMouseLeave()}
                 >
                   {item.linkText}
                 </Link>
@@ -64,6 +59,3 @@ export default function Navbar({
     </>
   );
 }
-
-// hoverStyle += " " + "cursor-pointer";
-//   event.currentTarget.classList.add("border-b-2 border-gray-600");

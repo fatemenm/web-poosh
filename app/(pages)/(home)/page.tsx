@@ -1,7 +1,7 @@
 // import Carousel from "./carousel";
 // import { getImages } from "../../lib/utils";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 
 export default async function Page() {
   // const categoryImages = await getImages("category");

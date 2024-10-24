@@ -1,13 +1,14 @@
 import "@fortawesome/fontawesome-svg-core/styles.css";
+import { Metadata } from "next";
+import { Head } from "next/document";
+import { Roboto, Roboto_Mono, Vazirmatn } from "next/font/google";
+
+import Footer from "../../components/footer";
+import Header from "../../components/header";
+import PromotionalBanner from "../../components/promotional-banner";
 // import { config } from "@fortawesome/fontawesome-svg-core";
 // config.autoAddCss = false;
 import "../../globals.css";
-import { Roboto, Roboto_Mono, Vazirmatn } from "next/font/google";
-import PromotionalBanner from "../../components/promotional-banner";
-import Header from "../../components/header";
-import Footer from "../../components/footer";
-import { Metadata } from "next";
-import { Head } from "next/document";
 
 const vazirmatn = Vazirmatn({ subsets: ["latin"] });
 export const roboto = Roboto({ subsets: ["latin"], weight: ["400", "700"] });

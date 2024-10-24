@@ -1,13 +1,14 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebook,
   faInstagram,
   faTelegram,
 } from "@fortawesome/free-brands-svg-icons";
-import Link from "next/link";
-import logo from "../../public/logo-footer.svg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
+import Link from "next/link";
+
 import { roboto } from "../(pages)/(home)/layout";
+import logo from "../../public/logo-footer.svg";
 
 export default function Footer({
   children,

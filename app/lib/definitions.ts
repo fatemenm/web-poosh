@@ -16,8 +16,8 @@
 // };
 
 export type Banner = {
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
   dynamicText: string;
   staticText: string;
   ctaText: string;
@@ -47,4 +47,16 @@ export type Image = {
   url: string;
   width: number;
   height: number;
+};
+
+export type ResponseBody = {
+  data: Record<string, unknown>[];
+  meta: {
+    pagination: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
 };

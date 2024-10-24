@@ -1,54 +1,43 @@
 "use client";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBagShopping,
   faSearch,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import logo from "../../public/logo.png";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+
 import PromotionalBanner from "@/components/promotional-banner";
-import { getBannerData, getNavbarItems } from "@/lib/data";
-import Navbar from "./navbar";
-import { useState, useEffect } from "react";
-import { Banner, NavigationLink, NavbarItem } from "@/lib/definitions";
 import config from "@/lib/config";
+import { getBanner, getNavbarItems } from "@/lib/data";
+import { Banner, NavbarItem, NavigationLink } from "@/lib/definitions";
+
+import logo from "@public/logo.png";
+
+import Navbar from "./navbar";
 
 export default function Header() {
   const [bannerData, setBannerData] = useState<Banner>();
   const [navbarItems, setNavbarItems] = useState<Array<NavbarItem>>();
-  const [hoveredLinkData, setHoveredLinkData] = useState<NavbarItem>();
-  function handleLinkHover(item: NavbarItem) {
+  const [hoveredLinkData, setHoveredLinkData] = useState<NavbarItem | null>();
+
+  function handleLinkHover(item: NavbarItem | null) {
     setHoveredLinkData(item);
-  }
-  function createLinksGrid(links: NavigationLink[] | undefined) {
-    let rowCount: number = 0;
-    let colCount: number = 0;
-    const list2d: NavigationLink[] | undefined = [];
-    if (links) {
-      rowCount = links.reduce((pre, cur) =>
-        cur.row > pre.row ? cur : pre
-      ).row;
-      colCount = links.reduce((pre, cur) =>
-        cur.col > pre.col ? cur : pre
-      ).col;
-    }
   }
 
   useEffect(() => {
-    const fetchBannerData = async () => {
-      const data = await getBannerData();
-      setBannerData(data);
-    };
-    const fetchNavbarItems = async () => {
-      const items = await getNavbarItems();
-      setNavbarItems(items);
-    };
-    fetchBannerData();
-    fetchNavbarItems();
+    async function getData() {
+      const [banner, navbarItems] = await Promise.all([
+        getBanner(),
+        getNavbarItems(),
+      ]);
+      setBannerData(banner);
+      setNavbarItems(navbarItems);
+    }
+    getData();
   }, []);
 
   return (
@@ -83,7 +72,7 @@ export default function Header() {
           </div>
         </div>
       </div>
-      {hoveredLinkData && (
+      {hoveredLinkData?.isExpandable && (
         <div className="absolute top-24 w-screen">
           <div className="bg-stone-100 flex flex-row justify-center py-8">
             <div className="flex flex-row justify-between w-2/3 px-6">
