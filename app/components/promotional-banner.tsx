@@ -1,6 +1,6 @@
 import { Banner } from "@/lib/definitions";
 import Link from "next/link";
-// Q: is there any alternative to the any type here?
+
 export default function PromotionalBanner({ data }: { data: Banner }) {
   const { dynamicText, staticText, ctaUrl, ctaText } = data;
   return (
