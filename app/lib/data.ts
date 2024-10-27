@@ -1,48 +1,42 @@
-import Navbar from "@/components/navbar";
-import { Banner, NavbarItem } from "./definitions";
-import config from "@/lib/config";
+import { Banner, NavbarItem, responseBody } from "./definitions";
 
-const baseUrl = config.apiUrl;
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const urls = {
+  getBanners: new URL("/api/banners", apiUrl),
+  getNavbarItems: new URL(
+    "/api/navbar-items?sort=order:desc&populate=image",
+    apiUrl
+  ),
+};
 export async function getBannerData() {
-  const path: string = "/api/banners";
-  const url = new URL(path, baseUrl);
   try {
-    const response = await fetch(url.href, { cache: "no-store" });
-    const strapiData = await response.json();
-    const data: Array<Banner> = strapiData.data;
-    let nowDate: Date = new Date();
-    nowDate = new Date(
-      nowDate.getFullYear(),
-      nowDate.getMonth(),
-      nowDate.getDay()
-    );
-    const activeBanners: Array<Banner> = data.filter((banner: Banner) => {
-      const startDate: Date = new Date(banner.startDate);
-      const endDate: Date = new Date(banner.endDate);
-      return startDate < nowDate && endDate > nowDate && banner;
-    });
-    const selectedBanner: Banner = activeBanners.reduce(
-      (formerBanner: Banner, currentBanner: Banner) => {
-        return currentBanner.endDate > formerBanner.endDate
-          ? currentBanner
-          : formerBanner;
-      }
-    );
-    return selectedBanner;
-    // TODO: handle errors
+    const response = await fetch(urls.getBanners.href, { cache: "no-store" });
+    const body: responseBody = await response.json();
+    const data = body.data.map((item) => ({
+      ...item,
+      startDate: new Date(item.startDate as string),
+      endDate: new Date(item.endDate as string),
+    })) as Banner[];
+    const now: Date = new Date();
+    const earliestActiveBanner = data
+      .filter((banner) => {
+        return banner.startDate < now && banner.endDate > now && banner;
+      })
+      .sort((a, b) => b.endDate.getTime() - a.endDate.getTime())
+      .pop();
+    return earliestActiveBanner;
   } catch (error) {
     console.log(error);
   }
 }
-// Q:should I use type definition to create objects from DB?
 export async function getNavbarItems() {
-  const path = "/api/navbar-items?sort=order:desc&populate=image";
-  const url = new URL(path, baseUrl);
   try {
-    const response = await fetch(url.href, { cache: "no-store" });
-    const strapiData = await response.json();
-    let navbarItems: NavbarItem[] = strapiData.data;
-    return navbarItems;
+    const response = await fetch(urls.getNavbarItems.href, {
+      cache: "no-store",
+    });
+    const body: responseBody = await response.json();
+    const data = body.data as NavbarItem[];
+    return data;
   } catch (error) {
     console.log(error);
   }

@@ -16,12 +16,24 @@
 // };
 
 export type Banner = {
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
   dynamicText: string;
   staticText: string;
   ctaText: string;
   ctaUrl: string;
+};
+
+export type responseBody = {
+  data: Record<string, unknown>[];
+  meta: {
+    pagination: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
 };
 
 export type NavbarItem = {
