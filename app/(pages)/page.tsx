@@ -1,9 +1,7 @@
 // import Carousel from "./carousel";
-// import { getImages } from "../../lib/utils";
-import Link from "next/link";
-import Image from "next/image";
+// import { getImages } from "../../lib/utils";z
 
-export default async function Page() {
+export default function Page() {
   // const categoryImages = await getImages("category");
   return (
     <div className="pt-10 flex flex-col gap-10 items-center">
