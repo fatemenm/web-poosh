@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { MouseEvent, useState } from "react";
+import { useState } from "react";
 
 interface NavbarItem {
   id: number;
