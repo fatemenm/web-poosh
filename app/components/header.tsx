@@ -10,15 +10,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import PromotionalBanner from "@/components/promotional-banner";
-import { getBannerData, getNavbarItems } from "@/lib/data";
+import PromotionalBanner from "@/components/promotionalBanner";
 import { Banner, NavbarItem, NavigationLink } from "@/lib/definitions";
 
 import logo from "../../public/logo.png";
 import Navbar from "./navbar";
 
-export default function Header() {
-  const [bannerData, setBannerData] = useState<Banner>();
+export default function Header({
+  bannerData,
+  navbarItemsData,
+}: {
+  bannerData: Banner | undefined;
+  navbarItemsData: NavbarItem[] | undefined;
+}) {
+  const [banner, setBanner] = useState<Banner>();
   const [navbarItems, setNavbarItems] = useState<Array<NavbarItem>>();
   const [hoveredLinkData, setHoveredLinkData] = useState<NavbarItem | null>();
   function handleLinkHover(item: NavbarItem | null) {
@@ -26,23 +31,16 @@ export default function Header() {
   }
 
   useEffect(() => {
-    async function getData() {
-      const [banner, navbarItems] = await Promise.all([
-        getBannerData(),
-        getNavbarItems(),
-      ]);
-      setBannerData(banner);
-      setNavbarItems(navbarItems);
-    }
-    getData();
+    setNavbarItems(navbarItemsData);
+    setBanner(bannerData);
   }, []);
 
   return (
     <header className="flex flex-col">
-      {bannerData ? (
-        <PromotionalBanner data={bannerData} />
+      {banner ? (
+        <PromotionalBanner data={banner} />
       ) : (
-        "No Banner Available"
+        <div className="bg-stone-800 w-full p-2 flex flex-row justify-start text-white text-sm font-light min-h-11 box-border"></div>
       )}
       <div className="flex flex-row justify-between items-center mx-48 ">
         <div className="flex flex-row justify-between gap-8">
@@ -57,14 +55,12 @@ export default function Header() {
           </button>
         </div>
         <div className="flex flex-row gap-10 ">
-          {navbarItems ? (
+          {navbarItems && (
             <Navbar items={navbarItems} onLinkHover={handleLinkHover} />
-          ) : (
-            "No Navbar Available"
           )}
           <div className="h-14 w-28 pt-1">
             <Link href="/">
-              <Image src={logo} alt="logo" width={153} height={163} />
+              <Image src={logo} alt="logo" />
             </Link>
           </div>
         </div>
