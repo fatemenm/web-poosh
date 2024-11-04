@@ -16,11 +16,12 @@ interface NavbarParams<Type extends NavbarItem> {
 }
 
 function getClassNames(item: NavbarItem, isHovered: boolean) {
-  if (!isHovered) return "flex items-center border-b-2 border-b-transparent";
+  if (!isHovered)
+    return "flex items-center text-stone-700 font-medium  border-b-2 border-b-transparent";
   if (item.isExpandable) {
-    return "flex items-center cursor-pointer border-b-2 border-b-transparent";
+    return "flex items-center cursor-pointer text-stone-700 font-medium border-b-2 border-b-transparent";
   } else {
-    return "flex items-center cursor-pointer border-b-2 border-gray-900";
+    return "flex items-center cursor-pointer text-stone-700 font-medium border-b-2 border-gray-900";
   }
 }
 
