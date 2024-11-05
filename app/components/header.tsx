@@ -103,6 +103,7 @@ export default function Header({
                   alt={hoveredLinkData.image?.alternativeText}
                   width={hoveredLinkData.image.width}
                   height={hoveredLinkData.image.height}
+                  unoptimized
                 />
               ) : (
                 <div></div>
