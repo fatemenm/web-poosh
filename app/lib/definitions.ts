@@ -47,3 +47,13 @@ export interface HeaderData {
   banner: Banner | undefined;
   navbarItems: NavbarItem[] | undefined;
 }
+
+export type HeroBanner = {
+  image: Image;
+  linkText: string;
+  linkUrl: string;
+  texts: {
+    primary: string;
+    secondary: string;
+  };
+};

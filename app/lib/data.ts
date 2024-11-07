@@ -1,9 +1,10 @@
-import { Banner, NavbarItem, responseBody } from "./definitions";
+import { Banner, HeroBanner, NavbarItem, responseBody } from "./definitions";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 const urls = {
-  getBanners: new URL("/api/banners", apiUrl),
-  getNavbarItems: new URL("/api/navbar-items", apiUrl),
+  getBanners: new URL("/api/banners", baseUrl),
+  getNavbarItems: new URL("/api/navbar-items", baseUrl),
+  getHeroBanners: new URL("/api/hero-banners", baseUrl),
 };
 
 export async function getBannerData() {
@@ -34,6 +35,18 @@ export async function getNavbarItems() {
     const response = await fetch(urls.getNavbarItems.href);
     const body: responseBody = await response.json();
     const data = body.data as NavbarItem[];
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getHeroBanners() {
+  try {
+    urls.getHeroBanners.searchParams.append("populate", "image");
+    const response = await fetch(urls.getHeroBanners.href);
+    const body: responseBody = await response.json();
+    const data = body.data as HeroBanner[];
     return data;
   } catch (error) {
     console.log(error);
