@@ -6,7 +6,6 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { create } from "domain";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -47,13 +46,6 @@ export default function Header({
     }
     return grid;
   }
-
-  console.log(
-    "height:",
-    hoveredLinkData?.image?.height,
-    " width:",
-    hoveredLinkData?.image?.width
-  );
 
   return (
     <header className="flex flex-col">

@@ -12,7 +12,7 @@ const vazirmatn = Vazirmatn({ subsets: ["latin"] });
 const banner = await getBannerData();
 const navbarItems = await getNavbarItems();
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
