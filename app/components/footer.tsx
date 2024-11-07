@@ -6,14 +6,15 @@ import {
   faTelegram,
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Roboto } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import PN from "persian-number";
 
-import { roboto } from "../(pages)/layout";
 import logo from "../../public/logo-footer.svg";
 
+const roboto = Roboto({ subsets: ["latin"], weight: ["400", "700"] });
 const footerContent = (
   <div className="flex flex-col gap-10 text-right py-5">
     <div className="flex flex-col gap-2">

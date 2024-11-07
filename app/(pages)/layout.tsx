@@ -1,5 +1,5 @@
 import "@fortawesome/fontawesome-svg-core/styles.css";
-import { Roboto, Vazirmatn } from "next/font/google";
+import { Vazirmatn } from "next/font/google";
 import Head from "next/head";
 
 import Footer from "@/components/footer";
@@ -8,12 +8,11 @@ import "@/globals.css";
 import { getBannerData, getNavbarItems } from "@/lib/data";
 
 const vazirmatn = Vazirmatn({ subsets: ["latin"] });
-export const roboto = Roboto({ subsets: ["latin"], weight: ["400", "700"] });
 
 const banner = await getBannerData();
 const navbarItems = await getNavbarItems();
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
