@@ -32,9 +32,6 @@ importers:
       next:
         specifier: 15.0.1
         version: 15.0.1(react-dom@19.0.0-rc-69d4b800-20241021(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021)
-      persian-number:
-        specifier: ^1.6.0
-        version: 1.6.0
       qs:
         specifier: ^6.13.0
         version: 6.13.0
@@ -1408,9 +1405,6 @@ packages:
   path-scurry@1.11.1:
     resolution: {integrity: sha512-Xa4Nw17FS9ApQFJ9umLiJS4orGjm7ZzwUrwamcGQuHSzDyth9boKDaycYdDcZDuqYATXw4HFXgaqWTctW/v1HA==}
     engines: {node: '>=16 || 14 >=14.18'}
-
-  persian-number@1.6.0:
-    resolution: {integrity: sha512-FcRuPNTzl3fndM2zuA1bcncb/mPto7otWJNqRtDOhtbZwN5Bc3roT99DcmIoLoxPlYy+t8OQ0ivNXaH+o+55iA==}
 
   picocolors@1.1.0:
     resolution: {integrity: sha512-TQ92mBOW0l3LeMeyLV6mzy/kWr8lkd/hp3mTg7wYK7zJhuBStmGMBG0BdeDZS/dZx1IukaX6Bk11zcln25o1Aw==}
@@ -3347,8 +3341,6 @@ snapshots:
     dependencies:
       lru-cache: 10.4.3
       minipass: 7.1.2
-
-  persian-number@1.6.0: {}
 
   picocolors@1.1.0: {}
 
