@@ -25,30 +25,34 @@ export async function getBannerData() {
       .pop();
     return earliestActiveBanner;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 export async function getNavbarItems() {
   try {
-    urls.getNavbarItems.searchParams.append("sort", "order:desc");
-    urls.getNavbarItems.searchParams.append("populate", "image");
+    urls.getNavbarItems.search = new URLSearchParams({
+      sort: "order:desc",
+      populate: "image",
+    }).toString();
     const response = await fetch(urls.getNavbarItems.href);
     const body: responseBody = await response.json();
     const data = body.data as NavbarItem[];
     return data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
 export async function getHeroBanners() {
   try {
-    urls.getHeroBanners.searchParams.append("populate", "image");
+    urls.getHeroBanners.search = new URLSearchParams({
+      populate: "image",
+    }).toString();
     const response = await fetch(urls.getHeroBanners.href);
     const body: responseBody = await response.json();
     const data = body.data as HeroBanner[];
     return data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
