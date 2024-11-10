@@ -3,8 +3,9 @@ import Link from "next/link";
 
 import { getHeroBanners } from "@/lib/data";
 
+import { apiBaseUrl } from "../../config";
+
 const heroBanners = await getHeroBanners();
-// console.log(heroBanners);
 
 export default async function Page() {
   return (
@@ -15,14 +16,14 @@ export default async function Page() {
           return (
             <div key={id} className="flex flex-col items-center gap-4">
               <Image
-                src={`${process.env.NEXT_PUBLIC_API_URL}${banner.image?.url}`}
+                src={`${apiBaseUrl}${banner.image?.url}`}
                 alt={banner.image.alternativeText}
                 width={banner.image.width}
                 height={banner.image.height}
               />
               <div className="flex flex-col items-center text-stone-900 font-medium gap-1">
                 <span className="text-lg ">{banner.texts.primary}</span>
-                <span className="tracking-[.2em] font-normal text-stone-700 text-sm">
+                <span className="tracking-[.2em] font-normal text-stone-700 text-sm font-english">
                   {banner.texts.secondary}
                 </span>
                 <Link
