@@ -41,21 +41,20 @@ export default function Navbar<T extends NavbarItem>({
   return (
     <>
       <nav className="flex flex-row justify-between gap-8 text-sm ">
-        {items
-          ? items.map((item: T) => {
-              return (
-                <Link
-                  className={getClassNames(item, hoveredLinkId === item.id)}
-                  key={item.id}
-                  href={item.linkUrl}
-                  onMouseEnter={() => handleMouseLeave(item)}
-                  onMouseLeave={() => handleMouseEnter()}
-                >
-                  {item.linkText}
-                </Link>
-              );
-            })
-          : "No Navbar Available"}
+        {items &&
+          items.map((item: T) => {
+            return (
+              <Link
+                className={getClassNames(item, hoveredLinkId === item.id)}
+                key={item.id}
+                href={item.linkUrl}
+                onMouseEnter={() => handleMouseLeave(item)}
+                onMouseLeave={() => handleMouseEnter()}
+              >
+                {item.linkText}
+              </Link>
+            );
+          })}
       </nav>
     </>
   );
