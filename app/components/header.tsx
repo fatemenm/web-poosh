@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import PromotionalBanner from "@/components/promotionalBanner";
 import { Banner, NavbarItem, NavigationLink } from "@/lib/definitions";
 
+import { apiBaseUrl } from "../../config";
 import logo from "../../public/logo.png";
 import Navbar from "./navbar";
 
@@ -33,17 +34,14 @@ export default function Header({
     setNavbarItems(navbarItemsData);
     setBanner(bannerData);
   }, []);
-  //define a function to create a grid of sub links
+
   function createSublinkGrid(items: NavigationLink[] | undefined) {
     if (!items) return null;
-    // find the number of cols
-    items.sort((a, b) => a.col - b.col);
-    const colCount = items[items.length - 1].col + 1;
-    // generate a grid of items based on rows and cols
-    let grid = [];
-    for (let i = 0; i < colCount; i++) {
-      grid.push(items.filter((item) => item.col === i));
-    }
+    const grid: Array<NavigationLink[]> = [];
+    items.forEach((item) => {
+      grid[item.col] ??= [];
+      grid[item.col][item.row] = item;
+    });
     return grid;
   }
 
@@ -91,7 +89,7 @@ export default function Header({
             <div className="flex flex-row justify-between w-2/3 px-6">
               {hoveredLinkData.image ? (
                 <Image
-                  src={`${process.env.NEXT_PUBLIC_API_URL}${hoveredLinkData.image?.url}`}
+                  src={`${apiBaseUrl}${hoveredLinkData.image?.url}`}
                   alt={hoveredLinkData.image?.alternativeText}
                   width={hoveredLinkData.image.width}
                   height={hoveredLinkData.image.height}
@@ -102,15 +100,15 @@ export default function Header({
               )}
               <div className="flex flex-row-reverse gap-20">
                 {createSublinkGrid(hoveredLinkData?.subLinks?.items)?.map(
-                  (col, index) => {
+                  (col, colNumber) => {
                     return (
                       <ul
-                        key={index}
+                        key={colNumber}
                         className="text-right text-stone-600 font-normal text-sm flex flex-col gap-5"
                       >
-                        {col.map((item, index) => {
+                        {col.map((item, rowNumber) => {
                           return (
-                            <li key={index}>
+                            <li key={rowNumber}>
                               <a href={item.linkUrl}>{item.linkText}</a>
                             </li>
                           );
