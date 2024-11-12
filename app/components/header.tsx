@@ -15,7 +15,26 @@ import { Banner, NavbarItem, NavigationLink } from "@/lib/definitions";
 
 import { apiBaseUrl } from "../../config";
 import logo from "../../public/logo.png";
-import Navbar from "./navbar";
+
+function getClassNames(item: NavbarItem, isHovered: boolean) {
+  if (!isHovered)
+    return "flex items-center text-stone-700 font-medium  border-b-2 border-b-transparent";
+  if (item.isExpandable) {
+    return "flex items-center cursor-pointer text-stone-700 font-medium border-b-2 border-b-transparent";
+  } else {
+    return "flex items-center cursor-pointer text-stone-700 font-medium border-b-2 border-gray-900";
+  }
+}
+
+function createSublinkGrid(items: NavigationLink[] | undefined) {
+  if (!items) return null;
+  const grid: Array<NavigationLink[]> = [];
+  items.forEach((item) => {
+    grid[item.col] ??= [];
+    grid[item.col][item.row] = item;
+  });
+  return grid;
+}
 
 export default function Header({
   bannerData,
@@ -27,23 +46,11 @@ export default function Header({
   const [banner, setBanner] = useState<Banner>();
   const [navbarItems, setNavbarItems] = useState<Array<NavbarItem>>();
   const [hoveredLinkData, setHoveredLinkData] = useState<NavbarItem | null>();
-  function handleLinkHover(item: NavbarItem | null) {
-    setHoveredLinkData(item);
-  }
+
   useEffect(() => {
     setNavbarItems(navbarItemsData);
     setBanner(bannerData);
   }, []);
-
-  function createSublinkGrid(items: NavigationLink[] | undefined) {
-    if (!items) return null;
-    const grid: Array<NavigationLink[]> = [];
-    items.forEach((item) => {
-      grid[item.col] ??= [];
-      grid[item.col][item.row] = item;
-    });
-    return grid;
-  }
 
   return (
     <header className="flex flex-col">
@@ -52,7 +59,7 @@ export default function Header({
       ) : (
         <div className="bg-stone-800 w-full p-2 flex flex-row justify-start text-white text-sm font-light min-h-10 box-border"></div>
       )}
-      <div className="flex flex-row justify-between items-center mx-48 ">
+      <div className="flex flex-row justify-between items-center mx-48 py-2">
         <div className="flex flex-row justify-between gap-8">
           <button>
             <FontAwesomeIcon icon={faBagShopping} style={{ fontSize: 20 }} />
@@ -66,7 +73,24 @@ export default function Header({
         </div>
         <div className="flex flex-row gap-10 ">
           {navbarItems && (
-            <Navbar items={navbarItems} onLinkHover={handleLinkHover} />
+            <nav className="flex flex-row justify-between gap-8 text-sm ">
+              {navbarItems.map((item) => {
+                return (
+                  <Link
+                    className={getClassNames(
+                      item,
+                      hoveredLinkData?.id === item.id
+                    )}
+                    key={item.id}
+                    href={item.linkUrl}
+                    onMouseEnter={() => setHoveredLinkData(item)}
+                    onMouseLeave={() => setHoveredLinkData(null)}
+                  >
+                    {item.linkText}
+                  </Link>
+                );
+              })}
+            </nav>
           )}
           <div className="h-14 w-28 pt-1">
             <Link href="/">
@@ -79,12 +103,8 @@ export default function Header({
         <div className="absolute top-24 w-screen ">
           <div
             className="bg-stone-100 flex flex-row justify-center py-5"
-            onMouseEnter={() =>
-              setHoveredLinkData({ ...hoveredLinkData, isExpandable: true })
-            }
-            onMouseLeave={() =>
-              setHoveredLinkData({ ...hoveredLinkData, isExpandable: false })
-            }
+            onMouseEnter={() => setHoveredLinkData(hoveredLinkData)}
+            onMouseLeave={() => setHoveredLinkData(null)}
           >
             <div className="flex flex-row justify-between w-2/3 px-6">
               {hoveredLinkData.image ? (
