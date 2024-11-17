@@ -1,10 +1,17 @@
-import { Banner, HeroBanner, NavbarItem, responseBody } from "./definitions";
+import {
+  Banner,
+  Category,
+  HeroBanner,
+  NavbarItem,
+  responseBody,
+} from "./definitions";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 const urls = {
   getBanners: new URL("/api/banners", baseUrl),
   getNavbarItems: new URL("/api/navbar-items", baseUrl),
   getHeroBanners: new URL("/api/hero-banners", baseUrl),
+  getCategories: new URL("api/categories", baseUrl),
 };
 
 export async function getBannerData() {
@@ -51,6 +58,20 @@ export async function getHeroBanners() {
     const response = await fetch(urls.getHeroBanners.href);
     const body: responseBody = await response.json();
     const data = body.data as HeroBanner[];
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getCategories() {
+  try {
+    urls.getCategories.search = new URLSearchParams({
+      populate: "image",
+    }).toString();
+    const response = await fetch(urls.getCategories.href);
+    const body: responseBody = await response.json();
+    const data = body.data as Category[];
     return data;
   } catch (error) {
     console.error(error);
