@@ -57,3 +57,9 @@ export type HeroBanner = {
     secondary: string;
   };
 };
+
+export type Category = {
+  id: number;
+  name: string;
+  image: Image;
+};
