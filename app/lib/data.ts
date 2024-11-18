@@ -67,9 +67,12 @@ export async function getHeroBanners() {
 export async function getCategories() {
   try {
     urls.getCategories.search = new URLSearchParams({
+      sort: "orderNumber:asc",
       populate: "image",
     }).toString();
-    const response = await fetch(urls.getCategories.href);
+    const response = await fetch(urls.getCategories.href, {
+      cache: "no-cache", // don't cache
+    });
     const body: responseBody = await response.json();
     const data = body.data as Category[];
     return data;
