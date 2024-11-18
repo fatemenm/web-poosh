@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import Carousel from "@/components/carousel";
+import ClickSlider from "@/components/clickSlider";
 import { getCategories, getHeroBanners } from "@/lib/data";
 
 import { apiBaseUrl } from "../../config";
@@ -40,7 +41,8 @@ export default async function Page() {
         })}
       </div>
       {/* Category Carousel */}
-      {categories && <Carousel categories={categories} />}
+      {/* {categories && <Carousel categories={categories} />} */}
+      {categories && <ClickSlider categories={categories} />}
       {/* Daily Set Banners */}
       {/* New Products Carousel */}
     </div>
