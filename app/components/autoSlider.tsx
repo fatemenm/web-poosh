@@ -4,6 +4,7 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons/faChevronLeft";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons/faChevronRight";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
@@ -64,11 +65,16 @@ const settings = {
 };
 
 export default function AutoSlider({ data }: { data: ClotheProduct[] }) {
+  const router = useRouter();
   return (
     <div className="w-full px-20 mx-auto mt-8 mb-24 ">
       <Slider {...settings}>
         {data.map((item) => (
-          <div key={item.id} className="px-4">
+          <div
+            key={item.id}
+            className="px-4"
+            onClick={() => router.push(`/products/${item.id}`)}
+          >
             <Image
               src={`${apiBaseUrl}${item.image.url}`}
               alt={item.image.alternativeText}
@@ -76,7 +82,9 @@ export default function AutoSlider({ data }: { data: ClotheProduct[] }) {
               height={item.image.height}
             />
             <div className="flex flex-col gap-2 text-center mt-4 text-stone-600 text-sm">
-              <span className="font-medium">{item.name}</span>
+              <span className="font-medium">
+                {item.name} {item.id.toLocaleString("fa-IR")}
+              </span>
               <span>
                 تومان{" "}
                 {Number(item.price.replace(/,/g, "")).toLocaleString("fa-IR")}
