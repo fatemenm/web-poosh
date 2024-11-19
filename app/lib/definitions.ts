@@ -25,7 +25,7 @@ export type NavbarItem = {
   linkUrl: string;
   subLinks?: { items: NavigationLink[] } | null;
   isExpandable: boolean;
-  order: number;
+  orderNumber: number;
   image?: Image | null;
 };
 
@@ -62,4 +62,19 @@ export type Category = {
   id: number;
   name: string;
   image: Image;
+};
+
+export type ClotheSetBanner = {
+  id: number;
+  image: Image;
+  linkText: string;
+  linkUrl: string;
+  title: string;
+};
+
+export type ClotheProduct = {
+  id: number;
+  name: string;
+  image: Image;
+  price: string;
 };
