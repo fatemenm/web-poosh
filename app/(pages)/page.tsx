@@ -30,6 +30,7 @@ export default async function Page() {
                 alt={banner.image.alternativeText}
                 width={banner.image.width}
                 height={banner.image.height}
+                priority
               />
               <div className="flex flex-col items-center text-stone-900 font-medium gap-1">
                 <span className="text-lg ">{banner.texts.primary}</span>
@@ -54,7 +55,7 @@ export default async function Page() {
         <div className="flex flex-col gap-3 w-full mt-16 px-12">
           <div className="flex flex-row-reverse items-center justify-between text-stone-800">
             <span className="text-lg"> ست‌‌‌‌‌‌‌های جدید</span>
-            <Link href="/" className="text-xs ">
+            <Link href="/sets" className="text-xs ">
               مشاهده همه
             </Link>
           </div>
