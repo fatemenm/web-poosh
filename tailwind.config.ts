@@ -8,6 +8,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        persian: ["var(--font-vazirmatn)"],
+        english: ["var(--font-roboto)"],
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

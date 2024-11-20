@@ -1,19 +1,62 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+"use client";
+
 import {
   faFacebook,
   faInstagram,
   faTelegram,
 } from "@fortawesome/free-brands-svg-icons";
-import Link from "next/link";
-import logo from "../../public/logo-footer.svg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import { roboto } from "../(pages)/(home)/layout";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-export default function Footer({
-  children,
-}: {
-  children: string | JSX.Element;
-}) {
+import logo from "../../public/logo-footer.svg";
+
+const footerContent = (
+  <div className="flex flex-col gap-10 text-right py-5">
+    <div className="flex flex-col gap-2">
+      <h1 className="text-3xl text-stone-800">
+        فروشگاه اینترنتی پوشاک و لباس مردانه وب پوش
+      </h1>
+      <p className="text-xs leading-5 text-stone-800 font-light" dir="rtl">
+        فروشگاه لباس مردانه وب پوش از سال ۱۳۹۳ با هدف ایجاد بستری مناسب و مطمئن
+        و نیز راحتی هرچه بیشتر مشتریان، برای خرید حضوری و غیرحضوری پوشاک مردانه
+        شروع به فعالیت نمود. ما با ارائه انواع البسه مردانه نظیر: انواع{" "}
+        <strong>پیراهن مردانه</strong> (پیراهن های رسمی، یقه دپلمات، آستین
+        کوتاه، چهارخانه، جین و...)، انواع <strong>شلوار مردانه</strong>{" "}
+        (شلوارهای پارچه ای، کتان، جین واسلش)، انواع <strong>تیشرت</strong> و{" "}
+        <strong> پولوشرت </strong>و انواع{" "}
+        <strong>کت، جلیقه، سویشرت، کاپشن، پلیور</strong> و ... همچنین انواع{" "}
+        <strong>کفش های مردانه</strong> (کفش های رسمی، روزمره و ورزشی) و اکسسوری
+        هایی نظیر <strong>کمربند، کلاه</strong> و... به دنبال ارائه تجربه ای
+        راحت و لذت بخش از <strong>خرید اینترنتی </strong> برای مشتریان می باشیم.
+        مجموعه وب پوش ارائه
+        <strong>محصولات با کیفیت</strong> را در دستور کار خود قرار داده است. از
+        این رو تمامی محصولات ارائه شده در سایت و فروشگاه های وب پوش از محصولات
+        با کیفیت می باشند. برای اطمینان خاطر مشتریان، تیم پشتیبانی وب پوش شنبه
+        تا پنجشنبه از ساعت ۹ الی ۱۷ آماده راهنمایی و پاسخگویی به سوالات شما
+        مشتریان عزیز می باشند. همچنین جهت رفاه هرچه بیشتر مشتریان پنج فروشگاه
+        حضوری وب پوش (فروشگاه های اقدسیه، شهرک غرب، ایران‌مال
+        <span dir="ltr"> G1 </span>، ایران‌مال
+        <span dir="ltr"> G2 </span>و هدیش مال) هر روز هفته از ساعت ۱۱ صبح الی ۱۰
+        شب آماده خدمت رسانی به مشتریان می باشد.
+      </p>
+    </div>
+    <div className="flex flex-col gap-2">
+      <h1 className="text-3xl text-stone-800">خرید اقساطی لباس مردانه</h1>
+      <p className="text-xs leading-5 text-stone-800 font-light" dir="rtl">
+        از این پس امکان خرید قسطی لباس از فروشگاه اینترنتی وبپوش فراهم شده است.
+        مشتریان عزیز می‌توانند با استفاده از اعتبار اسنپ پی خود ماهانه در چهار
+        قسط، بدون هیچ گونه ضمانت، بهره و یا وثیقه ای خرید خود را انجام دهند. با
+        استفاده از این سرویس، هزینه کالای مورد نظر به چهار قسط تقسیم می‌شود و به
+        محض پرداخت قسط اول خرید نهایی می‌شود و می‌توان هر قسط را ماهیانه از طریق
+        اپلیکیشن اسنپ پی پرداخت نمود.
+      </p>
+    </div>
+  </div>
+);
+export default function Footer() {
+  const isHomePage = usePathname() === "/" || false;
   return (
     <footer className="flex flex-col justify-between px-48 bg-stone-50 pb-4 border-t gap-8">
       <div className="flex flex-col items-end">
@@ -59,7 +102,6 @@ export default function Footer({
                       />
                     </button>
                     <button>
-                      {" "}
                       <FontAwesomeIcon
                         icon={faInstagram}
                         style={{ fontSize: 20 }}
@@ -71,49 +113,78 @@ export default function Footer({
             </div>
             <div className="flex flex-col items-end text-stone-700 gap-6">
               <span className="text-md font-medium">درباره وب‌ پوش</span>
-              <div className="flex flex-col text-sm font-light items-end gap-2">
-                <Link href="">درباره ما</Link>
-                <Link href="">ارتباط با ما</Link>
-              </div>
+              <nav>
+                <ul className="flex flex-col text-sm font-light items-end gap-2">
+                  <li>
+                    <Link href="">درباره ما</Link>
+                  </li>
+                  <li>
+                    <Link href="">ارتباط با ما</Link>
+                  </li>
+                </ul>
+              </nav>
             </div>
             <div className="flex flex-col items-end text-stone-700 gap-6">
               <span className="text-md font-medium">خدمات مشتریان</span>
-              <div className="flex flex-col text-sm font-light items-end gap-2">
-                <Link href="">پشتیبانی: 91005005 - 021</Link>
-                <Link href="">سوالات متداول</Link>
-                <Link href="">بازگشت کالا</Link>
-                <Link href="">حریم خصوصی</Link>
-                <Link href="">فروشگاه حضوری</Link>
-              </div>
+              <nav>
+                <ul className="flex flex-col text-sm font-light items-end gap-2">
+                  <li>
+                    <Link href="">پشتیبانی: ۹۱۰۰۵۰۰۵ - ۰۲۱</Link>
+                  </li>
+                  <li>
+                    <Link href="">سوالات متداول</Link>
+                  </li>
+                  <li>
+                    {" "}
+                    <Link href="">بازگشت کالا</Link>
+                  </li>
+                  <li>
+                    <Link href="">حریم خصوصی</Link>
+                  </li>
+                  <li>
+                    <Link href="">فروشگاه حضوری</Link>
+                  </li>
+                </ul>
+              </nav>
             </div>
             <div className="flex flex-col items-end text-stone-700 gap-6">
               <span className="text-md font-medium">راهنمای خرید</span>
-              <div className="flex flex-col text-sm font-light items-end gap-2">
-                <Link href="">راهنمای انتخاب سایز</Link>
-                <Link href="">روش ارسال</Link>
-                <Link href="">روش پرداخت</Link>
-              </div>
+              <nav>
+                <ul className="flex flex-col text-sm font-light items-end gap-2">
+                  <li>
+                    <Link href="">راهنمای انتخاب سایز</Link>
+                  </li>
+                  <li>
+                    <Link href="">روش ارسال</Link>
+                  </li>
+                  <li>
+                    <Link href="">روش پرداخت</Link>
+                  </li>
+                </ul>
+              </nav>
             </div>
           </div>
-          <div className="">
-            <Image src={logo} alt="logo" width={240} height={185} />
-          </div>
+          <Image
+            src={logo}
+            alt="logo"
+            style={{ width: "240px", height: "185px" }}
+          />
         </div>
         <hr className="bg-stone-400 h-px w-full mb-4" />
-        <div className="flex flex-row justify-end items-center gap-2 text-sm text-stone-700 font-light bg-pink ">
+        <nav className="flex flex-row-reverse justify-end items-center gap-2 text-sm text-stone-700 font-light bg-pink ">
           <Link href="/">وبلاگ</Link>|<Link href="/">همکاری با ما</Link>|
           <Link href="/">پیراهن</Link>|<Link href="/">یقه اسکی</Link>|
           <Link href="/">دورس مردانه</Link>|<Link href="/">شلوار جین</Link>
-        </div>
+        </nav>
       </div>
-      {children}
-      <div className="flex flex-row justify-between items-center text-xs text-stone-700">
-        <span className={`font-semibold ${roboto.className}`}>
+      {isHomePage && footerContent}
+      <div className="flex flex-row justify-between items-center text-stone-700">
+        <small className="font-semibold text-xs font-english">
           webpoosh.com - 2024 © Copyright
-        </span>
-        <span className="font-light">
+        </small>
+        <small className="font-light text-xs">
           کلیه حقوق مادی و معنوی این سایت متعلق به فروشگاه وب‌پوش می‌باشد
-        </span>
+        </small>
       </div>
     </footer>
   );

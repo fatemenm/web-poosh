@@ -1,25 +1,8 @@
-// export type User = {
-//   id: string;
-//   name: string;
-//   email: string;
-//   password: string;
-// };
-
-// export type product = {
-//   name: string;
-//   category: string;
-//   subCategory: string | undefined;
-//   color: string;
-//   size: string;
-//   price: string;
-//   stockStatus: boolean;
-// };
-
 export type Banner = {
   startDate: Date;
   endDate: Date;
-  dynamicText: string;
-  staticText: string;
+  promoMessage: string;
+  siteTagline: string;
   ctaText: string;
   ctaUrl: string;
 };
@@ -59,4 +42,18 @@ export type Image = {
   url: string;
   width: number;
   height: number;
+};
+export interface HeaderData {
+  banner: Banner | undefined;
+  navbarItems: NavbarItem[] | undefined;
+}
+
+export type HeroBanner = {
+  image: Image;
+  linkText: string;
+  linkUrl: string;
+  texts: {
+    primary: string;
+    secondary: string;
+  };
 };
