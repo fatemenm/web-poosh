@@ -71,7 +71,7 @@ export default function AutoSlider({ data }: { data: ClotheProduct[] }) {
         {data.map((item) => (
           <div
             key={item.id}
-            className="px-4"
+            className="px-4 cursor-pointer active:border-none"
             onClick={() => router.push(`/products/${item.id}`)}
           >
             <Image
