@@ -25,7 +25,7 @@ export type NavbarItem = {
   linkUrl: string;
   subLinks?: { items: NavigationLink[] } | null;
   isExpandable: boolean;
-  orderNumber: number;
+  index: number;
   image?: Image | null;
 };
 
@@ -60,6 +60,7 @@ export type HeroBanner = {
 
 export type Category = {
   id: number;
+  index: number;
   name: string;
   image: Image;
 };
