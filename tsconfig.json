@@ -24,7 +24,8 @@
     "paths": {
       "@/*": [
         "./app/*"
-      ]
+      ],
+      "@config":["./config.ts"]
     },
     "target": "ES2017"
   },
