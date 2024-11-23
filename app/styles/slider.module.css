@@ -1,0 +1,10 @@
+.customArrow {
+  height: auto;
+  width: auto;
+}
+.customLeftArrow {
+  left: -60px;
+}
+.customRightArrow {
+  right: -60px;
+}
