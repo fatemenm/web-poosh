@@ -1,3 +1,4 @@
+import { apiBaseUrl } from "@config";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -9,8 +10,6 @@ import {
   getClotheSetBanners,
   getHeroBanners,
 } from "@/lib/data";
-
-import { apiBaseUrl } from "../../config";
 
 const heroBanners = await getHeroBanners();
 const categories = await getCategories();
@@ -26,7 +25,7 @@ export default async function Page() {
           return (
             <div key={id} className="flex flex-col items-center gap-4">
               <Image
-                src={`${apiBaseUrl}${banner.image?.url}`}
+                src={apiBaseUrl + banner.image.url}
                 alt={banner.image.alternativeText}
                 width={banner.image.width}
                 height={banner.image.height}
@@ -62,11 +61,11 @@ export default async function Page() {
           <hr className="bg-stone-400 h-px w-full mb-4" />
         </div>
         <div className="flex flex-row-reverse gap-8">
-          {clothingSetBanners?.map((banner, id) => {
+          {clothingSetBanners?.map((banner) => {
             return (
-              <div key={id} className="flex flex-col items-center gap-4">
+              <div key={banner.id} className="flex flex-col items-center gap-4">
                 <Image
-                  src={`${apiBaseUrl}${banner.image?.url}`}
+                  src={apiBaseUrl + banner.image.url}
                   alt={banner.image.alternativeText}
                   width={banner.image.width}
                   height={banner.image.height}

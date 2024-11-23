@@ -1,5 +1,6 @@
 "use client";
 
+import { apiBaseUrl } from "@config";
 import {
   faBagShopping,
   faSearch,
@@ -13,17 +14,18 @@ import { useEffect, useState } from "react";
 import PromotionalBanner from "@/components/promotionalBanner";
 import { Banner, NavbarItem, NavigationLink } from "@/lib/definitions";
 
-import { apiBaseUrl } from "../../config";
 import logo from "../../public/logo.png";
 
 function getClassNames(item: NavbarItem, isHovered: boolean) {
-  if (!isHovered)
-    return "flex items-center text-stone-700 font-medium  border-b-2 border-b-transparent";
-  if (item.isExpandable) {
-    return "flex items-center cursor-pointer text-stone-700 font-medium border-b-2 border-b-transparent";
-  } else {
-    return "flex items-center cursor-pointer text-stone-700 font-medium border-b-2 border-gray-900";
-  }
+  const baseClasses =
+    "flex items-center text-stone-700 font-medium border-b-2 ";
+  let situationalClasses = "";
+  if (isHovered && item.isExpandable)
+    situationalClasses = "cursor-pointer border-b-transparent";
+  else if (isHovered && !item.isExpandable)
+    situationalClasses = "cursor-pointer border-gray-900";
+  else situationalClasses = "border-b-transparent";
+  return baseClasses + situationalClasses;
 }
 
 function createSublinkGrid(items: NavigationLink[] | undefined) {
@@ -45,7 +47,8 @@ export default function Header({
 }) {
   const [banner, setBanner] = useState<Banner>();
   const [navbarItems, setNavbarItems] = useState<Array<NavbarItem>>();
-  const [hoveredLinkData, setHoveredLinkData] = useState<NavbarItem | null>();
+  const [hoveredNavbarItem, setHoveredNavbarItem] =
+    useState<NavbarItem | null>();
 
   useEffect(() => {
     setNavbarItems(navbarItemsData);
@@ -79,12 +82,12 @@ export default function Header({
                   <Link
                     className={getClassNames(
                       item,
-                      hoveredLinkData?.id === item.id
+                      hoveredNavbarItem?.id === item.id
                     )}
                     key={item.id}
                     href={item.linkUrl}
-                    onMouseEnter={() => setHoveredLinkData(item)}
-                    onMouseLeave={() => setHoveredLinkData(null)}
+                    onMouseEnter={() => setHoveredNavbarItem(item)}
+                    onMouseLeave={() => setHoveredNavbarItem(null)}
                   >
                     {item.linkText}
                   </Link>
@@ -99,27 +102,27 @@ export default function Header({
           </div>
         </div>
       </div>
-      {hoveredLinkData?.isExpandable && (
+      {hoveredNavbarItem?.isExpandable && (
         <div className="absolute top-24 w-screen ">
           <div
             className="bg-stone-100 flex flex-row justify-center py-5"
-            onMouseEnter={() => setHoveredLinkData(hoveredLinkData)}
-            onMouseLeave={() => setHoveredLinkData(null)}
+            onMouseEnter={() => setHoveredNavbarItem(hoveredNavbarItem)}
+            onMouseLeave={() => setHoveredNavbarItem(null)}
           >
             <div className="flex flex-row justify-between w-2/3 px-6">
-              {hoveredLinkData.image ? (
+              {hoveredNavbarItem.image ? (
                 <Image
-                  src={`${apiBaseUrl}${hoveredLinkData.image?.url}`}
-                  alt={hoveredLinkData.image?.alternativeText}
-                  width={hoveredLinkData.image.width}
-                  height={hoveredLinkData.image.height}
+                  src={apiBaseUrl + hoveredNavbarItem.image.url}
+                  alt={hoveredNavbarItem.image?.alternativeText}
+                  width={hoveredNavbarItem.image.width}
+                  height={hoveredNavbarItem.image.height}
                   unoptimized
                 />
               ) : (
                 <div></div>
               )}
               <div className="flex flex-row-reverse gap-20">
-                {createSublinkGrid(hoveredLinkData?.subLinks?.items)?.map(
+                {createSublinkGrid(hoveredNavbarItem?.subLinks?.items)?.map(
                   (col, colNumber) => {
                     return (
                       <ul

@@ -1,5 +1,3 @@
-import { config } from "@fortawesome/fontawesome-svg-core";
-import "@fortawesome/fontawesome-svg-core/styles.css";
 import { Roboto, Vazirmatn } from "next/font/google";
 import Head from "next/head";
 
@@ -13,13 +11,6 @@ const vazirmatn = Vazirmatn({
   display: "swap",
   variable: "--font-vazirmatn",
 });
-const roboto = Roboto({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  display: "swap",
-  variable: "--font-roboto",
-});
-
 export default async function RootLayout({
   children,
 }: Readonly<{

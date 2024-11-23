@@ -1,5 +1,6 @@
 "use client";
 
+import { apiBaseUrl } from "@config";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons/faChevronLeft";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons/faChevronRight";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,8 +12,6 @@ import "slick-carousel/slick/slick.css";
 
 import { Category, ClotheProduct } from "@/lib/definitions";
 import styles from "@/styles/slider.module.css";
-
-import { apiBaseUrl } from "../../config";
 
 interface CustomArrowProps {
   className?: string | undefined;
@@ -76,7 +75,7 @@ export default function AutoSlider({ data }: { data: ClotheProduct[] }) {
             onClick={() => router.push(`/products/${item.id}`)}
           >
             <Image
-              src={`${apiBaseUrl}${item.image.url}`}
+              src={apiBaseUrl + item.image.url}
               alt={item.image.alternativeText}
               width={item.image.width}
               height={item.image.height}

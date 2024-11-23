@@ -8,3 +8,7 @@
 .customRightArrow {
   right: -60px;
 }
+.slick-prev::before,
+.slick-next::before {
+  display: none;
+}

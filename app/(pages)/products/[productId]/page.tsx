@@ -1,8 +1,7 @@
+import { apiBaseUrl } from "@config";
 import Image from "next/image";
 
 import { getClotheProducts } from "@/lib/data";
-
-import { apiBaseUrl } from "../../../../config";
 
 const clotheProducts = await getClotheProducts();
 export async function generateStaticParams() {
@@ -38,7 +37,7 @@ export default function ProductDetails({
           </div>
           <div className="">
             <Image
-              src={`${apiBaseUrl}${product.image?.url}`}
+              src={apiBaseUrl + product.image.url}
               alt={product.image.alternativeText}
               height={product.image.height}
               width={product.image.width}

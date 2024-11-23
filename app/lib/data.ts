@@ -1,4 +1,5 @@
-import { apiBaseUrl } from "../../config";
+import { apiBaseUrl } from "@config";
+
 import {
   Banner,
   Category,
@@ -42,7 +43,7 @@ export async function getBannerData() {
 export async function getNavbarItems() {
   try {
     urls.getNavbarItems.search = new URLSearchParams({
-      sort: "orderNumber:desc",
+      sort: "index:desc",
       populate: "image",
     }).toString();
     const response = await fetch(urls.getNavbarItems.href);
@@ -71,7 +72,7 @@ export async function getHeroBanners() {
 export async function getCategories() {
   try {
     urls.getCategories.search = new URLSearchParams({
-      sort: "orderNumber",
+      sort: "index",
       populate: "image",
     }).toString();
     const response = await fetch(urls.getCategories.href, {
