@@ -1,8 +1,7 @@
+import { apiBaseUrl } from "@config";
 import Image from "next/image";
 
 import { getClotheProducts } from "@/lib/data";
-
-import { apiBaseUrl } from "../../../../config";
 
 const clotheProducts = await getClotheProducts();
 export async function generateStaticParams() {

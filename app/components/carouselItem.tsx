@@ -1,8 +1,7 @@
+import { apiBaseUrl } from "@config";
 import Image from "next/image";
 
 import { Category } from "@/lib/definitions";
-
-import { apiBaseUrl } from "../../config";
 
 export default function CarouselItem({ item }: { item: Category }) {
   return (
