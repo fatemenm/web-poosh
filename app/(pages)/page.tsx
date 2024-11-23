@@ -23,7 +23,10 @@ export default async function Page() {
       <div className="flex flex-row-reverse">
         {heroBanners?.map((banner, id) => {
           return (
-            <div key={id} className="flex flex-col items-center gap-4">
+            <div
+              key={id}
+              className="flex flex-col items-center gap-4 cursor-pointer"
+            >
               <Image
                 src={apiBaseUrl + banner.image.url}
                 alt={banner.image.alternativeText}
@@ -65,6 +68,7 @@ export default async function Page() {
             return (
               <div key={banner.id} className="flex flex-col items-center gap-4">
                 <Image
+                  className="cursor-pointer"
                   src={apiBaseUrl + banner.image.url}
                   alt={banner.image.alternativeText}
                   width={banner.image.width}
