@@ -76,7 +76,7 @@ export default function AutoSlider({ data }: { data: ClotheProduct[] }) {
             onClick={() => router.push(`/products/${item.id}`)}
           >
             <Image
-              src={`${apiBaseUrl}${item.image.url}`}
+              src={apiBaseUrl + item.image.url}
               alt={item.image.alternativeText}
               width={item.image.width}
               height={item.image.height}

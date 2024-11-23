@@ -38,7 +38,7 @@ export default function ProductDetails({
           </div>
           <div className="">
             <Image
-              src={`${apiBaseUrl}${product.image?.url}`}
+              src={apiBaseUrl + product.image.url}
               alt={product.image.alternativeText}
               height={product.image.height}
               width={product.image.width}

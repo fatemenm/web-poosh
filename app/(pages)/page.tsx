@@ -26,7 +26,7 @@ export default async function Page() {
           return (
             <div key={id} className="flex flex-col items-center gap-4">
               <Image
-                src={`${apiBaseUrl}${banner.image?.url}`}
+                src={apiBaseUrl + banner.image.url}
                 alt={banner.image.alternativeText}
                 width={banner.image.width}
                 height={banner.image.height}
@@ -66,7 +66,7 @@ export default async function Page() {
             return (
               <div key={id} className="flex flex-col items-center gap-4">
                 <Image
-                  src={`${apiBaseUrl}${banner.image?.url}`}
+                  src={apiBaseUrl + banner.image.url}
                   alt={banner.image.alternativeText}
                   width={banner.image.width}
                   height={banner.image.height}

@@ -109,7 +109,7 @@ export default function Header({
             <div className="flex flex-row justify-between w-2/3 px-6">
               {hoveredLinkData.image ? (
                 <Image
-                  src={`${apiBaseUrl}${hoveredLinkData.image?.url}`}
+                  src={apiBaseUrl + hoveredLinkData.image.url}
                   alt={hoveredLinkData.image?.alternativeText}
                   width={hoveredLinkData.image.width}
                   height={hoveredLinkData.image.height}
