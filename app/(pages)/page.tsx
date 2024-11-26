@@ -11,21 +11,21 @@ import {
   getHeroBanners,
 } from "@/lib/data";
 
-const heroBanners = await getHeroBanners();
-const categories = await getCategories();
-const clothingSetBanners = await getClotheSetBanners();
-const clotheProducts = await getClotheProducts();
-
 export default async function Page() {
+  const heroBanners = await getHeroBanners();
+  const categories = await getCategories();
+  const clothingSetBanners = await getClotheSetBanners();
+  const clotheProducts = await getClotheProducts();
+
   return (
-    <div className=" flex flex-col items-center">
+    <div className="flex flex-col items-center">
       {/* Hero Banners */}
       <div className="flex flex-row-reverse">
         {heroBanners?.map((banner, id) => {
           return (
             <div
               key={id}
-              className="flex flex-col items-center gap-4 cursor-pointer"
+              className="flex cursor-pointer flex-col items-center gap-4"
             >
               <Image
                 src={apiBaseUrl + banner.image.url}
@@ -34,13 +34,13 @@ export default async function Page() {
                 height={banner.image.height}
                 priority
               />
-              <div className="flex flex-col items-center text-stone-900 font-medium gap-1">
-                <span className="text-lg ">{banner.texts.primary}</span>
-                <span className="tracking-[.2em] font-normal text-stone-700 text-sm font-english">
+              <div className="flex flex-col items-center gap-1 font-medium text-stone-900">
+                <span className="text-lg">{banner.texts.primary}</span>
+                <span className="font-english text-sm font-normal tracking-[.2em] text-stone-700">
                   {banner.texts.secondary}
                 </span>
                 <Link
-                  className="border-b pb-2 border-stone-900"
+                  className="border-b border-stone-900 pb-2"
                   href={banner.linkUrl}
                 >
                   {banner.linkText}
@@ -54,14 +54,14 @@ export default async function Page() {
       {categories && <ClickSlider categories={categories} />}
       {/* Daily Set Banners */}
       <div className="flex flex-col gap-7">
-        <div className="flex flex-col gap-3 w-full mt-16 px-12">
+        <div className="mt-16 flex w-full flex-col gap-3 px-12">
           <div className="flex flex-row-reverse items-center justify-between text-stone-800">
             <span className="text-lg"> ست‌‌‌‌‌‌‌های جدید</span>
-            <Link href="/sets" className="text-xs ">
+            <Link href="/sets" className="text-xs">
               مشاهده همه
             </Link>
           </div>
-          <hr className="bg-stone-400 h-px w-full mb-4" />
+          <hr className="mb-4 h-px w-full bg-stone-400" />
         </div>
         <div className="flex flex-row-reverse gap-8">
           {clothingSetBanners?.map((banner) => {
@@ -74,8 +74,8 @@ export default async function Page() {
                   width={banner.image.width}
                   height={banner.image.height}
                 />
-                <div className="flex flex-col items-center text-base text-stone-700 font-light gap-3">
-                  <span className="text-lg ">{banner.title}</span>
+                <div className="flex flex-col items-center gap-3 text-base font-light text-stone-700">
+                  <span className="text-lg">{banner.title}</span>
                   <Link
                     className="underline underline-offset-8"
                     href={banner.linkUrl}
@@ -89,14 +89,14 @@ export default async function Page() {
         </div>
       </div>
       {/* New Products Slider */}
-      <div className="flex flex-col gap-3 w-full mt-16 px-12">
+      <div className="mt-16 flex w-full flex-col gap-3 px-12">
         <div className="flex flex-row-reverse items-center justify-between text-stone-800">
           <span className="text-lg">محصولات جدید</span>
-          <Link href="/" className="text-xs ">
+          <Link href="/" className="text-xs">
             مشاهده همه
           </Link>
         </div>
-        <hr className="bg-stone-400 h-px w-full mb-4" />
+        <hr className="mb-4 h-px w-full bg-stone-400" />
       </div>
       {clotheProducts && <AutoSlider data={clotheProducts} />}
     </div>
