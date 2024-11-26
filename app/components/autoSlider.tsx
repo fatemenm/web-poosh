@@ -10,7 +10,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 
-import { Category, ClotheProduct } from "@/lib/definitions";
+import { ClotheProduct } from "@/lib/definitions";
 import styles from "@/styles/slider.module.css";
 
 interface CustomArrowProps {
@@ -29,7 +29,7 @@ function LeftArrow(props: CustomArrowProps) {
       onClick={onClick}
       style={style}
     >
-      <button className=" text-stone-800 ">
+      <button className="text-stone-800">
         <FontAwesomeIcon icon={faChevronLeft} style={{ fontSize: 24 }} />
       </button>
     </div>
@@ -44,7 +44,7 @@ function RightArrow(props: CustomArrowProps) {
       onClick={onClick}
       style={style}
     >
-      <button className=" text-stone-800 ">
+      <button className="text-stone-800">
         <FontAwesomeIcon icon={faChevronRight} style={{ fontSize: 24 }} />
       </button>
     </div>
@@ -66,31 +66,33 @@ const settings = {
 export default function AutoSlider({ data }: { data: ClotheProduct[] }) {
   const router = useRouter();
   return (
-    <div className="w-full px-20 mx-auto mt-8 mb-24 ">
+    <div className="mx-auto mb-24 mt-8 w-full px-20">
       <Slider {...settings}>
-        {data.map((item) => (
-          <div
-            key={item.id}
-            className="px-4 cursor-pointer outline-none "
-            onClick={() => router.push(`/products/${item.id}`)}
-          >
-            <Image
-              src={apiBaseUrl + item.image.url}
-              alt={item.image.alternativeText}
-              width={item.image.width}
-              height={item.image.height}
-            />
-            <div className="flex flex-col gap-2 text-center mt-4 text-stone-600 text-sm">
-              <span className="font-medium">
-                {item.name} {item.id.toLocaleString("fa-IR")}
-              </span>
-              <span>
-                تومان{" "}
-                {Number(item.price.replace(/,/g, "")).toLocaleString("fa-IR")}
-              </span>
+        {data.map((item) => {
+          return (
+            <div
+              key={item.id}
+              className="cursor-pointer px-4 outline-none"
+              onClick={() => router.push(`/products/${item.id}`)}
+            >
+              <Image
+                src={apiBaseUrl + item.images[0].url}
+                alt={item.images[0].alternativeText}
+                width={item.images[0].width}
+                height={item.images[0].height}
+              />
+              <div className="mt-4 flex flex-col gap-2 text-center text-sm text-stone-600">
+                <span className="font-medium">
+                  {item.name} {item.id.toLocaleString("fa-IR")}
+                </span>
+                <span>
+                  تومان{" "}
+                  {Number(item.price.replace(/,/g, "")).toLocaleString("fa-IR")}
+                </span>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </Slider>
     </div>
   );

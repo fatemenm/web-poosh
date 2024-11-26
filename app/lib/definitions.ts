@@ -42,11 +42,19 @@ export type Image = {
   url: string;
   width: number;
   height: number;
+  formats: {
+    thumbnail: {
+      name: string;
+      width: number;
+      height: number;
+      url: string;
+    };
+  };
 };
-export interface HeaderData {
+export type HeaderData = {
   banner: Banner | undefined;
   navbarItems: NavbarItem[] | undefined;
-}
+};
 
 export type HeroBanner = {
   image: Image;
@@ -76,6 +84,6 @@ export type ClotheSetBanner = {
 export type ClotheProduct = {
   id: number;
   name: string;
-  image: Image;
   price: string;
+  images: Image[];
 };

@@ -104,7 +104,7 @@ export async function getClotheProducts() {
   try {
     urls.getClotheProducts.search = new URLSearchParams({
       sort: "createdAt",
-      populate: "image",
+      populate: "images",
     }).toString();
     const response = await fetch(urls.getClotheProducts.href);
     const body: responseBody = await response.json();
