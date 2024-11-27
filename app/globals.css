@@ -16,3 +16,7 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+li.slick-active {
+  outline: 2px solid rgb(29, 28, 28) !important;
+}
