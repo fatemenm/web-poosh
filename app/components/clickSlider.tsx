@@ -28,7 +28,7 @@ function LeftArrow(props: CustomArrowProps) {
       onClick={onClick}
       style={style}
     >
-      <button className=" text-stone-800 ">
+      <button className="text-stone-800">
         <FontAwesomeIcon icon={faChevronLeft} style={{ fontSize: 24 }} />
       </button>
     </div>
@@ -43,7 +43,7 @@ function RightArrow(props: CustomArrowProps) {
       onClick={onClick}
       style={style}
     >
-      <button className=" text-stone-800 ">
+      <button className="text-stone-800">
         <FontAwesomeIcon icon={faChevronRight} style={{ fontSize: 24 }} />
       </button>
     </div>
@@ -64,12 +64,12 @@ export default function ClickSlider({
   categories: Category[];
 }) {
   return (
-    <div className="w-full px-20 mx-auto my-16 ">
+    <div className="my-16 w-full px-20">
       <Slider {...settings}>
         {categories.map((item) => (
           <div
             key={item.id}
-            className="flex flex-col items-center mx-4 cursor-pointer outline-none "
+            className="mx-4 flex cursor-pointer flex-col items-center outline-none"
           >
             <Image
               src={apiBaseUrl + item.image.url}
@@ -78,7 +78,7 @@ export default function ClickSlider({
               height={item.image.height}
               quality={100}
             />
-            <div className="underline underline-offset-8 text-center text-stone-600">
+            <div className="text-center text-stone-600 underline underline-offset-8">
               {item.name}
             </div>
           </div>
