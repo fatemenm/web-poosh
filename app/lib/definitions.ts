@@ -8,7 +8,7 @@ export type Banner = {
 };
 
 export type responseBody = {
-  data: Record<string, unknown>[];
+  data: Record<string, unknown>[] | unknown;
   meta: {
     pagination: {
       page: number;
@@ -82,6 +82,7 @@ export type ClotheSetBanner = {
 };
 
 export type ClotheProduct = {
+  documentId: string;
   id: number;
   name: string;
   price: string;
