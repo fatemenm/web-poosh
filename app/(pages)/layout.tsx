@@ -1,4 +1,4 @@
-import { Roboto, Vazirmatn } from "next/font/google";
+import { Vazirmatn } from "next/font/google";
 import Head from "next/head";
 
 import Footer from "@/components/footer";
@@ -19,7 +19,7 @@ export default async function RootLayout({
   const banner = await getBannerData();
   const navbarItems = await getNavbarItems();
   return (
-    <html lang="en" className={`${vazirmatn.className}`}>
+    <html lang="fa-IR" className={vazirmatn.className}>
       <Head>
         <link rel="icon" href="/icon.ico" sizes="any" />
       </Head>

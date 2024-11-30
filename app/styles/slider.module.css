@@ -2,13 +2,13 @@
   height: auto;
   width: auto;
 }
+.customArrow::before {
+  display: none;
+}
 .customLeftArrow {
   left: -60px;
 }
 .customRightArrow {
   right: -60px;
-}
-.slick-prev::before,
-.slick-next::before {
-  display: none;
+  text-align: left;
 }

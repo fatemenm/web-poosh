@@ -1,0 +1,35 @@
+.slickDots {
+  top: 0;
+  bottom: initial;
+  width: auto;
+  position: absolute;
+  display: block;
+  padding: 0;
+  margin: 0;
+  margin-top: 0.3rem;
+  list-style: none;
+  text-align: center;
+  right: -7.6rem;
+}
+.slickDots > li {
+  display: block;
+  width: 5rem;
+  position: relative;
+  margin: 0;
+  margin-bottom: 1.5rem;
+  outline: 2px solid transparent;
+  cursor: pointer;
+  padding: 1px;
+}
+
+.slickDots li:hover {
+  outline: 2px solid gray;
+}
+
+.slickDots li:global(.slick-active) {
+  outline: 2px solid rgb(39, 37, 37);
+}
+
+.slickSlide {
+  background-color: white;
+}
