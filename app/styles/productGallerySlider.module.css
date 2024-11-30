@@ -26,6 +26,10 @@
   outline: 2px solid gray;
 }
 
+.slickDots li:global(.slick-active) {
+  outline: 2px solid rgb(39, 37, 37);
+}
+
 .slickSlide {
   background-color: white;
 }
