@@ -50,7 +50,7 @@ function RightArrow(props: CustomArrowProps) {
   );
 }
 
-const settings = {
+const sliderSettings = {
   infinite: true,
   slidesToShow: 5,
   slidesToScroll: 1,
@@ -65,7 +65,7 @@ export default function ClickSlider({
 }) {
   return (
     <div className="my-16 w-full px-20">
-      <Slider {...settings}>
+      <Slider {...sliderSettings}>
         {categories.map((item) => (
           <div
             key={item.id}

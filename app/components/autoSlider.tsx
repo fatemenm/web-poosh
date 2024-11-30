@@ -51,7 +51,7 @@ function RightArrow(props: CustomArrowProps) {
   );
 }
 
-const settings = {
+const sliderSettings = {
   infinite: true,
   slidesToShow: 5,
   slidesToScroll: 1,
@@ -67,13 +67,13 @@ export default function AutoSlider({ data }: { data: ClotheProduct[] }) {
   const router = useRouter();
   return (
     <div className="mx-auto mb-24 mt-8 w-full px-20">
-      <Slider {...settings}>
+      <Slider {...sliderSettings}>
         {data.map((item) => {
           return (
             <div
               key={item.id}
               className="cursor-pointer px-4 outline-none"
-              onClick={() => router.push(`/products/${item.id}`)}
+              onClick={() => router.push(`/products/${item.documentId}`)}
             >
               <Image
                 src={apiBaseUrl + item.images[0].url}
