@@ -1,6 +1,3 @@
-"use client";
-
-import { apiBaseUrl } from "@config";
 import { faStar } from "@fortawesome/free-regular-svg-icons";
 import {
   faChevronLeft,
@@ -9,31 +6,12 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick-theme.css";
-import "slick-carousel/slick/slick.css";
 
 import { ClotheProduct } from "@/lib/definitions";
-import styles from "@/styles/productCardSlider.module.css";
+
+import ClotheProductGallerySlider from "./productGallerySlider";
 
 export default function ProductCard({ product }: { product: ClotheProduct }) {
-  const settings = {
-    customPaging: function (i: number) {
-      return (
-        <a>
-          <img src={apiBaseUrl + product.images[i].formats.thumbnail.url} />
-        </a>
-      );
-    },
-    dots: true,
-    dotsClass: styles.slickDots,
-    infinite: true,
-    speed: 800,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-    className: styles.slickSlide,
-  };
   return (
     <div className="flex w-full flex-row gap-10">
       {/* product detail */}
@@ -154,23 +132,7 @@ export default function ProductCard({ product }: { product: ClotheProduct }) {
       </div>
       {/* product image */}
       <div className="block w-5/12">
-        <div className="block w-full bg-gray-100">
-          <Slider {...settings}>
-            {product.images.map((img) => {
-              return (
-                <button className="h-full w-20 focus:outline-none" key={img.id}>
-                  <Image
-                    src={apiBaseUrl + img.url}
-                    width={img.width}
-                    height={img.height}
-                    alt={img.alternativeText}
-                    quality={100}
-                  />
-                </button>
-              );
-            })}
-          </Slider>
-        </div>
+        <ClotheProductGallerySlider product={product} />
       </div>
     </div>
   );
