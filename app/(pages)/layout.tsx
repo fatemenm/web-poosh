@@ -19,13 +19,17 @@ export default async function RootLayout({
   const banner = await getBannerData();
   const navbarItems = await getNavbarItems();
   return (
-    <html lang="fa-IR" className={vazirmatn.className}>
+    <html
+      lang="fa-IR"
+      className={vazirmatn.className}
+      style={{ direction: "rtl" }}
+    >
       <Head>
         <link rel="icon" href="/icon.ico" sizes="any" />
       </Head>
-      <body className="min-h-screen flex flex-col">
+      <body className="flex min-h-screen flex-col">
         <Header bannerData={banner} navbarItemsData={navbarItems} />
-        <main className="grow">{children}</main>
+        <main>{children}</main>
         <Footer />
       </body>
     </html>

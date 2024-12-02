@@ -13,7 +13,11 @@ import ClotheProductGallerySlider from "./productGallerySlider";
 
 export default function ProductCard({ product }: { product: ClotheProduct }) {
   return (
-    <div className="flex w-full flex-row gap-10">
+    <div className="flex w-full flex-row justify-end gap-10">
+      {/* product image */}
+      <div className="block w-5/12">
+        <ClotheProductGallerySlider product={product} />
+      </div>
       {/* product detail */}
       <div className="ml-32 flex w-3/12 flex-col gap-6 text-right">
         {/* title */}
@@ -21,14 +25,14 @@ export default function ProductCard({ product }: { product: ClotheProduct }) {
           {product.name} {product.id}
         </h1>
         {/* price */}
-        <div className="flex flex-row-reverse gap-1">
+        <div className="flex flex-row gap-1">
           <span>
             {Number(product.price.replace(/,/g, "")).toLocaleString("fa-IR")}
           </span>
           <span>تومان</span>
         </div>
         {/* snap pay */}
-        <div className="flex flex-row-reverse items-center justify-start gap-4 rounded-sm bg-sky-100 p-2">
+        <div className="flex flex-row items-center justify-start gap-4 rounded-sm bg-sky-100 p-2">
           <Image
             src="/snappay.png"
             width="32"
@@ -43,7 +47,7 @@ export default function ProductCard({ product }: { product: ClotheProduct }) {
           </div>
         </div>
         {/* star feedback */}
-        <div className="flex flex-row-reverse items-center gap-2 stroke-stone-700 text-xs font-light">
+        <div className="flex flex-row items-center gap-2 stroke-stone-700 text-xs font-light">
           <div>
             {[1, 2, 3, 4, 5].map((index) => {
               return (
@@ -67,7 +71,7 @@ export default function ProductCard({ product }: { product: ClotheProduct }) {
             رنگ انتخابی شما:
             <span className="pr-1 font-normal"> آبی روشن</span>
           </div>
-          <div className="flex flex-row-reverse flex-wrap gap-2">
+          <div className="flex flex-row flex-wrap gap-2">
             <button className="flex h-10 w-10 flex-row items-center justify-center rounded-full border border-stone-200 p-[3px] hover:border-2 hover:border-stone-900">
               <div className="h-full w-full rounded-full bg-indigo-100"></div>
             </button>
@@ -101,7 +105,7 @@ export default function ProductCard({ product }: { product: ClotheProduct }) {
           </table>
         </div>
         {/* sizing guidance */}
-        <Link className="mt-2 flex flex-row-reverse gap-3 pr-1" href="">
+        <Link className="mt-2 flex flex-row gap-3 pr-1" href="">
           <Image
             className="rotate-45"
             src="/ruler.png"
@@ -120,7 +124,7 @@ export default function ProductCard({ product }: { product: ClotheProduct }) {
         <button className="bg-green-700 py-5 text-sm text-white hover:bg-green-800">
           اضافه به سبد خرید
         </button>
-        <button className="mt-4 flex flex-row-reverse justify-between px-4 py-3 text-sm text-stone-800 outline outline-1 hover:bg-stone-800 hover:text-stone-50">
+        <button className="mt-4 flex flex-row justify-between px-4 py-3 text-sm text-stone-800 outline outline-1 hover:bg-stone-800 hover:text-stone-50">
           <span>
             <FontAwesomeIcon icon={faLocationDot} style={{ fontSize: 20 }} />
           </span>
@@ -129,10 +133,6 @@ export default function ProductCard({ product }: { product: ClotheProduct }) {
             <FontAwesomeIcon icon={faChevronLeft} style={{ fontSize: 20 }} />
           </span>
         </button>
-      </div>
-      {/* product image */}
-      <div className="block w-5/12">
-        <ClotheProductGallerySlider product={product} />
       </div>
     </div>
   );

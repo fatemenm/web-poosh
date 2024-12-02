@@ -20,7 +20,7 @@ export default async function Page() {
   return (
     <div className="flex flex-col items-center">
       {/* Hero Banners */}
-      <div className="flex flex-row-reverse">
+      <div className="flex flex-row">
         {heroBanners?.map((banner, id) => {
           return (
             <div
@@ -55,7 +55,7 @@ export default async function Page() {
       {/* Daily Set Banners */}
       <div className="flex flex-col gap-7">
         <div className="mt-16 flex w-full flex-col gap-3 px-12">
-          <div className="flex flex-row-reverse items-center justify-between text-stone-800">
+          <div className="flex flex-row items-center justify-between text-stone-800">
             <span className="text-lg"> ست‌‌‌‌‌‌‌های جدید</span>
             <Link href="/sets" className="text-xs">
               مشاهده همه
@@ -63,7 +63,7 @@ export default async function Page() {
           </div>
           <hr className="mb-4 h-px w-full bg-stone-400" />
         </div>
-        <div className="flex flex-row-reverse gap-8">
+        <div className="flex flex-row gap-8">
           {clothingSetBanners?.map((banner) => {
             return (
               <div key={banner.id} className="flex flex-col items-center gap-4">
@@ -90,7 +90,7 @@ export default async function Page() {
       </div>
       {/* New Products Slider */}
       <div className="mt-16 flex w-full flex-col gap-3 px-12">
-        <div className="flex flex-row-reverse items-center justify-between text-stone-800">
+        <div className="flex flex-row items-center justify-between text-stone-800">
           <span className="text-lg">محصولات جدید</span>
           <Link href="/" className="text-xs">
             مشاهده همه

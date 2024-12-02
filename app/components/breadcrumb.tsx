@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function BreadCrumb() {
   // TODO: fix icons layout shift problem
   return (
-    <div className="flex flex-row-reverse items-center gap-4 bg-stone-100 px-10 py-3 text-sm text-stone-700">
+    <div className="flex w-10/12 flex-row items-center gap-4 bg-stone-100 px-10 py-3 text-sm text-stone-700">
       <Link href="">وب پوش</Link>
       <span>
         <FontAwesomeIcon

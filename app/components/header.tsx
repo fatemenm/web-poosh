@@ -56,27 +56,21 @@ export default function Header({
   }, []);
 
   return (
-    <header className="flex flex-col">
+    <header className="flex flex-col items-center">
       {banner ? (
         <PromotionalBanner data={banner} />
       ) : (
-        <div className="bg-stone-800 w-full p-2 flex flex-row justify-start text-white text-sm font-light min-h-10 box-border"></div>
+        <div className="box-border flex min-h-10 w-full flex-row justify-start bg-stone-800 p-2 text-sm font-light text-white"></div>
       )}
-      <div className="flex flex-row justify-between items-center mx-48 py-2">
-        <div className="flex flex-row justify-between gap-8">
-          <button>
-            <FontAwesomeIcon icon={faBagShopping} style={{ fontSize: 20 }} />
-          </button>
-          <button>
-            <FontAwesomeIcon icon={faUser} style={{ fontSize: 20 }} />
-          </button>
-          <button>
-            <FontAwesomeIcon icon={faSearch} style={{ fontSize: 20 }} />
-          </button>
-        </div>
-        <div className="flex flex-row gap-10 ">
+      <div className="flex w-10/12 flex-row items-center justify-between py-2">
+        <div className="flex flex-row gap-10">
+          <div className="h-14 w-28 pt-1">
+            <Link href="/">
+              <Image src={logo} alt="logo" />
+            </Link>
+          </div>
           {navbarItems && (
-            <nav className="flex flex-row justify-between gap-8 text-sm ">
+            <nav className="flex flex-row justify-between gap-8 text-sm">
               {navbarItems.map((item) => {
                 return (
                   <Link
@@ -95,39 +89,35 @@ export default function Header({
               })}
             </nav>
           )}
-          <div className="h-14 w-28 pt-1">
-            <Link href="/">
-              <Image src={logo} alt="logo" />
-            </Link>
-          </div>
+        </div>
+        <div className="flex flex-row justify-between gap-8">
+          <button>
+            <FontAwesomeIcon icon={faSearch} style={{ fontSize: 20 }} />
+          </button>
+
+          <button>
+            <FontAwesomeIcon icon={faUser} style={{ fontSize: 20 }} />
+          </button>
+          <button>
+            <FontAwesomeIcon icon={faBagShopping} style={{ fontSize: 20 }} />
+          </button>
         </div>
       </div>
       {hoveredNavbarItem?.isExpandable && (
-        <div className="absolute top-24 w-screen ">
+        <div className="absolute top-24 z-10 w-screen">
           <div
-            className="bg-stone-100 flex flex-row justify-center py-5"
+            className="flex flex-row justify-center bg-stone-100 py-5"
             onMouseEnter={() => setHoveredNavbarItem(hoveredNavbarItem)}
             onMouseLeave={() => setHoveredNavbarItem(null)}
           >
-            <div className="flex flex-row justify-between w-2/3 px-6">
-              {hoveredNavbarItem.image ? (
-                <Image
-                  src={apiBaseUrl + hoveredNavbarItem.image.url}
-                  alt={hoveredNavbarItem.image?.alternativeText}
-                  width={hoveredNavbarItem.image.width}
-                  height={hoveredNavbarItem.image.height}
-                  unoptimized
-                />
-              ) : (
-                <div></div>
-              )}
-              <div className="flex flex-row-reverse gap-20">
+            <div className="flex w-2/3 flex-row justify-between px-6">
+              <div className="flex flex-row gap-20">
                 {createSublinkGrid(hoveredNavbarItem?.subLinks?.items)?.map(
                   (col, colNumber) => {
                     return (
                       <ul
                         key={colNumber}
-                        className="text-right text-stone-600 font-normal text-sm flex flex-col gap-5"
+                        className="flex flex-col gap-5 text-right text-sm font-normal text-stone-600"
                       >
                         {col.map((item, rowNumber) => {
                           return (
@@ -141,9 +131,20 @@ export default function Header({
                   }
                 )}
               </div>
+              {hoveredNavbarItem.image ? (
+                <Image
+                  src={apiBaseUrl + hoveredNavbarItem.image.url}
+                  alt={hoveredNavbarItem.image?.alternativeText}
+                  width={hoveredNavbarItem.image.width}
+                  height={hoveredNavbarItem.image.height}
+                  unoptimized
+                />
+              ) : (
+                <div></div>
+              )}
             </div>
           </div>
-          <div className="bg-stone-800 bg-opacity-50 h-screen"></div>
+          <div className="h-screen bg-stone-800 bg-opacity-50"></div>
         </div>
       )}
     </header>
