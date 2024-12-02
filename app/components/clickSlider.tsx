@@ -69,7 +69,7 @@ export default function ClickSlider({
         {categories.map((item) => (
           <div
             key={item.id}
-            className="mx-4 flex cursor-pointer flex-col items-center outline-none"
+            className="flex cursor-pointer flex-col items-center outline-none"
           >
             <Image
               src={apiBaseUrl + item.image.url}
