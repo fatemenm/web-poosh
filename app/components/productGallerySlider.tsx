@@ -29,7 +29,7 @@ export default function ClotheProductGallerySlider({
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: false,
-    className: styles.slickSlide,
+    className: styles.slickSlider,
   };
   return (
     <div className="block w-full bg-gray-100">
