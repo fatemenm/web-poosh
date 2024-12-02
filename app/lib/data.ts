@@ -46,14 +46,14 @@ export async function getBannerData() {
     return earliestActiveBanner;
   } catch (error) {
     console.error(error);
-    return error;
+    throw error;
   }
 }
 export async function getNavbarItems() {
   try {
     const url = new URL(urls.getNavbarItems);
     url.search = new URLSearchParams({
-      sort: "index:desc",
+      sort: "index",
       populate: "image",
     }).toString();
     const response = await fetch(url.href);
@@ -65,7 +65,7 @@ export async function getNavbarItems() {
     return data;
   } catch (error) {
     console.error(error);
-    return error;
+    throw error;
   }
 }
 
@@ -84,7 +84,7 @@ export async function getHeroBanners() {
     return data;
   } catch (error) {
     console.error(error);
-    return error;
+    throw error;
   }
 }
 
@@ -104,7 +104,7 @@ export async function getCategories() {
     return data;
   } catch (error) {
     console.error(error);
-    return error;
+    throw error;
   }
 }
 
@@ -123,7 +123,7 @@ export async function getClotheSetBanners() {
     return data;
   } catch (error) {
     console.error(error);
-    return error;
+    throw error;
   }
 }
 
@@ -142,7 +142,7 @@ export async function getClotheProducts() {
     return data;
   } catch (error) {
     console.error(error);
-    return error;
+    throw error;
   }
 }
 export async function getClotheProductById(documentId: string) {
@@ -160,7 +160,7 @@ export async function getClotheProductById(documentId: string) {
     const data = body.data as ClotheProduct;
     return data;
   } catch (error) {
-    // TODO: how to fix the error type ts in the file I use this function? (when returning error)
     console.error(error);
+    throw error;
   }
 }
