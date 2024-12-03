@@ -11,14 +11,18 @@ import { ClotheProduct } from "@/lib/definitions";
 
 import ClotheProductGallerySlider from "./productGallerySlider";
 
-export default function ProductCard({ product }: { product: ClotheProduct }) {
+export default function ProductDetails({
+  product,
+}: {
+  product: ClotheProduct;
+}) {
   return (
-    <div className="flex w-full flex-row justify-end gap-10">
+    <div className="flex w-10/12 flex-row justify-end gap-10">
       {/* product image */}
       <div className="block w-5/12">
         <ClotheProductGallerySlider product={product} />
       </div>
-      {/* product detail */}
+      {/* specifications */}
       <div className="ml-32 flex w-3/12 flex-col gap-6 text-right">
         {/* title */}
         <h1 className="text-2xl">
