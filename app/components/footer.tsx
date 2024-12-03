@@ -13,7 +13,7 @@ import { usePathname } from "next/navigation";
 import logo from "../../public/logo-footer.svg";
 
 const footerContent = (
-  <div className="flex flex-col gap-10 py-5 text-right">
+  <div className="flex flex-col gap-10 text-right">
     <div className="flex flex-col gap-2">
       <h1 className="text-3xl text-stone-800">
         فروشگاه اینترنتی پوشاک و لباس مردانه وب پوش
@@ -58,8 +58,8 @@ const footerContent = (
 export default function Footer() {
   const isHomePage = usePathname() === "/" || false;
   return (
-    <footer className="flex flex-col items-center justify-between gap-8 border-t bg-stone-50 pb-4">
-      <div className="w-10/12">
+    <footer className="flex w-full shrink-0 flex-col items-center border-t bg-stone-50">
+      <div className="flex w-10/12 flex-col items-center justify-between gap-8 pb-4">
         <div className="flex flex-col">
           {/* container logo and sections */}
           <div className="flex flex-row items-start justify-between gap-24 py-12">
@@ -146,22 +146,22 @@ export default function Footer() {
                       ما را در شبکه‌های اجتماعی دنبال کنید
                     </span>
                     <div className="flex flex-row gap-4 pr-2">
-                      <button>
+                      <button className="h-5 w-5">
                         <FontAwesomeIcon
                           icon={faFacebook}
                           style={{ fontSize: 20 }}
                         />
                       </button>
-                      <button>
+                      <button className="h-5 w-5">
                         <FontAwesomeIcon
                           icon={faTelegram}
-                          style={{ fontSize: 20 }}
+                          style={{ fontSize: 21 }}
                         />
                       </button>
-                      <button>
+                      <button className="h-5 w-5">
                         <FontAwesomeIcon
                           icon={faInstagram}
-                          style={{ fontSize: 20 }}
+                          style={{ fontSize: 23 }}
                         />
                       </button>
                     </div>
@@ -178,7 +178,7 @@ export default function Footer() {
           </nav>
         </div>
         {isHomePage && footerContent}
-        <div className="flex flex-row items-center justify-between text-stone-700">
+        <div className="flex w-full flex-row items-center justify-between text-stone-700">
           <small className="text-xs font-light">
             کلیه حقوق مادی و معنوی این سایت متعلق به فروشگاه وب‌پوش می‌باشد
           </small>

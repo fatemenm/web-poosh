@@ -56,7 +56,7 @@ export default function Header({
   }, []);
 
   return (
-    <header className="flex flex-col items-center">
+    <header className="flex shrink-0 flex-col items-center">
       {banner ? (
         <PromotionalBanner data={banner} />
       ) : (

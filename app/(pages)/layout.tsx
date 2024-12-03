@@ -29,7 +29,7 @@ export default async function RootLayout({
       </Head>
       <body className="flex min-h-screen flex-col">
         <Header bannerData={banner} navbarItemsData={navbarItems} />
-        <main>{children}</main>
+        <main className="shrink-0 grow">{children}</main>
         <Footer />
       </body>
     </html>
