@@ -83,12 +83,10 @@ export default function AutoSlider({ data }: { data: ClotheProduct[] }) {
               />
               <div className="mt-4 flex flex-col gap-2 text-center text-sm text-stone-600">
                 <span className="font-medium">
-                  {item.name} {item.id.toLocaleString("fa-IR")}
+                  {item.id}
+                  {item.name}
                 </span>
-                <span>
-                  تومان{" "}
-                  {Number(item.price.replace(/,/g, "")).toLocaleString("fa-IR")}
-                </span>
+                <span>تومان {item.price}</span>
               </div>
             </div>
           );
