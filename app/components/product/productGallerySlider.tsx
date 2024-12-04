@@ -43,6 +43,7 @@ export default function ClotheProductGallerySlider({
                 height={img.height}
                 alt={img.alternativeText}
                 quality={100}
+                priority
               />
             </button>
           );

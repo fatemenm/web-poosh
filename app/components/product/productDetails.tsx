@@ -9,13 +9,23 @@ import Link from "next/link";
 
 import { ClotheProduct } from "@/lib/definitions";
 
+import ColorPicker from "./colorPicker";
 import ClotheProductGallerySlider from "./productGallerySlider";
+import { ProductHeader } from "./productHeader";
+import RatingNavigator from "./ratingNavigator";
 
 export default function ProductDetails({
   product,
+  targetId,
 }: {
   product: ClotheProduct;
+  targetId: string;
 }) {
+  const colors = [
+    { name: "آبی روشن", colorCode: "#90b3de" },
+    { name: "آبی تیره", colorCode: "#3e5f87" },
+  ];
+
   return (
     <div className="flex w-10/12 flex-row justify-end gap-10">
       {/* product image */}
@@ -24,66 +34,10 @@ export default function ProductDetails({
       </div>
       {/* specifications */}
       <div className="ml-32 flex w-3/12 flex-col gap-6 text-right">
-        {/* title */}
-        <h1 className="text-2xl">
-          {product.name} {product.id}
-        </h1>
-        {/* price */}
-        <div className="flex flex-row gap-1">
-          <span>
-            {Number(product.price.replace(/,/g, "")).toLocaleString("fa-IR")}
-          </span>
-          <span>تومان</span>
-        </div>
-        {/* snap pay */}
-        <div className="flex flex-row items-center justify-start gap-4 rounded-sm bg-sky-100 p-2">
-          <Image
-            src="/snappay.png"
-            width="32"
-            height="32"
-            alt="snappay logo"
-            className="cursor-zoom-in"
-          />
-          {/* <div className="w-8 h-8 bg-blue-400 rounded-xl"></div> */}
-          <div className="flex flex-col gap-1 text-xs text-sky-900">
-            <span className="font-medium">امکان پرداخت اقساطیِ اسنپ پی</span>
-            <span dir="rtl">۴ قسط ماهیانه 448,750 تومان (بدون کارمزد)</span>
-          </div>
-        </div>
-        {/* star feedback */}
-        <div className="flex flex-row items-center gap-2 stroke-stone-700 text-xs font-light">
-          <div>
-            {[1, 2, 3, 4, 5].map((index) => {
-              return (
-                <span key={index}>
-                  <FontAwesomeIcon
-                    icon={faStar}
-                    style={{ fontSize: 20, color: "lightgray" }}
-                  />
-                </span>
-              );
-            })}
-          </div>
-          <Link href="" className="text-stone-800">
-            اولین نظر را بنویسید
-          </Link>
-        </div>
+        <ProductHeader product={product} />
+        <RatingNavigator targetId={targetId} starRatingNumber={5} />
         <hr />
-        {/* color picker */}
-        <div className="flex flex-col gap-6 text-stone-800">
-          <div className="text-sm font-light">
-            رنگ انتخابی شما:
-            <span className="pr-1 font-normal"> آبی روشن</span>
-          </div>
-          <div className="flex flex-row flex-wrap gap-2">
-            <button className="flex h-10 w-10 flex-row items-center justify-center rounded-full border border-stone-200 p-[3px] hover:border-2 hover:border-stone-900">
-              <div className="h-full w-full rounded-full bg-indigo-100"></div>
-            </button>
-            <button className="flex h-10 w-10 flex-row items-center justify-center rounded-full border border-stone-200 p-[3px] hover:border-2 hover:border-stone-900">
-              <div className="h-full w-full rounded-full bg-blue-900"></div>
-            </button>
-          </div>
-        </div>
+        <ColorPicker colors={colors} />
         {/* sizing table */}
         <div className="flex flex-row items-center" dir="rtl">
           <table className="border-collapse">

@@ -2,8 +2,8 @@ import { apiBaseUrl } from "@config";
 import Image from "next/image";
 import Link from "next/link";
 
-import AutoSlider from "@/components/autoSlider";
-import ClickSlider from "@/components/clickSlider";
+import CategorySlider from "@/components/home/categorySlider";
+import NewProductsSlider from "@/components/home/newProductsSlider";
 import {
   getCategories,
   getClotheProducts,
@@ -51,7 +51,7 @@ export default async function Page() {
         })}
       </div>
       {/* Category Slider */}
-      {categories && <ClickSlider categories={categories} />}
+      {categories && <CategorySlider categories={categories} />}
       {/* Daily Set Banners */}
       <div className="flex flex-col gap-7">
         <div className="mt-16 flex w-full flex-col gap-3 px-12">
@@ -98,7 +98,7 @@ export default async function Page() {
         </div>
         <hr className="mb-4 h-px w-full bg-stone-400" />
       </div>
-      {clotheProducts && <AutoSlider data={clotheProducts} />}
+      {clotheProducts && <NewProductsSlider data={clotheProducts} />}
     </div>
   );
 }

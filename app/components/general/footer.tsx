@@ -10,7 +10,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import logo from "../../public/logo-footer.svg";
+import logo from "../../../public/logo-footer.svg";
 
 const footerContent = (
   <div className="flex flex-col gap-10 text-right">
@@ -146,19 +146,19 @@ export default function Footer() {
                       ما را در شبکه‌های اجتماعی دنبال کنید
                     </span>
                     <div className="flex flex-row gap-4 pr-2">
-                      <button className="h-5 w-5">
+                      <button>
                         <FontAwesomeIcon
                           icon={faFacebook}
                           style={{ fontSize: 20 }}
                         />
                       </button>
-                      <button className="h-5 w-5">
+                      <button>
                         <FontAwesomeIcon
                           icon={faTelegram}
                           style={{ fontSize: 21 }}
                         />
                       </button>
-                      <button className="h-5 w-5">
+                      <button>
                         <FontAwesomeIcon
                           icon={faInstagram}
                           style={{ fontSize: 23 }}

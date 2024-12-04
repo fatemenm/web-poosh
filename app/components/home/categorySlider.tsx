@@ -5,13 +5,12 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons/faChevronLeft";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons/faChevronRight";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 
-import { ClotheProduct } from "@/lib/definitions";
-import styles from "@/styles/slider.module.css";
+import { Category } from "@/lib/definitions";
+import styles from "@/styles/homeSlider.module.css";
 
 interface CustomArrowProps {
   className?: string | undefined;
@@ -55,42 +54,35 @@ const sliderSettings = {
   infinite: true,
   slidesToShow: 5,
   slidesToScroll: 1,
-  speed: 400,
-  autoplay: true,
-  autoplaySpeed: 4000,
-  cssEase: "linear",
   nextArrow: <RightArrow />,
   prevArrow: <LeftArrow />,
 };
 
-export default function AutoSlider({ data }: { data: ClotheProduct[] }) {
-  const router = useRouter();
+export default function CategorySlider({
+  categories,
+}: {
+  categories: Category[];
+}) {
   return (
-    <div className="mx-auto mb-24 mt-8 w-full px-20">
+    <div className="my-16 w-full px-20">
       <Slider {...sliderSettings}>
-        {data.map((item) => {
-          return (
-            <div
-              key={item.id}
-              className="cursor-pointer px-4 outline-none"
-              onClick={() => router.push(`/products/${item.documentId}`)}
-            >
-              <Image
-                src={apiBaseUrl + item.images[0].url}
-                alt={item.images[0].alternativeText}
-                width={item.images[0].width}
-                height={item.images[0].height}
-              />
-              <div className="mt-4 flex flex-col gap-2 text-center text-sm text-stone-600">
-                <span className="font-medium">
-                  {item.id}
-                  {item.name}
-                </span>
-                <span>تومان {item.price}</span>
-              </div>
+        {categories.map((item) => (
+          <div
+            key={item.id}
+            className="flex cursor-pointer flex-col items-center outline-none"
+          >
+            <Image
+              src={apiBaseUrl + item.image.url}
+              alt={item.image.alternativeText}
+              width={item.image.width}
+              height={item.image.height}
+              quality={100}
+            />
+            <div className="text-center text-stone-600 underline underline-offset-8">
+              {item.name}
             </div>
-          );
-        })}
+          </div>
+        ))}
       </Slider>
     </div>
   );
