@@ -1,8 +1,9 @@
+import "@fortawesome/fontawesome-svg-core/styles.css";
 import { Vazirmatn } from "next/font/google";
 import Head from "next/head";
 
-import Footer from "@/components/footer";
-import Header from "@/components/header";
+import Footer from "@/components/general/footer";
+import Header from "@/components/general/header";
 import "@/globals.css";
 import { getBannerData, getNavbarItems } from "@/lib/data";
 
