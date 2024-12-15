@@ -3,7 +3,7 @@
 import { useState } from "react";
 import React from "react";
 
-export default function ColorPicker({
+export default function ColorSelector({
   colors,
 }: {
   colors: Array<{ name: string; colorCode: string }>;

@@ -6,14 +6,10 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 
-import { ClotheProduct } from "@/lib/definitions";
-import styles from "@/styles/productGallerySlider.module.css";
+import { ClotheProduct } from "@/_lib/definitions";
+import styles from "@/_styles/gallerySlider.module.css";
 
-export default function ClotheProductGallerySlider({
-  product,
-}: {
-  product: ClotheProduct;
-}) {
+export default function GallerySlider({ product }: { product: ClotheProduct }) {
   const sliderSettings = {
     customPaging: function (i: number) {
       return (

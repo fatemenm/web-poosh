@@ -10,7 +10,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import logo from "../../../public/logo-footer.svg";
+import logo from "../../public/logo-footer.svg";
 
 const footerContent = (
   <div className="flex flex-col gap-10 text-right">

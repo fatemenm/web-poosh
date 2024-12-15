@@ -2,10 +2,10 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { Vazirmatn } from "next/font/google";
 import Head from "next/head";
 
-import Footer from "@/components/general/footer";
-import Header from "@/components/general/header";
+import Footer from "@/_components/footer";
+import Header from "@/_components/header";
+import { getBannerData, getNavbarItems } from "@/_lib/data";
 import "@/globals.css";
-import { getBannerData, getNavbarItems } from "@/lib/data";
 
 const vazirmatn = Vazirmatn({
   subsets: ["latin"],

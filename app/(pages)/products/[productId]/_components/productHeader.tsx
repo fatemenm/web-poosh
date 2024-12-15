@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { ClotheProduct } from "@/lib/definitions";
+import { ClotheProduct } from "@/_lib/definitions";
 
 const billCount = 4;
 

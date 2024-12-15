@@ -2,14 +2,14 @@ import { apiBaseUrl } from "@config";
 import Image from "next/image";
 import Link from "next/link";
 
-import CategorySlider from "@/components/home/categorySlider";
-import NewProductsSlider from "@/components/home/newProductsSlider";
+import CategorySlider from "@/(pages)/_components/categorySlider";
+import NewProductsSlider from "@/(pages)/_components/newProductsSlider";
 import {
   getCategories,
   getClotheProducts,
   getClotheSetBanners,
   getHeroBanners,
-} from "@/lib/data";
+} from "@/_lib/data";
 
 export default async function Page() {
   const heroBanners = await getHeroBanners();

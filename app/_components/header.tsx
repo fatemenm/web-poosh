@@ -11,10 +11,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import PromotionalBanner from "@/components/general/promotionalBanner";
-import { Banner, NavbarItem, NavigationLink } from "@/lib/definitions";
+import { default as BannerComponent } from "@/_components/banner";
+import type { Banner, NavbarItem, NavigationLink } from "@/_lib/definitions";
 
-import logo from "../../../public/logo.png";
+import logo from "../../public/logo.png";
 
 function getClassNames(item: NavbarItem, isHovered: boolean) {
   const baseClasses =
@@ -58,7 +58,7 @@ export default function Header({
   return (
     <header className="flex shrink-0 flex-col items-center">
       {banner ? (
-        <PromotionalBanner data={banner} />
+        <BannerComponent data={banner} />
       ) : (
         <div className="box-border flex min-h-10 w-full flex-row justify-start bg-stone-800 p-2 text-sm font-light text-white"></div>
       )}

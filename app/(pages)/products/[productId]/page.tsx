@@ -1,6 +1,6 @@
-import BreadCrumb from "@/components/general/breadcrumb";
-import ProductDetails from "@/components/product/productDetails";
-import { getClotheProductById, getClotheProducts } from "@/lib/data";
+import ProductDetails from "@/(pages)/products/[productId]/_components/productDetails";
+import BreadCrumb from "@/_components/breadcrumb";
+import { getClotheProductById, getClotheProducts } from "@/_lib/data";
 
 export async function generateStaticParams() {
   const clotheProducts = await getClotheProducts();
@@ -34,10 +34,8 @@ export default async function Product({
     return (
       <div className="flex flex-col items-center gap-16">
         <BreadCrumb items={links} />
-        {product && <ProductDetails product={product} targetId={targetId} />}
-        <div className="h-96 w-2/3 bg-pink-50" id={targetId}>
-          this is gonna be comment form
-        </div>
+        {product && <ProductDetails product={product} />}
+        <div className="h-96 w-2/3 bg-gray-50">this is another section</div>
       </div>
     );
 }
