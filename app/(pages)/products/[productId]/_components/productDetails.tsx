@@ -18,16 +18,8 @@ export default function ProductDetails({
   product: ClotheProduct;
 }) {
   const colors = [
-    { name: "آبی روشن", colorCode: "#90b3de" },
-    { name: "آبی رشن", colorCode: "#90b3de" },
-    { name: "آب  روشن", colorCode: "#90b3de" },
-    { name: "آبی رون", colorCode: "#90b3de" },
-    { name: "آبی تره", colorCode: "#3e5f87" },
-    { name: "آبی تیر", colorCode: "#3e5f87" },
-    { name: "آبی تیره", colorCode: "#3e5f87" },
-    { name: "خاکسری", colorCode: "#7a7a7a" },
-    { name: "خاستری", colorCode: "#7a7a7a" },
-    { name: "خاکستی", colorCode: "#7a7a7a" },
+    { name: "آبی روشن", colorCode: "#90b3de", isAvailable: true },
+    { name: "خاکستری", colorCode: "#808080", isAvailable: false },
   ];
   const sizes = ["31", "32", "33", "34", "35"];
 

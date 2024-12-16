@@ -6,7 +6,7 @@ import React from "react";
 export default function ColorSelector({
   colors,
 }: {
-  colors: Array<{ name: string; colorCode: string }>;
+  colors: Array<{ name: string; colorCode: string; isAvailable: boolean }>;
 }) {
   const [selectedNameColor, setSelectedNameColor] = useState("آبی روشن");
 
@@ -23,22 +23,51 @@ export default function ColorSelector({
         }}
       >
         {colors.map((color, index) => {
-          return (
-            <input
-              readOnly
-              type="radio"
+          return color.isAvailable === true ? (
+            <label
               key={index}
-              id={color.name}
-              name="color"
-              checked={selectedNameColor === color.name}
-              value={color.name}
-              style={
-                {
-                  "--radio-button-before-bg-color": color.colorCode,
-                } as React.CSSProperties
-              }
-              className="flex h-9 w-9 appearance-none flex-row items-center justify-center rounded-full bg-white p-[3px] outline outline-1 outline-gray-300 before:block before:h-full before:w-full before:rounded-full before:bg-[var(--radio-button-before-bg-color)] before:content-[''] checked:outline-2 checked:outline-stone-800 hover:outline-2 hover:outline-stone-800"
-            />
+              htmlFor={color.colorCode}
+              className="relative flex h-10 w-10 flex-row items-center justify-center rounded-full outline outline-1 outline-gray-300 hover:outline-[2px] hover:outline-stone-800 has-[:checked]:outline-[2px] has-[:checked]:outline-stone-800"
+            >
+              <input
+                readOnly
+                type="radio"
+                id={color.colorCode}
+                name="color"
+                checked={selectedNameColor === color.name}
+                value={color.name}
+                style={
+                  {
+                    "--color-selector-bg-color": color.colorCode,
+                  } as React.CSSProperties
+                }
+                className="flex h-9 w-9 cursor-pointer appearance-none flex-row items-center justify-center rounded-full bg-[var(--color-selector-bg-color)] before:h-full"
+              />
+            </label>
+          ) : (
+            <label
+              key={index}
+              htmlFor={color.colorCode}
+              className="relative flex h-10 w-10 flex-row items-center justify-center rounded-full outline outline-1 outline-gray-300 hover:outline-[2px] hover:outline-stone-800 has-[:checked]:outline-[2px] has-[:checked]:outline-stone-800"
+            >
+              <input
+                readOnly
+                type="radio"
+                id={color.colorCode}
+                name="color"
+                checked={selectedNameColor === color.name}
+                value={color.name}
+                style={
+                  {
+                    "--color-selector-bg-color": color.colorCode,
+                  } as React.CSSProperties
+                }
+                className="flex h-9 w-9 cursor-pointer appearance-none flex-row items-center justify-center rounded-full bg-[var(--color-selector-bg-color)] before:h-full"
+              />
+              <div className="absolute h-full w-0.5 -rotate-45 bg-gray-400">
+                {" "}
+              </div>
+            </label>
           );
         })}
       </div>
