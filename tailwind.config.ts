@@ -17,7 +17,10 @@ const config: Config = {
         foreground: "var(--foreground)",
       },
       backgroundColor: {
-        custom: "var(--radio-button-before-bg-color)",
+        custom: "var(--color-selector-bg-color)",
+      },
+      cursor: {
+        zoomIn: "url('/zoom-in.png'), auto",
       },
     },
   },
