@@ -6,15 +6,15 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 
-import { ClotheProduct } from "@/_lib/definitions";
+import { Image as ImageType } from "@/_lib/definitions";
 import styles from "@/_styles/gallerySlider.module.css";
 
-export default function GallerySlider({ product }: { product: ClotheProduct }) {
+export default function GallerySlider({ images }: { images: ImageType[] }) {
   const sliderSettings = {
     customPaging: function (i: number) {
       return (
         <a>
-          <img src={apiBaseUrl + product.images[i].formats.thumbnail.url} />
+          <img src={apiBaseUrl + images[i].formats.thumbnail.url} />
         </a>
       );
     },
@@ -30,7 +30,7 @@ export default function GallerySlider({ product }: { product: ClotheProduct }) {
   return (
     <div className="block w-full bg-gray-100">
       <Slider {...sliderSettings}>
-        {product.images.map((img) => {
+        {images.map((img) => {
           return (
             <button className="h-full w-20 focus:outline-none" key={img.id}>
               <Image

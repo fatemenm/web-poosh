@@ -26,10 +26,10 @@ export default function ProductDetails({
   return (
     <div className="flex w-10/12 flex-row justify-end gap-10">
       <div className="block w-5/12">
-        <GallerySlider product={product} />
+        <GallerySlider images={product.images} />
       </div>
       <div className="ml-32 flex w-3/12 flex-col gap-6 text-right">
-        <ProductHeader product={product} />
+        <ProductHeader {...product} />
         <hr />
         <ColorSelector colors={colors} />
         <SizeSelector sizes={sizes} />

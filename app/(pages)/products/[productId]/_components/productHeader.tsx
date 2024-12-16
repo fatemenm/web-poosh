@@ -1,21 +1,25 @@
 import Image from "next/image";
 
-import { ClotheProduct } from "@/_lib/definitions";
-
 const billCount = 4;
 
-export function ProductHeader({ product }: { product: ClotheProduct }) {
+export function ProductHeader({
+  name,
+  price,
+  id,
+}: {
+  name: string;
+  price: string;
+  id: number;
+}) {
   return (
     <div className="flex flex-col gap-6">
       {/* title */}
       <h1 className="text-2xl">
-        {product.name} {product.id.toLocaleString("fa-IR")}
+        {name} {id.toLocaleString("fa-IR")}
       </h1>
       {/* price */}
       <div className="flex flex-row gap-1">
-        <span>
-          {Number(product.price.replace(/,/g, "")).toLocaleString("fa-IR")}
-        </span>
+        <span>{Number(price.replace(/,/g, "")).toLocaleString("fa-IR")}</span>
         <span>تومان</span>
       </div>
       {/* snap pay */}
@@ -31,9 +35,9 @@ export function ProductHeader({ product }: { product: ClotheProduct }) {
           <span className="font-medium">امکان پرداخت اقساطیِ اسنپ پی</span>
           <span dir="rtl">
             {billCount.toLocaleString("fa-IR")} قسط ماهیانه{" "}
-            {(
-              Number(product.price.replace(/,/g, "")) / billCount
-            ).toLocaleString("fa-IR")}{" "}
+            {(Number(price.replace(/,/g, "")) / billCount).toLocaleString(
+              "fa-IR"
+            )}{" "}
             تومان (بدون کارمزد)
           </span>
         </div>
