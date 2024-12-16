@@ -40,6 +40,7 @@ export default function GallerySlider({ product }: { product: ClotheProduct }) {
                 alt={img.alternativeText}
                 quality={100}
                 priority
+                className="cursor-zoomIn"
               />
             </button>
           );
