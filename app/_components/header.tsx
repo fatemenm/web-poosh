@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import { default as BannerComponent } from "@/_components/banner";
 import type { Banner, NavbarItem, NavigationLink } from "@/_lib/definitions";
 
-import logo from "../../public/logo.png";
+import logo from "@public/logo.png";
 
 function getClassNames(item: NavbarItem, isHovered: boolean) {
   const baseClasses =

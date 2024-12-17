@@ -25,7 +25,8 @@
       "@/*": [
         "./app/*"
       ],
-      "@config":["./config.ts"]
+      "@config":["./config.ts"],
+      "@public/*": ["./public/*"]
     },
     "target": "ES2017"
   },
