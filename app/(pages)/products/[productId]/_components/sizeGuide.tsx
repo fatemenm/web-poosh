@@ -147,85 +147,34 @@ export default function SizeGuide({ images }: { images: ProductImage[] }) {
                   <table className="border-collapse border text-center">
                     <thead>
                       <tr>
-                        <th
-                          className="border bg-stone-100 px-4 py-3 text-sm font-medium"
-                          scope="col"
-                        >
-                          سایز
-                        </th>
-                        <th
-                          className="border bg-stone-100 px-4 py-3 text-sm font-medium"
-                          scope="col"
-                        >
-                          عرض کمر
-                        </th>
-                        <th
-                          className="border bg-stone-100 px-4 py-3 text-sm font-medium"
-                          scope="col"
-                        >
-                          عرض ران
-                        </th>
-                        <th
-                          className="border bg-stone-100 px-4 py-3 text-sm font-medium"
-                          scope="col"
-                        >
-                          طول فاق
-                        </th>
-                        <th
-                          className="border bg-stone-100 px-4 py-3 text-sm font-medium"
-                          scope="col"
-                        >
-                          طول شلوار
-                        </th>
-                        <th
-                          className="border bg-stone-100 px-4 py-3 text-sm font-medium"
-                          scope="col"
-                        >
-                          عرض دمپا
-                        </th>
+                        {[
+                          "سایز",
+                          "عرض کمر",
+                          "عرض ران",
+                          "طول فاق",
+                          "طول شلوار",
+                          " عرض دمپا",
+                        ].map((item) => (
+                          <th
+                            className="border bg-stone-100 px-4 py-3 text-sm font-medium"
+                            scope="col"
+                          >
+                            {item}
+                          </th>
+                        ))}
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <th className="border bg-stone-100 px-4 py-3 text-sm font-medium">
-                          L
-                        </th>
-                        <td className="border px-4 py-2 text-sm">۳۷</td>
-                        <td className="border px-4 py-2 text-sm">۳۰</td>
-                        <td className="border px-4 py-2 text-sm">۳۰</td>
-                        <td className="border px-4 py-2 text-sm">۱۰۲</td>
-                        <td className="border px-4 py-2 text-sm">۱۴</td>
-                      </tr>
-                      <tr>
-                        <th className="border bg-stone-100 px-4 py-3 text-sm font-medium">
-                          XL
-                        </th>
-                        <td className="border px-4 py-2 text-sm">۳۹</td>
-                        <td className="border px-4 py-2 text-sm">۳۱</td>
-                        <td className="border px-4 py-2 text-sm">۳۰/۵</td>
-                        <td className="border px-4 py-2 text-sm">۱۰۳</td>
-                        <td className="border px-4 py-2 text-sm">۱۴</td>
-                      </tr>
-                      <tr>
-                        <th className="border bg-stone-100 px-4 py-3 text-sm font-medium">
-                          XXL
-                        </th>
-                        <td className="border px-4 py-2 text-sm">۴۰</td>
-                        <td className="border px-4 py-2 text-sm">۳۲</td>
-                        <td className="border px-4 py-2 text-sm">۳۱/۵</td>
-                        <td className="border px-4 py-2 text-sm">۱۰۳</td>
-                        <td className="border px-4 py-2 text-sm">۱۴/۵</td>
-                      </tr>
-                      <tr>
-                        <th className="border bg-stone-100 px-4 py-3 text-sm font-medium">
-                          XXXL
-                        </th>
-                        <td className="border px-4 py-2 text-sm">۴۱</td>
-                        <td className="border px-4 py-2 text-sm">۳۲/۵</td>
-                        <td className="border px-4 py-2 text-sm">۳۲</td>
-                        <td className="border px-4 py-2 text-sm">۱۰۴</td>
-                        <td className="border px-4 py-2 text-sm">۱۴/۵</td>
-                      </tr>
+                      {["L", "XL", "XXL", "XXXL"].map((item) => (
+                        <tr>
+                          <th className="border bg-stone-50 px-4 py-3 text-sm font-medium">
+                            {item}
+                          </th>
+                          {["۳۷", "۳۰", "۱۰۲", "۱۴", "۳۰"].map((item) => (
+                            <td className="border px-4 py-2 text-sm">{item}</td>
+                          ))}
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
