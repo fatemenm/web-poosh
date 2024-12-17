@@ -23,7 +23,7 @@ export default function ColorSelector({
         }}
       >
         {colors.map((color, index) => {
-          return color.isAvailable === true ? (
+          return (
             <label
               key={index}
               htmlFor={color.colorCode}
@@ -43,30 +43,11 @@ export default function ColorSelector({
                 }
                 className="flex h-9 w-9 cursor-pointer appearance-none flex-row items-center justify-center rounded-full bg-[var(--color-selector-bg-color)] before:h-full"
               />
-            </label>
-          ) : (
-            <label
-              key={index}
-              htmlFor={color.colorCode}
-              className="relative flex h-10 w-10 flex-row items-center justify-center rounded-full outline outline-1 outline-gray-300 hover:outline-[2px] hover:outline-stone-800 has-[:checked]:outline-[2px] has-[:checked]:outline-stone-800"
-            >
-              <input
-                readOnly
-                type="radio"
-                id={color.colorCode}
-                name="color"
-                checked={selectedNameColor === color.name}
-                value={color.name}
-                style={
-                  {
-                    "--color-selector-bg-color": color.colorCode,
-                  } as React.CSSProperties
-                }
-                className="flex h-9 w-9 cursor-pointer appearance-none flex-row items-center justify-center rounded-full bg-[var(--color-selector-bg-color)] before:h-full"
-              />
-              <div className="absolute h-full w-0.5 -rotate-45 bg-gray-400">
-                {" "}
-              </div>
+              {!color.isAvailable && (
+                <div className="absolute h-full w-0.5 -rotate-45 bg-gray-400">
+                  {" "}
+                </div>
+              )}
             </label>
           );
         })}
