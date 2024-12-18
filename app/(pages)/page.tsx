@@ -1,15 +1,48 @@
-import { apiBaseUrl } from "@config";
+import { apiBaseUrl, nextServerUrl } from "@config";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons/faChevronLeft";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons/faChevronRight";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
 
-import CategorySlider from "@/(pages)/_components/categorySlider";
-import NewProductsSlider from "@/(pages)/_components/newProductsSlider";
+import BasicSlider from "@/_components/basicSlider";
 import {
   getCategories,
   getClotheProducts,
   getClotheSetBanners,
   getHeroBanners,
 } from "@/_lib/data";
+
+function LeftArrow() {
+  return (
+    <div>
+      <button className="text-stone-800">
+        <FontAwesomeIcon icon={faChevronLeft} style={{ fontSize: 24 }} />
+      </button>
+    </div>
+  );
+}
+function RightArrow() {
+  return (
+    <div>
+      <button className="text-stone-800">
+        <FontAwesomeIcon icon={faChevronRight} style={{ fontSize: 24 }} />
+      </button>
+    </div>
+  );
+}
+
+const customSetting = {
+  slidesToShow: 5,
+  nextArrow: <RightArrow />,
+  prevArrow: <LeftArrow />,
+};
+const newProductsSliderSetting = {
+  speed: 400,
+  autoplay: true,
+  autoplaySpeed: 4000,
+  cssEase: "linear",
+};
 
 export default async function Page() {
   const heroBanners = await getHeroBanners();
@@ -51,7 +84,28 @@ export default async function Page() {
         })}
       </div>
       {/* Category Slider */}
-      {categories && <CategorySlider categories={categories} />}
+      {categories && (
+        <BasicSlider sliderSetting={customSetting} containerClass="my-16 px-20">
+          {categories.map((item) => (
+            <Link
+              href="/"
+              key={item.id}
+              className="flex cursor-pointer flex-col items-center outline-none"
+            >
+              <Image
+                src={apiBaseUrl + item.image.url}
+                alt={item.image.alternativeText}
+                width={item.image.width}
+                height={item.image.height}
+                quality={100}
+              />
+              <div className="text-center text-stone-600 underline underline-offset-8">
+                {item.name}
+              </div>
+            </Link>
+          ))}
+        </BasicSlider>
+      )}
       {/* Daily Set Banners */}
       <div className="flex flex-col gap-7">
         <div className="mt-16 flex w-full flex-col gap-3 px-12">
@@ -98,7 +152,40 @@ export default async function Page() {
         </div>
         <hr className="mb-4 h-px w-full bg-stone-400" />
       </div>
-      {clotheProducts && <NewProductsSlider data={clotheProducts} />}
+      {clotheProducts && (
+        <BasicSlider
+          sliderSetting={{ ...customSetting, ...newProductsSliderSetting }}
+          containerClass="mx-auto mb-24 mt-8 px-20"
+        >
+          {clotheProducts.map((item) => {
+            return (
+              <Link
+                key={item.id}
+                href={`${nextServerUrl}/products/${item.documentId}`}
+                className="cursor-pointer px-4 outline-none"
+              >
+                <Image
+                  src={apiBaseUrl + item.images[0].url}
+                  alt={item.images[0].alternativeText}
+                  width={item.images[0].width}
+                  height={item.images[0].height}
+                />
+                <div className="mt-4 flex flex-col gap-2 text-center text-sm text-stone-600">
+                  <span className="font-medium">
+                    {item.id.toLocaleString("fa-IR")} {item.name}
+                  </span>
+                  <span>
+                    تومان{" "}
+                    {Number(item.price.replace(/,/g, "")).toLocaleString(
+                      "fa-IR"
+                    )}
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
+        </BasicSlider>
+      )}
     </div>
   );
 }

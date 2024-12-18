@@ -16,3 +16,16 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.slick-prev,
+.slick-next {
+  @apply before:hidden;
+}
+
+.slick-prev {
+  @apply -left-16;
+}
+
+.slick-next {
+  @apply -right-16;
+}

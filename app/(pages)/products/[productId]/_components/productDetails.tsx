@@ -4,10 +4,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import GallerySlider from "@/_components/gallerySlider";
 import { ClotheProduct } from "@/_lib/definitions";
 
 import ColorSelector from "./colorSelector";
-import GallerySlider from "./gallerySlider";
 import { ProductHeader } from "./productHeader";
 import SizeGuide from "./sizeGuide";
 import SizeSelector from "./sizeSelector";
@@ -22,11 +22,16 @@ export default function ProductDetails({
     { name: "خاکستری", colorCode: "#808080", isAvailable: false },
   ];
   const sizes = ["31", "32", "33", "34", "35"];
+  const gallerySliderStyle = {
+    containerClass: "block bg-gray-100",
+    itemClass: "h-full w-20 focus:outline-none",
+    imgClass: "cursor-zoomIn",
+  };
 
   return (
     <div className="flex w-10/12 flex-row justify-end gap-10">
       <div className="block w-5/12">
-        <GallerySlider images={product.images} />
+        <GallerySlider images={product.images} style={gallerySliderStyle} />
       </div>
       <div className="ml-32 flex w-3/12 flex-col gap-6 text-right">
         <ProductHeader {...product} />
