@@ -154,8 +154,9 @@ export default function SizeGuide({ images }: { images: ProductImage[] }) {
                           "طول فاق",
                           "طول شلوار",
                           " عرض دمپا",
-                        ].map((item) => (
+                        ].map((item, index) => (
                           <th
+                            key={index}
                             className="border bg-stone-100 px-4 py-3 text-sm font-medium"
                             scope="col"
                           >
@@ -165,14 +166,21 @@ export default function SizeGuide({ images }: { images: ProductImage[] }) {
                       </tr>
                     </thead>
                     <tbody>
-                      {["L", "XL", "XXL", "XXXL"].map((item) => (
-                        <tr>
+                      {["L", "XL", "XXL", "XXXL"].map((item, index) => (
+                        <tr key={index}>
                           <th className="border bg-stone-50 px-4 py-3 text-sm font-medium">
                             {item}
                           </th>
-                          {["۳۷", "۳۰", "۱۰۲", "۱۴", "۳۰"].map((item) => (
-                            <td className="border px-4 py-2 text-sm">{item}</td>
-                          ))}
+                          {["۳۷", "۳۰", "۱۰۲", "۱۴", "۳۰"].map(
+                            (item, index) => (
+                              <td
+                                key={index}
+                                className="border px-4 py-2 text-sm"
+                              >
+                                {item}
+                              </td>
+                            )
+                          )}
                         </tr>
                       ))}
                     </tbody>
