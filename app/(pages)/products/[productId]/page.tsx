@@ -29,7 +29,7 @@ export default async function Product({
       href: ".",
     },
   ];
-  const targetId = "commentForm";
+
   if (product)
     return (
       <div className="flex flex-col items-center gap-16">
