@@ -2,24 +2,26 @@
 
 import { apiBaseUrl } from "@config";
 import Image from "next/image";
+import { useState } from "react";
 
 import Slider from "@/_components/slider";
 import { Image as ImageType } from "@/_lib/definitions";
 import styles from "@/_styles/gallerySlider.module.css";
 
-type styleType = {
-  containerClass: string;
-  itemClass: string;
-  imgClass: string;
-};
-
 export default function GallerySlider({
   images,
-  style,
+  onSelect,
+  viewMode,
 }: {
   images: ImageType[];
-  style: styleType;
+  onSelect: (viewMode: string) => void;
+  viewMode: "default" | "fullscreen";
 }) {
+  const [isImageZoomed, setIsImageZoomed] = useState<boolean>(false);
+  const containerClass =
+    viewMode === "fullscreen"
+      ? "fixed w-full top-0 left-0 h-full overflow-scroll bg-gray-100"
+      : "";
   const customSetting = {
     customPaging: function (i: number) {
       return (
@@ -29,20 +31,33 @@ export default function GallerySlider({
       );
     },
     dots: true,
-    dotsClass: styles.slickDots,
+    dotsClass: `${styles.slickDots} ${viewMode === "fullscreen" ? styles.slickDotsFullScreen : ""}`,
     speed: 800,
     slidesToShow: 1,
     arrows: false,
-    className: styles.slickSlider,
   };
-  const containerClass = style.containerClass;
-  const data = { containerClass, customSetting };
+  function getImageClass(viewMode: string, isImageZoomed: boolean) {
+    if (viewMode === "fullscreen")
+      return isImageZoomed
+        ? "cursor-zoomIn w-full scale-125 object-center"
+        : "cursor-zoomIn w-full";
+    return "cursor-zoomIn";
+  }
 
   return (
-    <Slider {...data}>
+    <Slider {...{ containerClass, customSetting }}>
       {images.map((img) => {
         return (
-          <div className={style.itemClass} key={img.id}>
+          <div
+            className={isImageZoomed ? "overflow-hidden" : ""}
+            key={img.id}
+            onClick={() => {
+              if (viewMode === "default") onSelect("fullscreen");
+              else if (viewMode === "fullscreen") {
+                setIsImageZoomed((isImageZoomed) => !isImageZoomed);
+              }
+            }}
+          >
             <Image
               src={apiBaseUrl + img.url}
               width={img.width}
@@ -50,7 +65,7 @@ export default function GallerySlider({
               alt={img.alternativeText}
               quality={100}
               priority
-              className={style.imgClass}
+              className={getImageClass(viewMode, isImageZoomed)}
             />
           </div>
         );

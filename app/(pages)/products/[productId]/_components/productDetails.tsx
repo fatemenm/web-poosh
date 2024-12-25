@@ -1,10 +1,14 @@
+"use client";
+
 import {
   faChevronLeft,
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState } from "react";
 
 import GallerySlider from "@/_components/gallerySlider";
+import Modal from "@/_components/modal";
 import { ClotheProduct } from "@/_lib/definitions";
 
 import ColorSelector from "./colorSelector";
@@ -12,26 +16,51 @@ import { ProductHeader } from "./productHeader";
 import SizeGuide from "./sizeGuide";
 import SizeSelector from "./sizeSelector";
 
+const colors = [
+  { name: "آبی روشن", colorCode: "#90b3de", isAvailable: true },
+  { name: "خاکستری", colorCode: "#808080", isAvailable: false },
+];
+const sizes = ["31", "32", "33", "34", "35"];
+
 export default function ProductDetails({
   product,
 }: {
   product: ClotheProduct;
 }) {
-  const colors = [
-    { name: "آبی روشن", colorCode: "#90b3de", isAvailable: true },
-    { name: "خاکستری", colorCode: "#808080", isAvailable: false },
-  ];
-  const sizes = ["31", "32", "33", "34", "35"];
-  const gallerySliderStyle = {
-    containerClass: "block bg-gray-100",
-    itemClass: "h-full w-20 focus:outline-none",
-    imgClass: "cursor-zoomIn",
-  };
+  const [galleryViewState, setGalleryViewState] = useState<
+    "default" | "fullscreen"
+  >("default");
+
+  const gallerySlider = (
+    <GallerySlider
+      images={product.images}
+      onSelect={(viewMode: string) => {
+        if (viewMode === "fullscreen") setGalleryViewState("fullscreen");
+      }}
+      viewMode={galleryViewState}
+    />
+  );
 
   return (
     <div className="flex w-10/12 flex-row justify-end gap-10">
       <div className="block w-5/12">
-        <GallerySlider images={product.images} style={gallerySliderStyle} />
+        {galleryViewState === "fullscreen" ? (
+          <Modal
+            onSelect={(modalAction: string) => {
+              if (modalAction === "close") setGalleryViewState("default");
+            }}
+            isOpen={galleryViewState === "fullscreen" ? true : false}
+            style={{
+              container: "fixed left-0 top-0 z-10 h-full w-full p-10 ",
+              closeButton:
+                "absolute right-0 top-0 z-10 p-4 text-stone-700 hover:text-stone-900 text-2xl",
+            }}
+          >
+            {gallerySlider}
+          </Modal>
+        ) : (
+          gallerySlider
+        )}
       </div>
       <div className="ml-32 flex w-3/12 flex-col gap-6 text-right">
         <ProductHeader {...product} />
