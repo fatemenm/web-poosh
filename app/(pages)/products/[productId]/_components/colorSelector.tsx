@@ -44,7 +44,7 @@ export default function ColorSelector({
                 className="flex h-9 w-9 cursor-pointer appearance-none flex-row items-center justify-center rounded-full bg-[var(--color-selector-bg-color)] before:h-full"
               />
               {!color.isAvailable && (
-                <div className="absolute h-full w-0.5 -rotate-45 bg-gray-400">
+                <div className="absolute h-full w-0.5 -rotate-45 bg-neutral-400">
                   {" "}
                 </div>
               )}

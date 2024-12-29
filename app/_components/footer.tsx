@@ -58,7 +58,7 @@ const footerContent = (
 export default function Footer() {
   const isHomePage = usePathname() === "/" || false;
   return (
-    <footer className="flex w-full shrink-0 flex-col items-center border-t bg-stone-50">
+    <footer className="flex w-full shrink-0 flex-col items-center border-t bg-stone-100">
       <div className="flex w-10/12 flex-col items-center justify-between gap-8 pb-4">
         <div className="flex flex-col">
           {/* container logo and sections */}
