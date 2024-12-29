@@ -7,6 +7,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 
+import Button from "@/_components/button";
 import GallerySlider from "@/_components/gallerySlider";
 import Modal from "@/_components/modal";
 import { ClotheProduct } from "@/_lib/definitions";
@@ -20,7 +21,13 @@ const colors = [
   { name: "آبی روشن", colorCode: "#90b3de", isAvailable: true },
   { name: "خاکستری", colorCode: "#808080", isAvailable: false },
 ];
-const sizes = ["31", "32", "33", "34", "35"];
+const sizes = [
+  { value: "31", isAvailable: true },
+  { value: "32", isAvailable: true },
+  { value: "33", isAvailable: false },
+  { value: "34", isAvailable: true },
+  { value: "35", isAvailable: true },
+];
 
 export default function ProductDetails({
   product,
@@ -71,10 +78,14 @@ export default function ProductDetails({
         <span className="text-sm font-light text-stone-800">
           ارسال رایگان برای خرید بالای ۲,۰۰۰,۰۰۰ تومان
         </span>
-        <button className="bg-green-700 py-5 text-sm text-white hover:bg-green-800">
+        <Button
+          // isDisabled={true}
+          onClick={() => console.log("clicked")}
+          className="bg-green-700 py-5 text-sm text-white hover:bg-green-800"
+        >
           اضافه به سبد خرید
-        </button>
-        <button className="mt-4 flex flex-row justify-between px-4 py-3 text-sm text-stone-800 outline outline-1 hover:bg-stone-800 hover:text-stone-50">
+        </Button>
+        <Button className="mt-4 flex flex-row justify-between px-4 py-3 text-sm text-stone-800 outline outline-1 hover:bg-stone-800 hover:text-stone-50">
           <span>
             <FontAwesomeIcon icon={faLocationDot} style={{ fontSize: 20 }} />
           </span>
@@ -82,7 +93,7 @@ export default function ProductDetails({
           <span>
             <FontAwesomeIcon icon={faChevronLeft} style={{ fontSize: 20 }} />
           </span>
-        </button>
+        </Button>
       </div>
     </div>
   );
