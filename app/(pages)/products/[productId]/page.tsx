@@ -2,6 +2,8 @@ import ProductDetails from "@/(pages)/products/[productId]/_components/productDe
 import BreadCrumb from "@/_components/breadcrumb";
 import { getClotheProductById, getClotheProducts } from "@/_lib/data";
 
+import ProductDescription from "./_components/productDescription";
+
 export async function generateStaticParams() {
   const clotheProducts = await getClotheProducts();
   return clotheProducts?.map((product) => ({
@@ -35,6 +37,7 @@ export default async function Product({
       <div className="flex flex-col items-center gap-16">
         <BreadCrumb items={links} />
         {product && <ProductDetails product={product} />}
+        <ProductDescription product={product} />
         <div className="h-96 w-2/3 bg-gray-50">this is another section</div>
       </div>
     );
