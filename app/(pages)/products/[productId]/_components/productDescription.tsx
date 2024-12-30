@@ -1,8 +1,6 @@
 import { apiBaseUrl } from "@config";
 import {
   faArrowRightArrowLeft,
-  faArrowsLeftRight,
-  faRuler,
   faRulerHorizontal,
   faTruckFast,
 } from "@fortawesome/free-solid-svg-icons";
@@ -12,14 +10,16 @@ import Link from "next/link";
 
 import { ClotheProduct } from "@/_lib/definitions";
 
+import SizeGuide from "./sizeGuide";
+
 export default function ProductDescription({
   product,
 }: {
   product: ClotheProduct;
 }) {
-  const productImage = product.images[1];
+  const productImage = product.images[0];
   return (
-    <div className="flex w-10/12 flex-row items-stretch justify-center gap-28 bg-stone-100 p-10">
+    <div className="flex flex-row items-stretch justify-center gap-28 bg-stone-100 p-10">
       <div className="w-3/12">
         <Image
           src={apiBaseUrl + productImage.url}
@@ -48,8 +48,8 @@ export default function ProductDescription({
         </p>
         <div className="flex flex-col gap-5">
           <span className="text-sm font-medium">روش شستشو و نگهداری</span>
-          <div className="flex flex-row justify-between gap-8 pr-4 text-sm font-light leading-6">
-            <ul className="flex w-1/2 list-inside list-disc flex-col gap-3">
+          <div className="flex flex-row justify-between gap-12 pr-8 text-sm font-light leading-7">
+            <ul className="flex w-1/2 list-disc flex-col">
               <li>
                 برای تمیز کردن کفش یک دستمال یا اسفنج مرطوب را با کف شامپو آغشته
                 کنید و به نرمی بر روی سطح کفش بکشید. سپس سطح کفش را با پارچه‌ی
@@ -57,7 +57,7 @@ export default function ProductDescription({
               </li>
               <li>کفش های چرم ، جیر و نبوک را با ماشین لباسشویی نشویید.</li>
             </ul>
-            <ul className="flex w-1/2 list-inside list-disc flex-col gap-3">
+            <ul className="flex w-1/2 list-disc flex-col">
               <li>از برخورد کفش با اشیاء نوک تیز جلوگیری کنید.</li>
               <li>
                 درصورت خیس شدن کفش‌، آنرا بدور از حرارت و نور خورشید و در دمای
@@ -67,15 +67,22 @@ export default function ProductDescription({
           </div>
         </div>
         <div className="flex flex-row gap-20">
-          <Link href="" className="flex flex-row items-center gap-2 text-xs">
-            <FontAwesomeIcon
-              icon={faRulerHorizontal}
-              style={{ fontSize: 12 }}
-            />
-            <span className="text-blue-600 underline underline-offset-8">
-              راهنمای انتخاب سایز
-            </span>
-          </Link>
+          <SizeGuide
+            images={product.images}
+            buttonClassName="flex flex-row items-center gap-2 text-xs"
+            children={
+              <>
+                <FontAwesomeIcon
+                  icon={faRulerHorizontal}
+                  style={{ fontSize: 12 }}
+                />
+                <span className="text-blue-600 underline underline-offset-8">
+                  راهنمای انتخاب سایز
+                </span>
+              </>
+            }
+          />
+
           <Link href="" className="flex flex-row items-center gap-2 text-xs">
             <FontAwesomeIcon icon={faTruckFast} style={{ fontSize: 12 }} />
             روش ارسال

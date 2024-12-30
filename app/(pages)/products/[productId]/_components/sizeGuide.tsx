@@ -5,11 +5,19 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
-import { RefObject, useEffect, useRef, useState } from "react";
+import { ReactNode, RefObject, useEffect, useRef, useState } from "react";
 
 import { Image as ProductImage } from "@/_lib/definitions";
 
-export default function SizeGuide({ images }: { images: ProductImage[] }) {
+export default function SizeGuide({
+  images,
+  children,
+  buttonClassName,
+}: {
+  images: ProductImage[];
+  children: ReactNode;
+  buttonClassName: string;
+}) {
   const guideRef = useRef(null) as RefObject<HTMLDivElement>;
   const backDropRef = useRef(null) as RefObject<HTMLDivElement>;
   const [isGuideOpen, setIsGuideOpen] = useState(false);
@@ -37,25 +45,15 @@ export default function SizeGuide({ images }: { images: ProductImage[] }) {
   return (
     <div>
       <button
-        className="mt-2 flex flex-row gap-3 pr-1"
+        className={buttonClassName}
         onClick={() => setIsGuideOpen((isGuideOpen) => !isGuideOpen)}
       >
-        <Image
-          className="rotate-45"
-          src="/ruler.png"
-          width="24"
-          height="24"
-          alt="راهنمای سایز"
-          quality={100}
-        />
-        <span className="text-sm text-blue-500 underline underline-offset-8">
-          راهنمای سایز
-        </span>
+        {children}
       </button>
       {isGuideOpen && (
         <div
           ref={backDropRef}
-          className="fixed left-0 top-0 h-screen w-screen overflow-scroll bg-stone-800 bg-opacity-50"
+          className="fixed left-0 top-0 z-10 h-screen w-screen overflow-scroll bg-stone-800 bg-opacity-50"
         >
           <div
             ref={guideRef}

@@ -5,6 +5,7 @@ import {
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
 import { useState } from "react";
 
 import Button from "@/_components/button";
@@ -47,9 +48,8 @@ export default function ProductDetails({
       viewMode={galleryViewState}
     />
   );
-
   return (
-    <div className="flex w-10/12 flex-row justify-end gap-10">
+    <div className="flex flex-row justify-end gap-10">
       <div className="block w-5/12">
         {galleryViewState === "fullscreen" ? (
           <Modal
@@ -74,7 +74,25 @@ export default function ProductDetails({
         <hr />
         <ColorSelector colors={colors} />
         <SizeSelector sizes={sizes} />
-        <SizeGuide images={product.images} />
+        <SizeGuide
+          images={product.images}
+          buttonClassName="mt-2 flex flex-row gap-3 pr-1"
+          children={
+            <>
+              <Image
+                className="rotate-45"
+                src="/ruler.png"
+                width="24"
+                height="24"
+                alt="راهنمای سایز"
+                quality={100}
+              />
+              <span className="text-sm text-blue-500 underline underline-offset-8">
+                راهنمای سایز
+              </span>
+            </>
+          }
+        />
         <span className="text-sm font-light text-stone-800">
           ارسال رایگان برای خرید بالای ۲,۰۰۰,۰۰۰ تومان
         </span>
