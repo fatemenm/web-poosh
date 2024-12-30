@@ -21,11 +21,3 @@ input[type="number"]::-webkit-outer-spin-button {
 .slick-next {
   @apply before:hidden;
 }
-
-.slick-prev {
-  @apply -left-16;
-}
-
-.slick-next {
-  @apply -right-16;
-}
