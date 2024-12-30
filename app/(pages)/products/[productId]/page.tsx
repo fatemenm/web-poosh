@@ -1,6 +1,17 @@
+import { apiBaseUrl } from "@config";
+import {
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
+import Link from "next/link";
+
 import ProductDetails from "@/(pages)/products/[productId]/_components/productDetails";
+import BasicSlider from "@/_components/basicSlider";
 import BreadCrumb from "@/_components/breadcrumb";
 import { getClotheProductById, getClotheProducts } from "@/_lib/data";
+import { ClotheProduct } from "@/_lib/definitions";
 
 import ProductDescription from "./_components/productDescription";
 
@@ -31,14 +42,66 @@ export default async function Product({
       href: ".",
     },
   ];
+  const sliderContent: ClotheProduct[] = new Array(10).fill(product);
+
+  function LeftArrow() {
+    return (
+      <div>
+        <button className="text-stone-800">
+          <FontAwesomeIcon icon={faChevronLeft} style={{ fontSize: 24 }} />
+        </button>
+      </div>
+    );
+  }
+  function RightArrow(props: any) {
+    const { className, style, onClick } = props;
+    return (
+      <div>
+        <button className="text-stone-800">
+          <FontAwesomeIcon icon={faChevronRight} style={{ fontSize: 24 }} />
+        </button>
+      </div>
+    );
+  }
+
+  const customSetting = {
+    infinite: false,
+    slidesToScroll: 5,
+    slidesToShow: 5,
+    nextArrow: <RightArrow />,
+    prevArrow: <LeftArrow />,
+  };
 
   if (product)
     return (
-      <div className="flex flex-col items-center gap-16">
+      <div className="mx-auto flex w-10/12 flex-col gap-20">
         <BreadCrumb items={links} />
         {product && <ProductDetails product={product} />}
         <ProductDescription product={product} />
-        <div className="h-96 w-2/3 bg-gray-50">this is another section</div>
+        <div className="mb-20 flex w-full flex-col gap-4">
+          <span className="text-lg">محصولات مشابه دیگر</span>
+          <BasicSlider sliderSetting={customSetting} containerClass="">
+            {sliderContent.map((item) => (
+              <Link
+                href="/"
+                key={item.id}
+                className="flex cursor-pointer flex-col items-center outline-none"
+              >
+                <Image
+                  src={apiBaseUrl + item.images[0].url}
+                  alt={item.images[0].alternativeText}
+                  width={item.images[0].width}
+                  height={item.images[0].height}
+                  quality={100}
+                />
+                <div className="mt-4 flex justify-center gap-1 text-center text-sm font-light text-stone-700">
+                  <span> تومان</span>
+                  {Number(item.price.replace(/,/g, "")).toLocaleString("fa-IR")}
+                </div>
+              </Link>
+            ))}
+          </BasicSlider>
+        </div>
       </div>
     );
 }
