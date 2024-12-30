@@ -9,7 +9,7 @@ type BreadCrumbItem = {
 
 export default function BreadCrumb({ items }: { items: BreadCrumbItem[] }) {
   return (
-    <div className="flex w-10/12 flex-row items-center gap-4 bg-stone-100 px-10 py-3 text-sm text-stone-700">
+    <div className="flex flex-row items-center gap-4 bg-stone-100 px-10 py-3 text-sm text-stone-700">
       {items.map((item, index) => {
         return (
           <Link href={item.href} key={index} className="flex flex-row gap-4">
