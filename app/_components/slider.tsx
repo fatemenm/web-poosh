@@ -1,4 +1,4 @@
-"use Client";
+"use client";
 
 import { ReactNode } from "react";
 import SlickSlider from "react-slick";
