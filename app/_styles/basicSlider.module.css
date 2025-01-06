@@ -1,0 +1,5 @@
+.slickPrev::before,
+.slickNext::before {
+  content: "";
+  display: none;
+}
