@@ -1,7 +1,4 @@
 import { apiBaseUrl, nextServerUrl } from "@config";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons/faChevronLeft";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons/faChevronRight";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -13,30 +10,6 @@ import {
   getHeroBanners,
 } from "@/_lib/data";
 
-function LeftArrow() {
-  return (
-    <div>
-      <button className="text-stone-800">
-        <FontAwesomeIcon icon={faChevronLeft} style={{ fontSize: 24 }} />
-      </button>
-    </div>
-  );
-}
-function RightArrow() {
-  return (
-    <div>
-      <button className="text-stone-800">
-        <FontAwesomeIcon icon={faChevronRight} style={{ fontSize: 24 }} />
-      </button>
-    </div>
-  );
-}
-
-const customSetting = {
-  slidesToShow: 5,
-  nextArrow: <RightArrow />,
-  prevArrow: <LeftArrow />,
-};
 const newProductsSliderSetting = {
   speed: 400,
   autoplay: true,
@@ -85,12 +58,12 @@ export default async function Page() {
       </div>
       {/* Category Slider */}
       {categories && (
-        <BasicSlider sliderSetting={customSetting} containerClass="my-16 px-20">
+        <BasicSlider containerClass="my-16 px-20">
           {categories.map((item) => (
             <Link
               href="/"
               key={item.id}
-              className="flex cursor-pointer flex-col items-center outline-none"
+              className="flex cursor-pointer flex-col items-center px-4 outline-none"
             >
               <Image
                 src={apiBaseUrl + item.image.url}
@@ -154,7 +127,7 @@ export default async function Page() {
       </div>
       {clotheProducts && (
         <BasicSlider
-          sliderSetting={{ ...customSetting, ...newProductsSliderSetting }}
+          sliderSetting={newProductsSliderSetting}
           containerClass="mx-auto mb-24 mt-8 px-20"
         >
           {clotheProducts.map((item) => {

@@ -1,9 +1,4 @@
 import { apiBaseUrl } from "@config";
-import {
-  faChevronLeft,
-  faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -44,32 +39,10 @@ export default async function Product({
   ];
   const sliderContent: ClotheProduct[] = new Array(10).fill(product);
 
-  function LeftArrow() {
-    return (
-      <div>
-        <button className="text-stone-800">
-          <FontAwesomeIcon icon={faChevronLeft} style={{ fontSize: 24 }} />
-        </button>
-      </div>
-    );
-  }
-  function RightArrow(props: any) {
-    const { className, style, onClick } = props;
-    return (
-      <div>
-        <button className="text-stone-800">
-          <FontAwesomeIcon icon={faChevronRight} style={{ fontSize: 24 }} />
-        </button>
-      </div>
-    );
-  }
-
   const customSetting = {
     infinite: false,
     slidesToScroll: 5,
     slidesToShow: 5,
-    nextArrow: <RightArrow />,
-    prevArrow: <LeftArrow />,
   };
 
   if (product)
