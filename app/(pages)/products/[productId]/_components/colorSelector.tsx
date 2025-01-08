@@ -1,57 +1,48 @@
 "use client";
 
+import * as ToggleGroup from "@radix-ui/react-toggle-group";
 import { useState } from "react";
 import React from "react";
 
+const defaultColor = "آبی روشن";
 export default function ColorSelector({
   colors,
 }: {
   colors: Array<{ name: string; colorCode: string; isAvailable: boolean }>;
 }) {
-  const [selectedNameColor, setSelectedNameColor] = useState("آبی روشن");
+  const [selectedColor, setSelectedColor] = useState<string>(defaultColor);
 
   return (
     <div className="flex flex-col gap-6 text-stone-800">
       <div className="text-sm font-light">
         رنگ انتخابی شما:
-        <span className="pr-1 font-normal">{selectedNameColor}</span>
+        <span className="pr-1 font-normal">{selectedColor}</span>
       </div>
-      <div
-        className="flex flex-row flex-wrap gap-3"
-        onChange={(e) => {
-          setSelectedNameColor((e.target as HTMLInputElement).value);
-        }}
+      <ToggleGroup.Root
+        className="flex flex-row-reverse flex-wrap gap-3"
+        onValueChange={(value) => setSelectedColor(value)}
+        type="single"
+        defaultValue={defaultColor}
+        aria-label="رنگ محصول"
       >
         {colors.map((color, index) => {
           return (
-            <label
+            <ToggleGroup.Item
+              value={color.name}
               key={index}
-              htmlFor={color.colorCode}
-              className="relative flex h-10 w-10 flex-row items-center justify-center rounded-full outline outline-1 outline-gray-300 hover:outline-[2px] hover:outline-stone-800 has-[:checked]:outline-[2px] has-[:checked]:outline-stone-800"
+              className="relative rounded-full border-[2px] bg-white p-[3px] hover:border-black data-[state=on]:border-black"
             >
-              <input
-                readOnly
-                type="radio"
-                id={color.colorCode}
-                name="color"
-                checked={selectedNameColor === color.name}
-                value={color.name}
-                style={
-                  {
-                    "--color-selector-bg-color": color.colorCode,
-                  } as React.CSSProperties
-                }
-                className="flex h-9 w-9 cursor-pointer appearance-none flex-row items-center justify-center rounded-full bg-[var(--color-selector-bg-color)] before:h-full"
+              <div
+                style={{ backgroundColor: color.colorCode }}
+                className="h-8 w-8 rounded-full"
               />
               {!color.isAvailable && (
-                <div className="absolute h-full w-0.5 -rotate-45 bg-neutral-400">
-                  {" "}
-                </div>
+                <div className="absolute left-[18px] top-0 h-10 w-0.5 -rotate-45 bg-stone-400" />
               )}
-            </label>
+            </ToggleGroup.Item>
           );
         })}
-      </div>
+      </ToggleGroup.Root>
     </div>
   );
 }
