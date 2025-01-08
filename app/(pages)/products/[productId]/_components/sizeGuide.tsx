@@ -3,85 +3,60 @@
 import { apiBaseUrl } from "@config";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as Dialog from "@radix-ui/react-dialog";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import Image from "next/image";
 import Link from "next/link";
-import { ReactNode, RefObject, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 import { Image as ProductImage } from "@/_lib/definitions";
 
-export default function SizeGuide({
-  images,
-  children,
-  buttonClassName,
-}: {
-  images: ProductImage[];
-  children: ReactNode;
-  buttonClassName: string;
-}) {
-  const guideRef = useRef(null) as RefObject<HTMLDivElement>;
-  const backDropRef = useRef(null) as RefObject<HTMLDivElement>;
-  const [isGuideOpen, setIsGuideOpen] = useState(false);
+export default function SizeGuide({ images }: { images: ProductImage[] }) {
   const [activeTab, setActiveTab] = useState<"sizeTable" | "measurementMethod">(
     "sizeTable"
   );
-  useEffect(() => {
-    if (isGuideOpen) {
-      document.body.style.overflow = "hidden";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isGuideOpen]);
-  useEffect(() => {
-    function handleOutsideClick(event: MouseEvent) {
-      if (isGuideOpen && !guideRef.current?.contains(event.target as Node)) {
-        setIsGuideOpen((isGuideOpen) => !isGuideOpen);
-      }
-    }
-    backDropRef.current?.addEventListener("mousedown", handleOutsideClick);
-    return () =>
-      backDropRef.current?.removeEventListener("mousedown", handleOutsideClick);
-  }, [guideRef, isGuideOpen, backDropRef]);
   return (
-    <div>
-      <button
-        className={buttonClassName}
-        onClick={() => setIsGuideOpen((isGuideOpen) => !isGuideOpen)}
-      >
-        {children}
-      </button>
-      {isGuideOpen && (
-        <div
-          ref={backDropRef}
-          className="fixed left-0 top-0 z-10 h-screen w-screen overflow-scroll bg-stone-800 bg-opacity-50"
-        >
-          <div
-            ref={guideRef}
-            className="m-auto my-6 flex w-1/2 flex-col rounded-md border border-stone-500 bg-white"
-          >
+    <Dialog.Root>
+      <Dialog.Trigger className="border-non mt-2 flex w-fit flex-row gap-3 border-none pr-1 text-sm text-blue-500 underline underline-offset-8">
+        <Image
+          className="rotate-45"
+          src="/ruler.png"
+          width="24"
+          height="24"
+          alt="راهنمای سایز"
+          quality={100}
+        />
+        <span className="text-sm text-blue-500 underline underline-offset-8">
+          راهنمای سایز
+        </span>
+      </Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Overlay className="fixed inset-0 flex justify-center overflow-y-auto bg-black/50">
+          <Dialog.Content className="absolute my-6 flex w-full min-w-[300px] max-w-4xl flex-col rounded-md border border-stone-500 bg-white p-0">
+            <VisuallyHidden.Root asChild>
+              <Dialog.Title> راهنمای سایز</Dialog.Title>
+            </VisuallyHidden.Root>
+            <VisuallyHidden.Root asChild>
+              <Dialog.Description>
+                سایز مورد نظر خود را بر اساس جدول و راهنمای اندازه گیری انتخاب
+                کنید
+              </Dialog.Description>
+            </VisuallyHidden.Root>
+            <Dialog.Close className="absolute right-2 top-3 px-2 text-slate-500 hover:text-slate-600">
+              <FontAwesomeIcon icon={faClose} style={{ fontSize: 16 }} />
+            </Dialog.Close>
+            {/* row 1 */}
             <div className="flex flex-row border-b-[1px]">
-              <div className="flex w-1/2 flex-col justify-start gap-12 rounded-tr-md bg-stone-100 px-3 pt-3">
-                <span className="">
-                  <button
-                    className="text-stone-500 hover:text-stone-700"
-                    onClick={() =>
-                      setIsGuideOpen((isGuideOpen) => !isGuideOpen)
-                    }
-                  >
-                    <FontAwesomeIcon icon={faClose} style={{ fontSize: 16 }} />
-                  </button>
-                </span>
-                <div className="flex h-fit flex-row items-center justify-center px-10">
-                  <div className="flex w-full flex-col gap-2 rounded-md bg-white px-4 py-5 shadow-sm">
-                    <span className="text-xl font-normal text-stone-800">
-                      شلوار اسلش ۲۱۱۵۸
-                    </span>
-                    <hr />
-                    <span className="text-sm text-stone-600">
-                      مدل با قد 183 سانتی‌متر و وزن 73 کیلوگرم سایز L را پوشیده
-                      است
-                    </span>
-                  </div>
+              <div className="flex w-1/2 flex-row items-center justify-center rounded-tr-md bg-stone-100">
+                <div className="flex w-fit flex-col gap-2 rounded-md bg-white px-4 py-5 shadow-sm">
+                  <span className="text-xl font-normal text-stone-800">
+                    شلوار اسلش ۲۱۱۵۸
+                  </span>
+                  <hr />
+                  <span className="text-sm text-stone-600">
+                    مدل با قد 183 سانتی‌متر و وزن 73 کیلوگرم سایز L را پوشیده
+                    است
+                  </span>
                 </div>
               </div>
               <div className="w-1/4">
@@ -102,6 +77,7 @@ export default function SizeGuide({
                 />
               </div>
             </div>
+            {/* row 2 */}
             <div className="flex flex-col gap-6 rounded-b-md px-4 py-8">
               <div className="flex flex-row justify-between border-b-[1px] hover:border-b-stone-500">
                 <button
@@ -211,9 +187,9 @@ export default function SizeGuide({
                 </div>
               )}
             </div>
-          </div>
-        </div>
-      )}
-    </div>
+          </Dialog.Content>
+        </Dialog.Overlay>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }
