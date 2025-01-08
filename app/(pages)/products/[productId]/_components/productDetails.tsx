@@ -5,12 +5,9 @@ import {
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from "next/image";
 import { useState } from "react";
 
-import Button from "@/_components/button";
 import GallerySlider from "@/_components/gallerySlider";
-import Modal from "@/_components/modal";
 import { ClotheProduct } from "@/_lib/definitions";
 
 import ColorSelector from "./colorSelector";
@@ -35,75 +32,33 @@ export default function ProductDetails({
 }: {
   product: ClotheProduct;
 }) {
-  const [galleryViewState, setGalleryViewState] = useState<
-    "default" | "fullscreen"
-  >("default");
-
-  const gallerySlider = (
-    <GallerySlider
-      images={product.images}
-      onSelect={(viewMode: string) => {
-        if (viewMode === "fullscreen") setGalleryViewState("fullscreen");
-      }}
-      viewMode={galleryViewState}
-    />
-  );
+  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
   return (
     <div className="flex flex-row justify-end gap-10">
       <div className="block w-5/12">
-        {galleryViewState === "fullscreen" ? (
-          <Modal
-            onSelect={(modalAction: string) => {
-              if (modalAction === "close") setGalleryViewState("default");
-            }}
-            isOpen={galleryViewState === "fullscreen" ? true : false}
-            style={{
-              container: "fixed left-0 top-0 z-10 h-full w-full p-10 ",
-              closeButton:
-                "absolute right-0 top-0 z-10 p-4 text-stone-700 hover:text-stone-900 text-2xl",
-            }}
-          >
-            {gallerySlider}
-          </Modal>
-        ) : (
-          gallerySlider
-        )}
+        <GallerySlider images={product.images} isExpandable={true} />
       </div>
       <div className="ml-32 flex w-3/12 flex-col gap-6 text-right">
         <ProductHeader {...product} />
         <hr />
         <ColorSelector colors={colors} />
         <SizeSelector sizes={sizes} />
-        <SizeGuide
-          images={product.images}
-          buttonClassName="mt-2 flex flex-row gap-3 pr-1"
-          children={
-            <>
-              <Image
-                className="rotate-45"
-                src="/ruler.png"
-                width="24"
-                height="24"
-                alt="راهنمای سایز"
-                quality={100}
-              />
-              <span className="text-sm text-blue-500 underline underline-offset-8">
-                راهنمای سایز
-              </span>
-            </>
-          }
-        />
+        <SizeGuide images={product.images} />
         <span className="text-sm font-light text-stone-800">
           ارسال رایگان برای خرید بالای ۲,۰۰۰,۰۰۰ تومان
         </span>
-        <Button
-          // isDisabled={true}
+        <button
           onClick={() => console.log("clicked")}
-          className="bg-green-700 py-5 text-sm text-white hover:bg-green-800"
+          disabled={isButtonDisabled}
+          className={`py-5 text-sm text-white ${isButtonDisabled ? "bg-neutral-400 hover:bg-neutral-400" : "bg-green-700 hover:bg-green-800"}`}
         >
-          اضافه به سبد خرید
-        </Button>
-        <Button className="mt-4 flex flex-row justify-between px-4 py-3 text-sm text-stone-800 outline outline-1 hover:bg-stone-800 hover:text-stone-50">
+          {isButtonDisabled ? "ناموجود" : "اضافه به سبد خرید"}
+        </button>
+
+        <button
+          onClick={() => console.log("clicked second button")}
+          className="mt-4 flex flex-row justify-between px-4 py-3 text-sm text-stone-800 outline outline-1 hover:bg-stone-800 hover:text-stone-50"
+        >
           <span>
             <FontAwesomeIcon icon={faLocationDot} style={{ fontSize: 20 }} />
           </span>
@@ -111,7 +66,7 @@ export default function ProductDetails({
           <span>
             <FontAwesomeIcon icon={faChevronLeft} style={{ fontSize: 20 }} />
           </span>
-        </Button>
+        </button>
       </div>
     </div>
   );
