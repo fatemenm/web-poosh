@@ -2,26 +2,22 @@
 
 import { ReactNode } from "react";
 import SlickSlider from "react-slick";
+import { Settings } from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 
 export default function Slider({
-  containerClass = "",
-  customSetting,
+  containerClass,
+  setting,
   children,
 }: {
-  containerClass: string;
-  customSetting: Record<string, unknown>;
+  containerClass?: string;
+  setting?: Settings;
   children: ReactNode;
 }) {
-  const baseSetting = {
-    infinite: true,
-    slidesToScroll: 1,
-  };
-  const finalSetting = { ...baseSetting, ...customSetting };
   return (
     <div className={`w-full ${containerClass}`}>
-      <SlickSlider {...finalSetting}>{children}</SlickSlider>
+      <SlickSlider {...setting}>{children}</SlickSlider>
     </div>
   );
 }

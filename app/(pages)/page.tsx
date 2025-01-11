@@ -10,18 +10,20 @@ import {
   getHeroBanners,
 } from "@/_lib/data";
 
-const newProductsSliderSetting = {
-  speed: 400,
-  autoplay: true,
-  autoplaySpeed: 4000,
-  cssEase: "linear",
+const sliderSetting = {
+  infinite: true,
+  slidesToScroll: 1,
+  slidesToShow: 5,
 };
 
 export default async function Page() {
-  const heroBanners = await getHeroBanners();
-  const categories = await getCategories();
-  const clothingSetBanners = await getClotheSetBanners();
-  const clotheProducts = await getClotheProducts();
+  const [heroBanners, categories, clothingSetBanners, clotheProducts] =
+    await Promise.all([
+      getHeroBanners(),
+      getCategories(),
+      getClotheSetBanners(),
+      getClotheProducts(),
+    ]);
 
   return (
     <div className="flex flex-col items-center">
@@ -58,7 +60,7 @@ export default async function Page() {
       </div>
       {/* Category Slider */}
       {categories && (
-        <BasicSlider containerClass="my-16 px-20">
+        <BasicSlider containerClass="my-16 px-20" setting={sliderSetting}>
           {categories.map((item) => (
             <Link
               href="/"
@@ -127,7 +129,13 @@ export default async function Page() {
       </div>
       {clotheProducts && (
         <BasicSlider
-          sliderSetting={newProductsSliderSetting}
+          setting={{
+            ...sliderSetting,
+            speed: 400,
+            autoplay: true,
+            autoplaySpeed: 4000,
+            cssEase: "linear",
+          }}
           containerClass="mx-auto mb-24 mt-8 px-20"
         >
           {clotheProducts.map((item) => {

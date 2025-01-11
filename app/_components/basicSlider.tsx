@@ -6,17 +6,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ReactNode } from "react";
+import { CustomArrowProps } from "react-slick";
+import { Settings } from "react-slick";
 
 import Slider from "@/_components/slider";
 import styles from "@/_styles/basicSlider.module.css";
-
-interface CustomArrowProps {
-  className?: string | undefined;
-  style?: React.CSSProperties | undefined;
-  onClick?: React.MouseEventHandler<any> | undefined;
-  currentSlide?: number | undefined;
-  slideCount?: number | undefined;
-}
 
 function LeftArrow(props: CustomArrowProps) {
   const { className, style, onClick } = props;
@@ -34,7 +28,7 @@ function LeftArrow(props: CustomArrowProps) {
             : "text-stone-800"
         }
       >
-        <FontAwesomeIcon icon={faChevronLeft} style={{ fontSize: 24 }} />
+        <FontAwesomeIcon icon={faChevronLeft} className="text-2xl" />
       </button>
     </div>
   );
@@ -54,29 +48,29 @@ function RightArrow(props: CustomArrowProps) {
             : "text-stone-800"
         }
       >
-        <FontAwesomeIcon icon={faChevronRight} style={{ fontSize: 24 }} />
+        <FontAwesomeIcon icon={faChevronRight} className="text-2xl" />
       </button>
     </div>
   );
 }
 
 export default function BasicSlider({
-  containerClass = "",
-  sliderSetting = {},
+  containerClass,
+  setting,
   children,
 }: {
   containerClass?: string;
-  sliderSetting?: Record<string, unknown>;
+  setting?: Settings;
   children: ReactNode;
 }) {
   return (
     <Slider
       containerClass={containerClass}
-      customSetting={{
-        ...sliderSetting,
-        slidesToShow: 5,
+      setting={{
+        infinite: true,
         nextArrow: <RightArrow />,
         prevArrow: <LeftArrow />,
+        ...setting,
       }}
     >
       {children}
