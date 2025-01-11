@@ -1,12 +1,12 @@
 import { apiBaseUrl } from "@config";
 
 import {
-  Banner,
   Category,
   ClotheProduct,
   ClotheSetBanner,
   HeroBanner,
   NavbarItem,
+  PromoBanner,
   responseBody,
 } from "./definitions";
 
@@ -20,7 +20,7 @@ const urls = {
   getClotheProductById: new URL("/api/clothe-products/:id", apiBaseUrl),
 };
 
-export async function getBannerData() {
+export async function getPromoBannerData() {
   try {
     const url = new URL(urls.getBanners);
     const response = await fetch(url.href);
@@ -35,7 +35,7 @@ export async function getBannerData() {
       ...item,
       startDate: new Date(item.startDate as string),
       endDate: new Date(item.endDate as string),
-    })) as Banner[];
+    })) as PromoBanner[];
     const now: Date = new Date();
     const earliestActiveBanner = data
       .filter((banner) => {

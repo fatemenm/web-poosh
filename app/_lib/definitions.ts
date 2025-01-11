@@ -1,4 +1,4 @@
-export type Banner = {
+export type PromoBanner = {
   startDate: Date;
   endDate: Date;
   promoMessage: string;
@@ -52,7 +52,7 @@ export type Image = {
   };
 };
 export type HeaderData = {
-  banner: Banner | undefined;
+  banner: PromoBanner | undefined;
   navbarItems: NavbarItem[] | undefined;
 };
 

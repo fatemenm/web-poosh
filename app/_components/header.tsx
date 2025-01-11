@@ -11,8 +11,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { default as BannerComponent } from "@/_components/banner";
-import type { Banner, NavbarItem, NavigationLink } from "@/_lib/definitions";
+import PromoBanner from "@/_components/promoBanner";
+import {
+  NavbarItem,
+  NavigationLink,
+  PromoBanner as PromoBannerType,
+} from "@/_lib/definitions";
 
 import logo from "@public/logo.png";
 
@@ -39,26 +43,26 @@ function createSublinkGrid(items: NavigationLink[] | undefined) {
 }
 
 export default function Header({
-  bannerData,
+  promoBannerData,
   navbarItemsData,
 }: {
-  bannerData: Banner | undefined;
+  promoBannerData: PromoBannerType | undefined;
   navbarItemsData: NavbarItem[] | undefined;
 }) {
-  const [banner, setBanner] = useState<Banner>();
+  const [promoBanner, setPromoBanner] = useState<PromoBannerType>();
   const [navbarItems, setNavbarItems] = useState<Array<NavbarItem>>();
   const [hoveredNavbarItem, setHoveredNavbarItem] =
     useState<NavbarItem | null>();
 
   useEffect(() => {
     setNavbarItems(navbarItemsData);
-    setBanner(bannerData);
+    setPromoBanner(promoBannerData);
   }, []);
 
   return (
     <header className="flex shrink-0 flex-col items-center">
-      {banner ? (
-        <BannerComponent data={banner} />
+      {promoBanner ? (
+        <PromoBanner data={promoBanner} />
       ) : (
         <div className="box-border flex min-h-10 w-full flex-row justify-start bg-stone-800 p-2 text-sm font-light text-white"></div>
       )}
@@ -92,14 +96,14 @@ export default function Header({
         </div>
         <div className="flex flex-row justify-between gap-8">
           <button>
-            <FontAwesomeIcon icon={faSearch} style={{ fontSize: 20 }} />
+            <FontAwesomeIcon icon={faSearch} className="text-xl" />
           </button>
 
           <button>
-            <FontAwesomeIcon icon={faUser} style={{ fontSize: 20 }} />
+            <FontAwesomeIcon icon={faUser} className="text-xl" />
           </button>
           <button>
-            <FontAwesomeIcon icon={faBagShopping} style={{ fontSize: 20 }} />
+            <FontAwesomeIcon icon={faBagShopping} className="text-xl" />
           </button>
         </div>
       </div>
