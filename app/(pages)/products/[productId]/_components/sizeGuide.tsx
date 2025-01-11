@@ -43,7 +43,7 @@ export default function SizeGuide({ images }: { images: ProductImage[] }) {
               </Dialog.Description>
             </VisuallyHidden.Root>
             <Dialog.Close className="absolute right-2 top-3 px-2 text-slate-500 hover:text-slate-600">
-              <FontAwesomeIcon icon={faClose} style={{ fontSize: 16 }} />
+              <FontAwesomeIcon icon={faClose} className="text-[16px]" />
             </Dialog.Close>
             {/* row 1 */}
             <div className="flex flex-row border-b-[1px]">

@@ -12,7 +12,7 @@ import { usePathname } from "next/navigation";
 
 import logo from "@public/logo-footer.svg";
 
-const footerContent = (
+const homeExclusiveContent = (
   <div className="flex flex-col gap-10 text-right">
     <div className="flex flex-col gap-2">
       <h1 className="text-3xl text-stone-800">
@@ -149,19 +149,19 @@ export default function Footer() {
                       <button>
                         <FontAwesomeIcon
                           icon={faFacebook}
-                          style={{ fontSize: 20 }}
+                          className="text-xl"
                         />
                       </button>
                       <button>
                         <FontAwesomeIcon
                           icon={faTelegram}
-                          style={{ fontSize: 21 }}
+                          className="text-xl"
                         />
                       </button>
                       <button>
                         <FontAwesomeIcon
                           icon={faInstagram}
-                          style={{ fontSize: 23 }}
+                          className="text-xl"
                         />
                       </button>
                     </div>
@@ -177,7 +177,7 @@ export default function Footer() {
             <Link href="/">دورس مردانه</Link>|<Link href="/">شلوار جین</Link>
           </nav>
         </div>
-        {isHomePage && footerContent}
+        {isHomePage && homeExclusiveContent}
         <div className="flex w-full flex-row items-center justify-between text-stone-700">
           <small className="text-xs font-light">
             کلیه حقوق مادی و معنوی این سایت متعلق به فروشگاه وب‌پوش می‌باشد

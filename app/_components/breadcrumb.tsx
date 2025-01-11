@@ -17,8 +17,8 @@ export default function BreadCrumb({ items }: { items: BreadCrumbItem[] }) {
             {items.length - 1 !== index && (
               <span>
                 <FontAwesomeIcon
+                  className="text-[12px] text-stone-500"
                   icon={faChevronLeft}
-                  style={{ fontSize: 12, color: "gray" }}
                 />
               </span>
             )}
