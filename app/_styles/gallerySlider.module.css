@@ -30,6 +30,7 @@
   outline: 2px solid rgb(39, 37, 37);
 }
 
-.slickSlide {
-  background-color: white;
+.slickDotsFullScreen {
+  right: 6rem;
+  top: 4rem;
 }

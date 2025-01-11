@@ -1,26 +1,34 @@
-import { apiBaseUrl } from "@config";
+import { apiBaseUrl, nextServerUrl } from "@config";
 import Image from "next/image";
 import Link from "next/link";
 
-import AutoSlider from "@/components/autoSlider";
-import ClickSlider from "@/components/clickSlider";
+import BasicSlider from "@/_components/basicSlider";
 import {
   getCategories,
   getClotheProducts,
   getClotheSetBanners,
   getHeroBanners,
-} from "@/lib/data";
+} from "@/_lib/data";
+
+const sliderSetting = {
+  infinite: true,
+  slidesToScroll: 1,
+  slidesToShow: 5,
+};
 
 export default async function Page() {
-  const heroBanners = await getHeroBanners();
-  const categories = await getCategories();
-  const clothingSetBanners = await getClotheSetBanners();
-  const clotheProducts = await getClotheProducts();
+  const [heroBanners, categories, clothingSetBanners, clotheProducts] =
+    await Promise.all([
+      getHeroBanners(),
+      getCategories(),
+      getClotheSetBanners(),
+      getClotheProducts(),
+    ]);
 
   return (
     <div className="flex flex-col items-center">
       {/* Hero Banners */}
-      <div className="flex flex-row-reverse">
+      <div className="flex flex-row">
         {heroBanners?.map((banner, id) => {
           return (
             <div
@@ -51,11 +59,32 @@ export default async function Page() {
         })}
       </div>
       {/* Category Slider */}
-      {categories && <ClickSlider categories={categories} />}
+      {categories && (
+        <BasicSlider containerClass="my-16 px-20" setting={sliderSetting}>
+          {categories.map((item) => (
+            <Link
+              href="/"
+              key={item.id}
+              className="flex cursor-pointer flex-col items-center px-4 outline-none"
+            >
+              <Image
+                src={apiBaseUrl + item.image.url}
+                alt={item.image.alternativeText}
+                width={item.image.width}
+                height={item.image.height}
+                quality={100}
+              />
+              <div className="text-center text-stone-600 underline underline-offset-8">
+                {item.name}
+              </div>
+            </Link>
+          ))}
+        </BasicSlider>
+      )}
       {/* Daily Set Banners */}
       <div className="flex flex-col gap-7">
         <div className="mt-16 flex w-full flex-col gap-3 px-12">
-          <div className="flex flex-row-reverse items-center justify-between text-stone-800">
+          <div className="flex flex-row items-center justify-between text-stone-800">
             <span className="text-lg"> ست‌‌‌‌‌‌‌های جدید</span>
             <Link href="/sets" className="text-xs">
               مشاهده همه
@@ -63,7 +92,7 @@ export default async function Page() {
           </div>
           <hr className="mb-4 h-px w-full bg-stone-400" />
         </div>
-        <div className="flex flex-row-reverse gap-8">
+        <div className="flex flex-row gap-8">
           {clothingSetBanners?.map((banner) => {
             return (
               <div key={banner.id} className="flex flex-col items-center gap-4">
@@ -90,7 +119,7 @@ export default async function Page() {
       </div>
       {/* New Products Slider */}
       <div className="mt-16 flex w-full flex-col gap-3 px-12">
-        <div className="flex flex-row-reverse items-center justify-between text-stone-800">
+        <div className="flex flex-row items-center justify-between text-stone-800">
           <span className="text-lg">محصولات جدید</span>
           <Link href="/" className="text-xs">
             مشاهده همه
@@ -98,7 +127,46 @@ export default async function Page() {
         </div>
         <hr className="mb-4 h-px w-full bg-stone-400" />
       </div>
-      {clotheProducts && <AutoSlider data={clotheProducts} />}
+      {clotheProducts && (
+        <BasicSlider
+          setting={{
+            ...sliderSetting,
+            speed: 400,
+            autoplay: true,
+            autoplaySpeed: 4000,
+            cssEase: "linear",
+          }}
+          containerClass="mx-auto mb-24 mt-8 px-20"
+        >
+          {clotheProducts.map((item) => {
+            return (
+              <Link
+                key={item.id}
+                href={`${nextServerUrl}/products/${item.documentId}`}
+                className="cursor-pointer px-4 outline-none"
+              >
+                <Image
+                  src={apiBaseUrl + item.images[0].url}
+                  alt={item.images[0].alternativeText}
+                  width={item.images[0].width}
+                  height={item.images[0].height}
+                />
+                <div className="mt-4 flex flex-col gap-2 text-center text-sm text-stone-600">
+                  <span className="font-medium">
+                    {item.id.toLocaleString("fa-IR")} {item.name}
+                  </span>
+                  <span>
+                    تومان{" "}
+                    {Number(item.price.replace(/,/g, "")).toLocaleString(
+                      "fa-IR"
+                    )}
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
+        </BasicSlider>
+      )}
     </div>
   );
 }

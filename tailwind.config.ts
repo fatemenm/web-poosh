@@ -16,6 +16,12 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      backgroundColor: {
+        custom: "var(--color-selector-bg-color)",
+      },
+      cursor: {
+        zoomIn: "url('/zoom-in.png'), auto",
+      },
     },
   },
   plugins: [],
