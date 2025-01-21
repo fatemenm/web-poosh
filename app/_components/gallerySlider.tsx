@@ -20,7 +20,7 @@ export default function GallerySlider({
   setting = {},
   isExpandable = false,
 }: {
-  images: ImageType[];
+  images: ImageType[] | undefined;
   containerClass?: string;
   setting?: Settings;
   isExpandable: boolean;
