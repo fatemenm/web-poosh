@@ -71,6 +71,18 @@ export type Category = {
   index: number;
   name: string;
   image: Image;
+  filters: Filter[];
+  sizeGuideImage: Image;
+  sizeTable: Record<string, unknown>[];
+  careTips: string[];
+};
+
+export type Filter = {
+  type: "availability" | "discount" | "size" | "color" | "style";
+  query: string;
+  value: Record<string, unknown> | null;
+  images: Image[];
+  index: number;
 };
 
 export type ClotheSetBanner = {
@@ -87,4 +99,32 @@ export type ClotheProduct = {
   name: string;
   price: string;
   images: Image[];
+};
+
+export type Product = {
+  id: number;
+  documentId: string;
+  name: string;
+  basePrice: string;
+  category: Category;
+  discountPrice: string;
+  sizes: string[];
+  colors: Color[];
+  stocks: Stock[];
+  imagesByColor: Array<{
+    color: string;
+    images: Image[];
+  }>;
+};
+
+export type Color = {
+  name: string;
+  colorHex: string;
+};
+
+export type Stock = {
+  id: number;
+  size: string;
+  color: string;
+  quantity: number;
 };
