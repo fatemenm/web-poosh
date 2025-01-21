@@ -5,14 +5,14 @@ import Link from "next/link";
 import ProductDetails from "@/(pages)/products/[productId]/_components/productDetails";
 import BasicSlider from "@/_components/basicSlider";
 import BreadCrumb from "@/_components/breadcrumb";
-import { getClotheProductById, getClotheProducts } from "@/_lib/data";
+import { getProductById, getProducts } from "@/_lib/data";
 import { ClotheProduct } from "@/_lib/definitions";
 
 import ProductDescription from "./_components/productDescription";
 
 export async function generateStaticParams() {
-  const clotheProducts = await getClotheProducts();
-  return clotheProducts?.map((product) => ({
+  const products = await getProducts();
+  return products?.map((product) => ({
     productId: product.documentId,
   }));
 }
@@ -35,7 +35,7 @@ export default async function Product({
 }: {
   params: Promise<{ productId: string }>;
 }) {
-  const product = await getClotheProductById((await params).productId);
+  const product = await getProductById((await params).productId);
   if (!product) throw new Error("product is undefined");
   const sliderContent: ClotheProduct[] = new Array(10).fill(product);
 
@@ -43,7 +43,7 @@ export default async function Product({
     <div className="mx-auto flex w-10/12 flex-col gap-20">
       <BreadCrumb items={breadcrumbItems} />
       <ProductDetails product={product} />
-      <ProductDescription product={product} />
+      {/* <ProductDescription product={product} />
       <div className="mb-20 flex w-full flex-col gap-4">
         <span className="text-lg">محصولات مشابه دیگر</span>
         <BasicSlider
@@ -69,7 +69,7 @@ export default async function Product({
             </Link>
           ))}
         </BasicSlider>
-      </div>
+      </div> */}
     </div>
   );
 }

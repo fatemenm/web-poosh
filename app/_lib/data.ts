@@ -6,6 +6,7 @@ import {
   ClotheSetBanner,
   HeroBanner,
   NavbarItem,
+  Product,
   PromoBanner,
   responseBody,
 } from "./definitions";
@@ -16,8 +17,8 @@ const urls = {
   getHeroBanners: new URL("/api/hero-banners", apiBaseUrl),
   getCategories: new URL("/api/categories", apiBaseUrl),
   getClotheSetBanners: new URL("/api/clothe-set-banners", apiBaseUrl),
-  getClotheProducts: new URL("/api/clothe-products", apiBaseUrl),
-  getClotheProductById: new URL("/api/clothe-products/:id", apiBaseUrl),
+  getProductById: new URL("/api/products/:id", apiBaseUrl),
+  getProducts: new URL("/api/products", apiBaseUrl),
 };
 
 export async function getPromoBannerData() {
@@ -91,10 +92,19 @@ export async function getHeroBanners() {
 export async function getCategories() {
   try {
     const url = new URL(urls.getCategories);
-    url.search = new URLSearchParams({
-      sort: "index",
-      populate: "image",
-    }).toString();
+    const populateFields = [
+      "filters",
+      "filters.images",
+      "image",
+      "sizeGuideImage",
+    ];
+    const params = new URLSearchParams();
+    params.append("sort", "index");
+    populateFields.forEach((field, index) =>
+      params.append(`populate[${index}]`, field)
+    );
+
+    url.search = params.toString();
     const response = await fetch(url.href);
     if (!response.ok) {
       throw new Error("Failed to fetch data");
@@ -127,37 +137,49 @@ export async function getClotheSetBanners() {
   }
 }
 
-export async function getClotheProducts() {
+export async function getProducts() {
   try {
-    const url = new URL(urls.getClotheProducts);
-    url.search = new URLSearchParams({
-      populate: "images",
-    }).toString();
+    const url = new URL(urls.getProducts);
+    const populateFields = [
+      "imagesByColor",
+      "imagesByColor.images",
+      "category",
+      "category.image",
+    ];
+    const params = new URLSearchParams();
+    populateFields.forEach((field, index) =>
+      params.append(`populate[${index}]`, field)
+    );
+
+    url.search = params.toString();
     const response = await fetch(url.href);
     if (!response.ok) {
       throw new Error("Failed to fetch data");
     }
     const body: responseBody = await response.json();
-    const data = body.data as ClotheProduct[];
+    const data = body.data as Product[];
     return data;
   } catch (error) {
     console.error(error);
     throw error;
   }
 }
-export async function getClotheProductById(documentId: string) {
+export async function getProductById(documentId: string) {
   try {
-    const url = new URL(urls.getClotheProductById);
+    const url = new URL(urls.getProductById);
     url.pathname = url.pathname.replace(":id", documentId);
-    url.search = new URLSearchParams({
-      populate: "images",
-    }).toString();
+    const populateFields = ["imagesByColor", "imagesByColor.images"];
+    const params = new URLSearchParams();
+    populateFields.forEach((field, index) =>
+      params.append(`populate[${index}]`, field)
+    );
+    url.search = params.toString();
     const response = await fetch(url.href);
     if (!response.ok) {
       throw new Error("Failed to fetch data");
     }
     const body: responseBody = await response.json();
-    const data = body.data as ClotheProduct;
+    const data = body.data as Product;
     return data;
   } catch (error) {
     console.error(error);

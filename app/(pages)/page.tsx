@@ -5,9 +5,9 @@ import Link from "next/link";
 import BasicSlider from "@/_components/basicSlider";
 import {
   getCategories,
-  getClotheProducts,
   getClotheSetBanners,
   getHeroBanners,
+  getProducts,
 } from "@/_lib/data";
 
 const sliderSetting = {
@@ -17,14 +17,13 @@ const sliderSetting = {
 };
 
 export default async function Page() {
-  const [heroBanners, categories, clothingSetBanners, clotheProducts] =
+  const [heroBanners, categories, clothingSetBanners, products] =
     await Promise.all([
       getHeroBanners(),
       getCategories(),
       getClotheSetBanners(),
-      getClotheProducts(),
+      getProducts(),
     ]);
-
   return (
     <div className="flex flex-col items-center">
       {/* Hero Banners */}
@@ -127,7 +126,7 @@ export default async function Page() {
         </div>
         <hr className="mb-4 h-px w-full bg-stone-400" />
       </div>
-      {clotheProducts && (
+      {products && (
         <BasicSlider
           setting={{
             ...sliderSetting,
@@ -138,7 +137,7 @@ export default async function Page() {
           }}
           containerClass="mx-auto mb-24 mt-8 px-20"
         >
-          {clotheProducts.map((item) => {
+          {products.map((item) => {
             return (
               <Link
                 key={item.id}
@@ -146,10 +145,10 @@ export default async function Page() {
                 className="cursor-pointer px-4 outline-none"
               >
                 <Image
-                  src={apiBaseUrl + item.images[0].url}
-                  alt={item.images[0].alternativeText}
-                  width={item.images[0].width}
-                  height={item.images[0].height}
+                  src={apiBaseUrl + item.imagesByColor[0].images[0].url}
+                  alt={item.imagesByColor[0].images[0].alternativeText}
+                  width={item.imagesByColor[0].images[0].width}
+                  height={item.imagesByColor[0].images[0].height}
                 />
                 <div className="mt-4 flex flex-col gap-2 text-center text-sm text-stone-600">
                   <span className="font-medium">
@@ -157,7 +156,7 @@ export default async function Page() {
                   </span>
                   <span>
                     تومان{" "}
-                    {Number(item.price.replace(/,/g, "")).toLocaleString(
+                    {Number(item.basePrice.replace(/,/g, "")).toLocaleString(
                       "fa-IR"
                     )}
                   </span>
