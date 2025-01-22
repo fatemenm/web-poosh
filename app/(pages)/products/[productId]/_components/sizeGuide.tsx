@@ -9,15 +9,38 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-import { Image as ProductImage } from "@/_lib/definitions";
+import { Image as ImageType } from "@/_lib/definitions";
 
-export default function SizeGuide({ images }: { images: ProductImage[] }) {
+export default function SizeGuide({
+  productImages: images,
+  className,
+  sizeTableInfo,
+  sizeGuideImage,
+  information,
+  productName,
+  productId,
+}: {
+  productImages: ImageType[];
+  className: string;
+  sizeTableInfo: Record<string, string>[];
+  sizeGuideImage: ImageType;
+  information: {
+    productInfo: string;
+    modelSizeInfo: string;
+    colorInfo: string;
+  };
+  productName: string;
+  productId: number;
+}) {
   const [activeTab, setActiveTab] = useState<"sizeTable" | "measurementMethod">(
     "sizeTable"
   );
+
   return (
     <Dialog.Root>
-      <Dialog.Trigger className="border-non mt-2 flex w-fit flex-row gap-3 border-none pr-1 text-sm text-blue-500 underline underline-offset-8">
+      <Dialog.Trigger
+        className={`border-non flex w-fit flex-row gap-3 border-none pr-1 text-blue-500 underline underline-offset-8 ${className}`}
+      >
         <Image
           className="rotate-45"
           src="/ruler.png"
@@ -26,7 +49,7 @@ export default function SizeGuide({ images }: { images: ProductImage[] }) {
           alt="راهنمای سایز"
           quality={100}
         />
-        <span className="text-sm text-blue-500 underline underline-offset-8">
+        <span className="text-blue-500 underline underline-offset-8">
           راهنمای سایز
         </span>
       </Dialog.Trigger>
@@ -50,12 +73,11 @@ export default function SizeGuide({ images }: { images: ProductImage[] }) {
               <div className="flex w-1/2 flex-row items-center justify-center rounded-tr-md bg-stone-100">
                 <div className="flex w-fit flex-col gap-2 rounded-md bg-white px-4 py-5 shadow-sm">
                   <span className="text-xl font-normal text-stone-800">
-                    شلوار اسلش ۲۱۱۵۸
+                    {productName} {productId}
                   </span>
                   <hr />
                   <span className="text-sm text-stone-600">
-                    مدل با قد 183 سانتی‌متر و وزن 73 کیلوگرم سایز L را پوشیده
-                    است
+                    {information.modelSizeInfo}
                   </span>
                 </div>
               </div>
@@ -121,42 +143,36 @@ export default function SizeGuide({ images }: { images: ProductImage[] }) {
                   <table className="border-collapse border text-center">
                     <thead>
                       <tr>
-                        {[
-                          "سایز",
-                          "عرض کمر",
-                          "عرض ران",
-                          "طول فاق",
-                          "طول شلوار",
-                          " عرض دمپا",
-                        ].map((item, index) => (
+                        {Object.keys(sizeTableInfo[0]).map((label, index) => (
                           <th
-                            key={index}
                             className="border bg-stone-100 px-4 py-3 text-sm font-medium"
                             scope="col"
+                            key={index}
                           >
-                            {item}
+                            {label}
                           </th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
-                      {["L", "XL", "XXL", "XXXL"].map((item, index) => (
-                        <tr key={index}>
-                          <th className="border bg-stone-50 px-4 py-3 text-sm font-medium">
-                            {item}
-                          </th>
-                          {["۳۷", "۳۰", "۱۰۲", "۱۴", "۳۰"].map(
-                            (item, index) => (
+                      {sizeTableInfo.map((sizeData, index) => {
+                        const labels = Object.keys(sizeData);
+                        return (
+                          <tr key={index}>
+                            <th className="border bg-stone-50 px-4 py-3 text-sm font-medium">
+                              {sizeData[labels[0]]}
+                            </th>
+                            {labels.slice(1).map((label, index) => (
                               <td
                                 key={index}
                                 className="border px-4 py-2 text-sm"
                               >
-                                {item}
+                                {sizeData[label]}
                               </td>
-                            )
-                          )}
-                        </tr>
-                      ))}
+                            ))}
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
@@ -176,12 +192,11 @@ export default function SizeGuide({ images }: { images: ProductImage[] }) {
                     ارائه شده، سایز مناسب خود را انتخاب نمایید.
                   </p>
                   <div>
-                    {" "}
                     <Image
-                      src="/sizingGuide.jpg"
-                      alt="sizing guide"
-                      width={1600}
-                      height={2000}
+                      src={apiBaseUrl + sizeGuideImage.url}
+                      alt={sizeGuideImage.alternativeText}
+                      width={sizeGuideImage.width}
+                      height={sizeGuideImage.height}
                     />
                   </div>
                 </div>

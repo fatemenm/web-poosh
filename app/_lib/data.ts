@@ -145,6 +145,7 @@ export async function getProducts() {
       "imagesByColor.images",
       "category",
       "category.image",
+      "category.sizeGuideImage",
     ];
     const params = new URLSearchParams();
     populateFields.forEach((field, index) =>
@@ -168,7 +169,13 @@ export async function getProductById(documentId: string) {
   try {
     const url = new URL(urls.getProductById);
     url.pathname = url.pathname.replace(":id", documentId);
-    const populateFields = ["imagesByColor", "imagesByColor.images"];
+    const populateFields = [
+      "imagesByColor",
+      "imagesByColor.images",
+      "category",
+      "category.image",
+      "category.sizeGuideImage",
+    ];
     const params = new URLSearchParams();
     populateFields.forEach((field, index) =>
       params.append(`populate[${index}]`, field)
