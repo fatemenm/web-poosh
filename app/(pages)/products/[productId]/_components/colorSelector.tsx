@@ -20,10 +20,7 @@ export default function ColorSelector({
     <ToggleGroup.Root
       className="flex flex-row-reverse flex-wrap gap-3"
       value={selectedColor}
-      onValueChange={(value: string) => {
-        if (value === "") onSelect(selectedColor);
-        else onSelect(value);
-      }}
+      onValueChange={(value: string) => value && onSelect(value)}
       type="single"
       defaultValue={selectedColor}
       aria-label="رنگ محصول"
@@ -37,11 +34,7 @@ export default function ColorSelector({
               color: color.colorHex,
             }}
             className="relative h-10 w-10 rounded-full border-2 bg-white p-2 before:absolute before:inset-0 before:top-0 before:rounded-full before:border-2 before:border-white before:bg-current hover:border-2 hover:border-black data-[state=on]:border-2 data-[state=on]:border-black"
-          >
-            {!color.isAvailable && (
-              <div className="absolute left-[16px] top-0 h-[38px] w-0.5 -rotate-45 bg-stone-400" />
-            )}
-          </ToggleGroup.Item>
+          />
         );
       })}
     </ToggleGroup.Root>

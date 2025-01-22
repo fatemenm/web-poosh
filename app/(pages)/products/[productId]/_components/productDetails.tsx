@@ -1,7 +1,6 @@
 "use client";
 
-import classNames from "classnames";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import GallerySlider from "@/_components/gallerySlider";
 import { Product } from "@/_lib/definitions";
@@ -12,54 +11,79 @@ import SizeGuide from "./sizeGuide";
 import SizeSelector from "./sizeSelector";
 
 export default function ProductDetails({ product }: { product: Product }) {
-  const [selectedColor, setSelectedColor] = useState<string>(
-    product.colors[0].name
-  );
-  const [selectedSize, setSelectedSize] = useState<string>();
+  const colorToSizes = useMemo(() => hasStockBy("color"), []);
+  const sizeToColors = useMemo(() => hasStockBy("size"), []);
+  const colors = useMemo(getColors, []);
+  const [selectedColor, setSelectedColor] = useState<string>(colors[0].name);
+  const sizes = useMemo(() => getSizes(selectedColor), [selectedColor]);
+  const [selectedSize, setSelectedSize] = useState<string | undefined>();
+  const [isSizeErrorVisible, setIsSizeErrorVisible] = useState<boolean>(false);
+  const selectedProduct = {
+    id: product.id,
+    documentId: product.documentId,
+    name: product.name,
+    basePrice: product.basePrice,
+    discountPrice: product.discountPrice,
+    color: selectedColor,
+    size: selectedSize,
+    image: product.imagesByColor.find((item) => item.color === selectedColor)
+      ?.images[0],
+  };
 
   function hasStockBy(type: "color" | "size") {
+    const filter = type === "color" ? "size" : "color";
     return product.stocks.reduce(
       (acc, currStock) => {
-        acc[currStock[type]] ||= Boolean(currStock.quantity);
+        if (currStock.quantity) {
+          if (!Array.isArray(acc[currStock[type]])) {
+            acc[currStock[type]] = new Array();
+          }
+          acc[currStock[type]].push(currStock[filter]);
+        }
         return acc;
       },
-      {} as Record<string, boolean>
+      {} as Record<string, string[]>
     );
   }
   function getColors() {
-    const colorAvailabilityMap = hasStockBy("color");
-    return product.colors.map((color) => ({
-      ...color,
-      isAvailable: colorAvailabilityMap[color.name] || false,
-    }));
+    return product.colors
+      .filter((color) => colorToSizes[color.name])
+      .map((color) => {
+        return { ...color, isAvailable: true };
+      });
   }
-  function getSizes() {
-    const sizeAvailabilityMap = hasStockBy("size");
-    return product.sizes.map((size) => ({
-      value: size,
-      isAvailable: sizeAvailabilityMap[size] || false,
-    }));
+  function getSizes(colorFilter?: string) {
+    return product.sizes.map((size) => {
+      let sizeValue;
+      if (colorFilter)
+        sizeValue = colorToSizes[colorFilter].find((s) => s === size);
+      else sizeValue = sizeToColors[size];
+      return {
+        value: size,
+        isAvailable: Boolean(sizeValue),
+      };
+    });
   }
-  const colors = getColors();
-  const sizes = getSizes();
-  const isProductAvailable = !product.stocks.every(
-    (variant) => variant.quantity === 0
-  );
   return (
     <div className="flex flex-row justify-end gap-10">
       <div className="block w-5/12">
-        <GallerySlider
-          images={
-            product.imagesByColor.find((item) => item.color === selectedColor)
-              ?.images
-          }
-          isExpandable={true}
-        />
+        {selectedColor ? (
+          <GallerySlider
+            images={
+              product.imagesByColor.find((item) => item.color === selectedColor)
+                ?.images
+            }
+            isExpandable={true}
+          />
+        ) : (
+          <div>loading...</div>
+        )}
       </div>
       <div className="ml-32 flex w-3/12 flex-col gap-6 text-right">
         <ProductHeader
           name={product.name}
-          price={product.basePrice}
+          basePrice={product.basePrice}
+          discountPrice={product.discountPrice}
           id={product.id}
         />
         <hr />
@@ -68,40 +92,57 @@ export default function ProductDetails({ product }: { product: Product }) {
             رنگ انتخابی شما:
             <span className="pr-1 font-normal">{selectedColor}</span>
           </div>
-          <ColorSelector
-            selectedColor={selectedColor}
-            colors={colors}
-            onSelect={setSelectedColor}
-          />
+          {selectedColor && colors ? (
+            <ColorSelector
+              selectedColor={selectedColor}
+              colors={colors}
+              onSelect={(color: string) => {
+                setSelectedColor(color);
+                setSelectedSize("");
+              }}
+            />
+          ) : (
+            <div>loading</div>
+          )}
         </div>
 
-        <SizeSelector sizes={sizes} onSelect={setSelectedSize} />
-        <SizeGuide images={product.imagesByColor[0].images} />
+        {sizes ? (
+          <SizeSelector
+            sizes={sizes}
+            selectedSize={selectedSize}
+            onSelect={(size: string) => {
+              setSelectedSize(size);
+              setIsSizeErrorVisible(false);
+            }}
+          />
+        ) : (
+          <div>loading</div>
+        )}
+        <SizeGuide
+          productImages={product.imagesByColor[0].images}
+          className="text-sm"
+          sizeTableInfo={product.category.sizeTable}
+          information={product.information}
+          sizeGuideImage={product.category.sizeGuideImage}
+          productId={product.id}
+          productName={product.name}
+        />
         <span className="text-sm font-light text-stone-800">
           ارسال رایگان برای خرید بالای ۲,۰۰۰,۰۰۰ تومان
         </span>
+        {isSizeErrorVisible && (
+          <div className="bg-red-700 px-4 py-3 text-sm font-light text-white">
+            لطفا سایز را انتخاب کنید
+          </div>
+        )}
         <button
           onClick={() => {
-            const selectedProduct = {
-              id: product.id,
-              documentId: product.documentId,
-              name: product.name,
-              basePrice: product.basePrice,
-              color: selectedColor,
-              size: selectedSize,
-              image: product.imagesByColor.find(
-                (item) => item.color === selectedColor
-              )?.images[0],
-            };
-            console.log(selectedProduct);
+            if (!selectedProduct.size) setIsSizeErrorVisible(true);
+            else console.log(selectedProduct);
           }}
-          disabled={!isProductAvailable}
-          className={classNames("py-5 text-sm text-white", {
-            "bg-neutral-400 hover:bg-neutral-400": !isProductAvailable,
-            "bg-green-700 hover:bg-green-800": isProductAvailable,
-          })}
+          className={"bg-green-700 py-5 text-sm text-white hover:bg-green-800"}
         >
-          {isProductAvailable ? "اضافه به سبد خرید" : "ناموجود"}
+          اضافه به سبد خرید
         </button>
       </div>
     </div>
