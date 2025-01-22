@@ -4,13 +4,17 @@ const billCount = 4;
 
 export function ProductHeader({
   name,
-  price,
+  basePrice,
+  discountPrice,
   id,
 }: {
   name: string;
-  price: string;
+  basePrice: string;
+  discountPrice: string;
   id: number;
 }) {
+  const basePriceNum = Number(basePrice);
+  const discountPriceNum = Number(discountPrice);
   return (
     <div className="flex flex-col gap-6">
       {/* title */}
@@ -18,9 +22,25 @@ export function ProductHeader({
         {name} {id.toLocaleString("fa-IR")}
       </h1>
       {/* price */}
-      <div className="flex flex-row gap-1">
-        <span>{Number(price.replace(/,/g, "")).toLocaleString("fa-IR")}</span>
-        <span>تومان</span>
+      <div className="flex flex-row items-center gap-3">
+        <span className="line-through">
+          {basePriceNum.toLocaleString("fa-IR")} تومان
+        </span>
+        {discountPrice && (
+          <div className="flex flex-row items-center gap-3">
+            <span className="text-sm">
+              (
+              {(
+                ((basePriceNum - discountPriceNum) / basePriceNum) *
+                100
+              ).toLocaleString("fa-IR")}
+              %)
+            </span>
+            <span className="text-red-600">
+              {discountPriceNum.toLocaleString("fa-IR")} تومان
+            </span>
+          </div>
+        )}
       </div>
       {/* snap pay */}
       <div className="flex flex-row items-center justify-start gap-4 rounded-sm bg-sky-100 p-2">
@@ -35,9 +55,9 @@ export function ProductHeader({
           <span className="font-medium">امکان پرداخت اقساطیِ اسنپ پی</span>
           <span dir="rtl">
             {billCount.toLocaleString("fa-IR")} قسط ماهیانه{" "}
-            {(Number(price.replace(/,/g, "")) / billCount).toLocaleString(
-              "fa-IR"
-            )}{" "}
+            {(
+              (discountPrice ? discountPriceNum : basePriceNum) / billCount
+            ).toLocaleString("fa-IR")}{" "}
             تومان (بدون کارمزد)
           </span>
         </div>
