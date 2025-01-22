@@ -67,7 +67,6 @@ export default function BasicSlider({
     <Slider
       containerClass={containerClass}
       setting={{
-        infinite: true,
         nextArrow: <RightArrow />,
         prevArrow: <LeftArrow />,
         ...setting,

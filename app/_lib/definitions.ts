@@ -73,7 +73,7 @@ export type Category = {
   image: Image;
   filters: Filter[];
   sizeGuideImage: Image;
-  sizeTable: Record<string, unknown>[];
+  sizeTable: Record<string, string>[];
   careTips: string[];
 };
 
@@ -111,6 +111,11 @@ export type Product = {
   sizes: string[];
   colors: Color[];
   stocks: Stock[];
+  information: {
+    productInfo: string;
+    modelSizeInfo: string;
+    colorInfo: string;
+  };
   imagesByColor: Array<{
     color: string;
     images: Image[];
