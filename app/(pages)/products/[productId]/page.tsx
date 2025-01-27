@@ -1,4 +1,5 @@
-import { apiBaseUrl, nextServerUrl } from "@config";
+import { apiBaseUrl } from "@config";
+import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -6,7 +7,6 @@ import ProductDetails from "@/(pages)/products/[productId]/_components/productDe
 import BasicSlider from "@/_components/basicSlider";
 import BreadCrumb from "@/_components/breadcrumb";
 import { getProductById, getProducts } from "@/_lib/data";
-import { ClotheProduct } from "@/_lib/definitions";
 
 import ProductDescription from "./_components/productDescription";
 
@@ -29,8 +29,7 @@ export default async function Product({
 }) {
   const product = await getProductById((await params).productId);
   if (!product) throw new Error("product is undefined");
-
-  const products = await getProducts();
+  const relatedProducts = await getProducts();
   const breadcrumbItems = [
     {
       label: "وب پوش",
@@ -54,7 +53,7 @@ export default async function Product({
       <div className="mb-20 flex w-full flex-col gap-4">
         <span className="text-lg">محصولات مشابه دیگر</span>
         <BasicSlider setting={sliderSetting}>
-          {products.map((item) => (
+          {relatedProducts.map((item) => (
             <Link
               href="/"
               key={item.id}
@@ -67,11 +66,26 @@ export default async function Product({
                 height={item.imagesByColor[0].images[0].height}
                 quality={100}
               />
-              <div className="mt-4 flex justify-center gap-1 text-center text-sm font-light text-stone-700">
-                <span> تومان</span>
-                {Number(item.basePrice.replace(/,/g, "")).toLocaleString(
-                  "fa-IR"
-                )}
+
+              <div
+                style={{ direction: "rtl" }}
+                className="mt-4 flex flex-col items-center gap-2 text-center text-sm text-stone-600"
+              >
+                <span className="font-medium">
+                  {item.id.toLocaleString("fa-IR")} {item.name}
+                </span>
+                <div className="flex flex-row items-center gap-3">
+                  <span
+                    className={classNames(item.salePrice && "line-through")}
+                  >
+                    {item.originalPrice.toLocaleString("fa-IR")} تومان
+                  </span>
+                  {item.salePrice ? (
+                    <span className="text-red-600">
+                      {item.salePrice.toLocaleString("fa-IR")} تومان
+                    </span>
+                  ) : null}
+                </div>
               </div>
             </Link>
           ))}

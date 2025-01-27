@@ -1,4 +1,5 @@
 import { apiBaseUrl, nextServerUrl } from "@config";
+import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -15,7 +16,6 @@ const sliderSetting = {
   slidesToScroll: 1,
   slidesToShow: 5,
 };
-
 export default async function Page() {
   const [heroBanners, categories, clothingSetBanners, products] =
     await Promise.all([
@@ -150,16 +150,36 @@ export default async function Page() {
                   width={item.imagesByColor[0].images[0].width}
                   height={item.imagesByColor[0].images[0].height}
                 />
-                <div className="mt-4 flex flex-col gap-2 text-center text-sm text-stone-600">
+                <div
+                  style={{ direction: "rtl" }}
+                  className="mt-4 flex flex-col items-center gap-2 text-center text-sm text-stone-600"
+                >
                   <span className="font-medium">
                     {item.id.toLocaleString("fa-IR")} {item.name}
                   </span>
-                  <span>
-                    تومان{" "}
-                    {Number(item.basePrice.replace(/,/g, "")).toLocaleString(
-                      "fa-IR"
-                    )}
-                  </span>
+                  <div className="flex flex-row items-center gap-3">
+                    <span
+                      className={classNames(item.salePrice && "line-through")}
+                    >
+                      {item.originalPrice.toLocaleString("fa-IR")} تومان
+                    </span>
+                    {item.salePrice ? (
+                      <div className="flex flex-row items-center gap-3">
+                        <span className="text-sm">
+                          (
+                          {(
+                            ((item.originalPrice - item.salePrice) /
+                              item.originalPrice) *
+                            100
+                          ).toLocaleString("fa-IR")}
+                          %)
+                        </span>
+                        <span className="text-red-600">
+                          {item.salePrice.toLocaleString("fa-IR")} تومان
+                        </span>
+                      </div>
+                    ) : null}
+                  </div>
                 </div>
               </Link>
             );

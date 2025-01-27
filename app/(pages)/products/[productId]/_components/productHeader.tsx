@@ -1,20 +1,19 @@
+import classNames from "classnames";
 import Image from "next/image";
 
 const billCount = 4;
 
 export function ProductHeader({
   name,
-  basePrice,
-  discountPrice,
+  originalPrice,
+  salePrice,
   id,
 }: {
   name: string;
-  basePrice: string;
-  discountPrice: string;
+  originalPrice: number;
+  salePrice: number;
   id: number;
 }) {
-  const basePriceNum = Number(basePrice);
-  const discountPriceNum = Number(discountPrice);
   return (
     <div className="flex flex-col gap-6">
       {/* title */}
@@ -23,24 +22,24 @@ export function ProductHeader({
       </h1>
       {/* price */}
       <div className="flex flex-row items-center gap-3">
-        <span className="line-through">
-          {basePriceNum.toLocaleString("fa-IR")} تومان
+        <span className={classNames(salePrice && "line-through")}>
+          {originalPrice.toLocaleString("fa-IR")} تومان
         </span>
-        {discountPrice && (
+        {salePrice ? (
           <div className="flex flex-row items-center gap-3">
             <span className="text-sm">
               (
               {(
-                ((basePriceNum - discountPriceNum) / basePriceNum) *
+                ((originalPrice - salePrice) / originalPrice) *
                 100
               ).toLocaleString("fa-IR")}
               %)
             </span>
             <span className="text-red-600">
-              {discountPriceNum.toLocaleString("fa-IR")} تومان
+              {salePrice.toLocaleString("fa-IR")} تومان
             </span>
           </div>
-        )}
+        ) : null}
       </div>
       {/* snap pay */}
       <div className="flex flex-row items-center justify-start gap-4 rounded-sm bg-sky-100 p-2">
@@ -56,7 +55,7 @@ export function ProductHeader({
           <span dir="rtl">
             {billCount.toLocaleString("fa-IR")} قسط ماهیانه{" "}
             {(
-              (discountPrice ? discountPriceNum : basePriceNum) / billCount
+              (salePrice ? salePrice : originalPrice) / billCount
             ).toLocaleString("fa-IR")}{" "}
             تومان (بدون کارمزد)
           </span>
