@@ -20,7 +20,7 @@ export default function GallerySlider({
   setting = {},
   isExpandable = false,
 }: {
-  images: ImageType[] | undefined;
+  images: ImageType[];
   containerClass?: string;
   setting?: Settings;
   isExpandable: boolean;
@@ -126,6 +126,7 @@ export default function GallerySlider({
   return (
     <div>
       <Slider
+        key={images.map((img) => img.id).join(",")}
         containerClass={containerClass}
         setting={{ ...baseSetting, ...setting }}
       >

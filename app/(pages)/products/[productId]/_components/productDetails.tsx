@@ -18,6 +18,10 @@ export default function ProductDetails({ product }: { product: Product }) {
   const sizes = useMemo(() => getSizes(selectedColor), [selectedColor]);
   const [selectedSize, setSelectedSize] = useState<string | undefined>();
   const [isSizeErrorVisible, setIsSizeErrorVisible] = useState<boolean>(false);
+  const gallerySliderImages = [
+    ...(product.imagesByColor.find((item) => item.color === selectedColor)
+      ?.images || []),
+  ];
   const selectedProduct = {
     id: product.id,
     documentId: product.documentId,
@@ -68,17 +72,7 @@ export default function ProductDetails({ product }: { product: Product }) {
   return (
     <div className="flex flex-row justify-end gap-10">
       <div className="block w-5/12">
-        {selectedColor ? (
-          <GallerySlider
-            images={
-              product.imagesByColor.find((item) => item.color === selectedColor)
-                ?.images
-            }
-            isExpandable={true}
-          />
-        ) : (
-          <div>loading...</div>
-        )}
+        {<GallerySlider images={gallerySliderImages} isExpandable={true} />}
       </div>
       <div className="ml-32 flex w-3/12 flex-col gap-6 text-right">
         <ProductHeader
@@ -93,32 +87,23 @@ export default function ProductDetails({ product }: { product: Product }) {
             رنگ انتخابی شما:
             <span className="pr-1 font-normal">{selectedColor}</span>
           </div>
-          {selectedColor && colors ? (
-            <ColorSelector
-              selectedColor={selectedColor}
-              colors={colors}
-              onSelect={(color: string) => {
-                setSelectedColor(color);
-                setSelectedSize("");
-              }}
-            />
-          ) : (
-            <div>loading</div>
-          )}
-        </div>
-
-        {sizes ? (
-          <SizeSelector
-            sizes={sizes}
-            selectedSize={selectedSize}
-            onSelect={(size: string) => {
-              setSelectedSize(size);
-              setIsSizeErrorVisible(false);
+          <ColorSelector
+            selectedColor={selectedColor}
+            colors={colors}
+            onSelect={(color: string) => {
+              setSelectedColor(color);
+              setSelectedSize("");
             }}
           />
-        ) : (
-          <div>loading</div>
-        )}
+        </div>
+        <SizeSelector
+          sizes={sizes}
+          selectedSize={selectedSize}
+          onSelect={(size: string) => {
+            setSelectedSize(size);
+            setIsSizeErrorVisible(false);
+          }}
+        />
         <SizeGuideModal
           productImages={product.imagesByColor[0].images}
           className="text-sm"
