@@ -120,13 +120,12 @@ export default function SizeGuideModal({
                   <div className="text-sm font-light text-stone-800">
                     <p className="pb-2">
                       لطفا طبق{" "}
-                      <Link
-                        href="#"
+                      <button
                         onClick={() => setActiveTab("measurementMethod")}
                         className="text-blue-600"
                       >
                         روش اندازه گیری
-                      </Link>{" "}
+                      </button>{" "}
                       ارائه شده سایز مناسب خود را از جدول زیر انتخاب نمایید
                     </p>
                     <ul className="list-inside list-disc pr-4">
@@ -182,13 +181,12 @@ export default function SizeGuideModal({
                   <p className="text-sm font-light text-stone-800">
                     لطفا طبق تصویر زیر اندازه ها را به دست آورید . سپس با مقایسه
                     اندازه های خود با{" "}
-                    <Link
-                      href="#"
+                    <button
                       onClick={() => setActiveTab("sizeTable")}
                       className="text-blue-600"
                     >
                       جدول سایز
-                    </Link>{" "}
+                    </button>{" "}
                     ارائه شده، سایز مناسب خود را انتخاب نمایید.
                   </p>
                   <div>
