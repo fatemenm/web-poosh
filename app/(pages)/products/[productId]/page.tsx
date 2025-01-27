@@ -1,4 +1,4 @@
-import { apiBaseUrl } from "@config";
+import { apiBaseUrl, nextServerUrl } from "@config";
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
@@ -55,7 +55,7 @@ export default async function Product({
         <BasicSlider setting={sliderSetting}>
           {relatedProducts.map((item) => (
             <Link
-              href="/"
+              href={`${nextServerUrl}/products/${item.documentId}`}
               key={item.id}
               className="flex cursor-pointer flex-col items-center outline-none"
             >
