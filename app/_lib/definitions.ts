@@ -78,10 +78,8 @@ export type Category = {
 };
 
 export type Filter = {
-  type: "availability" | "discount" | "size" | "color" | "style";
   query: string;
-  value: Record<string, unknown> | null;
-  images: Image[];
+  image: Image;
   index: number;
 };
 
@@ -105,9 +103,9 @@ export type Product = {
   id: number;
   documentId: string;
   name: string;
-  basePrice: string;
+  originalPrice: number;
+  salePrice: number;
   category: Category;
-  discountPrice: string;
   sizes: string[];
   colors: Color[];
   stocks: Stock[];

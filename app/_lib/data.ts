@@ -2,7 +2,6 @@ import { apiBaseUrl } from "@config";
 
 import {
   Category,
-  ClotheProduct,
   ClotheSetBanner,
   HeroBanner,
   NavbarItem,
@@ -94,7 +93,7 @@ export async function getCategories() {
     const url = new URL(urls.getCategories);
     const populateFields = [
       "filters",
-      "filters.images",
+      "filters.image",
       "image",
       "sizeGuideImage",
     ];
