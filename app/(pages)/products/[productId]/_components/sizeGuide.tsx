@@ -11,7 +11,7 @@ import { useState } from "react";
 
 import { Image as ImageType } from "@/_lib/definitions";
 
-export default function SizeGuide({
+export default function SizeGuideModal({
   productImages: images,
   className,
   sizeTableInfo,

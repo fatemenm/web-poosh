@@ -2,13 +2,13 @@
 
 import { useMemo, useState } from "react";
 
+import ColorSelector from "@/_components/colorSelector";
 import GallerySlider from "@/_components/gallerySlider";
+import SizeSelector from "@/_components/sizeSelector";
 import { Product } from "@/_lib/definitions";
 
-import ColorSelector from "./colorSelector";
 import { ProductHeader } from "./productHeader";
-import SizeGuide from "./sizeGuide";
-import SizeSelector from "./sizeSelector";
+import SizeGuideModal from "./sizeGuide";
 
 export default function ProductDetails({ product }: { product: Product }) {
   const colorToSizes = useMemo(() => hasStockBy("color"), []);
@@ -22,8 +22,8 @@ export default function ProductDetails({ product }: { product: Product }) {
     id: product.id,
     documentId: product.documentId,
     name: product.name,
-    basePrice: product.basePrice,
-    discountPrice: product.discountPrice,
+    originalPrice: product.originalPrice,
+    salePrice: product.salePrice,
     color: selectedColor,
     size: selectedSize,
     image: product.imagesByColor.find((item) => item.color === selectedColor)
@@ -64,6 +64,7 @@ export default function ProductDetails({ product }: { product: Product }) {
       };
     });
   }
+
   return (
     <div className="flex flex-row justify-end gap-10">
       <div className="block w-5/12">
@@ -82,8 +83,8 @@ export default function ProductDetails({ product }: { product: Product }) {
       <div className="ml-32 flex w-3/12 flex-col gap-6 text-right">
         <ProductHeader
           name={product.name}
-          basePrice={product.basePrice}
-          discountPrice={product.discountPrice}
+          originalPrice={product.originalPrice}
+          salePrice={product.salePrice}
           id={product.id}
         />
         <hr />
@@ -118,7 +119,7 @@ export default function ProductDetails({ product }: { product: Product }) {
         ) : (
           <div>loading</div>
         )}
-        <SizeGuide
+        <SizeGuideModal
           productImages={product.imagesByColor[0].images}
           className="text-sm"
           sizeTableInfo={product.category.sizeTable}

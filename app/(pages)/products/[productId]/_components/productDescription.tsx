@@ -11,7 +11,7 @@ import Link from "next/link";
 
 import { Product } from "@/_lib/definitions";
 
-import SizeGuide from "./sizeGuide";
+import SizeGuideModal from "./sizeGuide";
 
 export default function ProductDescription({ product }: { product: Product }) {
   const productImage = product.imagesByColor[0].images[0];
@@ -46,7 +46,7 @@ export default function ProductDescription({ product }: { product: Product }) {
           </div>
         </div>
         <div className="flex flex-row gap-20 text-xs">
-          <SizeGuide
+          <SizeGuideModal
             productImages={product.imagesByColor[0].images}
             className=""
             sizeTableInfo={product.category.sizeTable}
