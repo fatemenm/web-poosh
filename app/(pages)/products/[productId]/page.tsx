@@ -1,46 +1,62 @@
+"use client";
+
 import { apiBaseUrl, nextServerUrl } from "@config";
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
-import ProductDetails from "@/(pages)/products/[productId]/_components/productDetails";
 import BasicSlider from "@/_components/basicSlider";
 import BreadCrumb from "@/_components/breadcrumb";
 import { getProductById, getProducts } from "@/_lib/data";
+import { Product as ProductType } from "@/_lib/definitions";
+import { ProductModel } from "@/_models/product.model";
 
 import ProductDescription from "./_components/productDescription";
+import ProductDetails from "./_components/productDetails";
+import SizeGuideModal from "./_components/sizeGuideModal";
 
-export async function generateStaticParams() {
-  const products = await getProducts();
-  return products?.map((product) => ({
-    productId: product.documentId,
-  }));
-}
 const sliderSetting = {
   infinite: false,
   slidesToScroll: 5,
   slidesToShow: 5,
 };
 
-export default async function Product({
-  params,
-}: {
-  params: Promise<{ productId: string }>;
-}) {
-  const product = await getProductById((await params).productId);
-  if (!product) throw new Error("product is undefined");
-  const relatedProducts = await getProducts();
+export default function Product({ params }: { params: { productId: string } }) {
+  const [product, setProduct] = useState<ProductModel | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState<ProductType[] | null>(
+    null
+  );
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const defaultColor = product?.getAvailableColors()[0].name;
+  const [isSizeGuideModalOpen, setIsSizeGuideModalOpen] =
+    useState<boolean>(false);
+
+  useEffect(() => {
+    const getData = async () => {
+      const [product, relatedProducts] = await Promise.all([
+        getProductById(params.productId),
+        getProducts(),
+      ]);
+      setProduct(product);
+      setRelatedProducts(relatedProducts);
+    };
+    getData();
+  }, [params.productId]);
+
+  if (!product || !relatedProducts || !defaultColor)
+    return <div>product is not available</div>;
   const breadcrumbItems = [
     {
       label: "وب پوش",
       href: "/",
     },
     {
-      label: product.category.name,
+      label: product.data.category.name,
       href: "/products",
     },
     {
-      label: product.name + " " + product.id,
+      label: product.data.name + " " + product.data.id,
       href: ".",
     },
   ];
@@ -48,8 +64,17 @@ export default async function Product({
   return (
     <div className="mx-auto flex w-10/12 flex-col gap-20">
       <BreadCrumb items={breadcrumbItems} />
-      <ProductDetails product={product} />
-      <ProductDescription product={product} />
+      <ProductDetails
+        onSelectSizeGuideLink={setIsSizeGuideModalOpen}
+        product={product}
+        selectedColor={selectedColor ?? defaultColor}
+        onSelectColor={(value: string) => setSelectedColor(value)}
+      />
+      <ProductDescription
+        onSelectSizeGuideLink={setIsSizeGuideModalOpen}
+        product={product}
+        images={product.getImagesByColor(selectedColor ?? defaultColor)}
+      />
       <div className="mb-20 flex w-full flex-col gap-4">
         <span className="text-lg">محصولات مشابه دیگر</span>
         <BasicSlider setting={sliderSetting}>
@@ -91,6 +116,16 @@ export default async function Product({
           ))}
         </BasicSlider>
       </div>
+      <SizeGuideModal
+        isOpen={isSizeGuideModalOpen}
+        onOpenChange={setIsSizeGuideModalOpen}
+        productImages={product.getImagesByColor(defaultColor)}
+        sizeTableInfo={product.data.category.sizeTable}
+        information={product.data.information}
+        sizeGuideImage={product.data.category.sizeGuideImage}
+        productId={product.data.id}
+        productName={product.data.name}
+      />
     </div>
   );
 }

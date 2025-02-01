@@ -6,22 +6,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import Image from "next/image";
-import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Image as ImageType } from "@/_lib/definitions";
 
 export default function SizeGuideModal({
-  productImages: images,
-  className,
+  productImages,
   sizeTableInfo,
   sizeGuideImage,
   information,
   productName,
   productId,
+  isOpen,
+  onOpenChange,
 }: {
   productImages: ImageType[];
-  className: string;
   sizeTableInfo: Record<string, string>[];
   sizeGuideImage: ImageType;
   information: {
@@ -31,28 +30,24 @@ export default function SizeGuideModal({
   };
   productName: string;
   productId: number;
+  isOpen: boolean;
+  onOpenChange: (value: boolean) => void;
 }) {
   const [activeTab, setActiveTab] = useState<"sizeTable" | "measurementMethod">(
     "sizeTable"
   );
+  useEffect(() => {
+    if (isOpen) setActiveTab("sizeTable");
+  }, [isOpen]);
 
   return (
-    <Dialog.Root>
-      <Dialog.Trigger
-        className={`border-non flex w-fit flex-row gap-3 border-none pr-1 text-blue-500 underline underline-offset-8 ${className}`}
-      >
-        <Image
-          className="rotate-45"
-          src="/ruler.png"
-          width="24"
-          height="24"
-          alt="راهنمای سایز"
-          quality={100}
-        />
-        <span className="text-blue-500 underline underline-offset-8">
-          راهنمای سایز
-        </span>
-      </Dialog.Trigger>
+    <Dialog.Root
+      modal
+      open={isOpen}
+      onOpenChange={(open) => {
+        onOpenChange(open);
+      }}
+    >
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 flex justify-center overflow-y-auto bg-black/50">
           <Dialog.Content className="absolute my-6 flex w-full min-w-[300px] max-w-4xl flex-col rounded-md border border-stone-500 bg-white p-0">
@@ -83,19 +78,19 @@ export default function SizeGuideModal({
               </div>
               <div className="w-1/4">
                 <Image
-                  src={apiBaseUrl + images[1].url}
-                  height={images[1].height}
-                  width={images[1].width}
-                  alt={images[1].alternativeText}
+                  src={apiBaseUrl + productImages[1].url}
+                  height={productImages[1].height}
+                  width={productImages[1].width}
+                  alt={productImages[1].alternativeText}
                 />
               </div>
               <div className="w-1/4">
                 <Image
                   className="rounded-tl-md"
-                  src={apiBaseUrl + images[0].url}
-                  height={images[0].height}
-                  width={images[0].width}
-                  alt={images[0].alternativeText}
+                  src={apiBaseUrl + productImages[0].url}
+                  height={productImages[0].height}
+                  width={productImages[0].width}
+                  alt={productImages[0].alternativeText}
                 />
               </div>
             </div>
