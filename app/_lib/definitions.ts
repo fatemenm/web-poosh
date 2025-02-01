@@ -91,14 +91,6 @@ export type ClotheSetBanner = {
   title: string;
 };
 
-export type ClotheProduct = {
-  documentId: string;
-  id: number;
-  name: string;
-  price: string;
-  images: Image[];
-};
-
 export type Product = {
   id: number;
   documentId: string;
