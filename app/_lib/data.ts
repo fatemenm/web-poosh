@@ -1,5 +1,7 @@
 import { apiBaseUrl } from "@config";
 
+import { ProductModel } from "@/_models/product.model";
+
 import {
   Category,
   ClotheSetBanner,
@@ -186,7 +188,7 @@ export async function getProductById(documentId: string) {
     }
     const body: responseBody = await response.json();
     const data = body.data as Product;
-    return data;
+    return new ProductModel(data);
   } catch (error) {
     console.error(error);
     throw error;
