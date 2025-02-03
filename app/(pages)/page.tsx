@@ -1,7 +1,11 @@
+"use client";
+
 import { apiBaseUrl, nextServerUrl } from "@config";
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import BasicSlider from "@/_components/basicSlider";
 import {
@@ -10,25 +14,47 @@ import {
   getHeroBanners,
   getProducts,
 } from "@/_lib/data";
+import {
+  Category,
+  ClotheSetBanner,
+  HeroBanner,
+  Product,
+} from "@/_lib/definitions";
 
 const sliderSetting = {
   infinite: true,
   slidesToScroll: 1,
   slidesToShow: 5,
 };
-export default async function Page() {
-  const [heroBanners, categories, clothingSetBanners, products] =
-    await Promise.all([
-      getHeroBanners(),
-      getCategories(),
-      getClotheSetBanners(),
-      getProducts(),
-    ]);
+type Data = {
+  heroBanners: HeroBanner[];
+  categories: Category[];
+  clothingSetBanners: ClotheSetBanner[];
+  products: Product[];
+};
+export default function Page() {
+  const [data, setData] = useState<Data | null>(null);
+  const router = useRouter();
+  useEffect(() => {
+    const getData = async () => {
+      const [heroBanners, categories, clothingSetBanners, products] =
+        await Promise.all([
+          getHeroBanners(),
+          getCategories(),
+          getClotheSetBanners(),
+          getProducts(),
+        ]);
+      const data = { heroBanners, categories, clothingSetBanners, products };
+      setData(data);
+    };
+    getData();
+  }, []);
+  if (!data) return <div>data is not available</div>;
   return (
     <div className="flex flex-col items-center">
       {/* Hero Banners */}
       <div className="flex flex-row">
-        {heroBanners?.map((banner, id) => {
+        {data.heroBanners?.map((banner, id) => {
           return (
             <div
               key={id}
@@ -58,27 +84,36 @@ export default async function Page() {
         })}
       </div>
       {/* Category Slider */}
-      {categories && (
-        <BasicSlider containerClass="my-16 px-20" setting={sliderSetting}>
-          {categories.map((item) => (
-            <Link
-              href="/"
-              key={item.id}
-              className="flex cursor-pointer flex-col items-center px-4 outline-none"
-            >
-              <Image
-                src={apiBaseUrl + item.image.url}
-                alt={item.image.alternativeText}
-                width={item.image.width}
-                height={item.image.height}
-                quality={100}
-              />
-              <div className="text-center text-stone-600 underline underline-offset-8">
-                {item.name}
-              </div>
-            </Link>
-          ))}
-        </BasicSlider>
+      {data.categories && (
+        <BasicSlider<Category>
+          containerClass="my-16 px-20"
+          setting={sliderSetting}
+          items={data.categories}
+          renderItem={(item, isSwiping) => {
+            return (
+              <Link
+                href="/"
+                key={item.id}
+                className="flex cursor-pointer flex-col items-center px-4 outline-none"
+                onClick={(e) => {
+                  if (isSwiping) e.preventDefault();
+                  else console.log(item.name);
+                }}
+              >
+                <Image
+                  src={apiBaseUrl + item.image.url}
+                  alt={item.image.alternativeText}
+                  width={item.image.width}
+                  height={item.image.height}
+                  quality={100}
+                />
+                <div className="text-center text-stone-600 underline underline-offset-8">
+                  {item.name}
+                </div>
+              </Link>
+            );
+          }}
+        />
       )}
       {/* Daily Set Banners */}
       <div className="flex flex-col gap-7">
@@ -92,7 +127,7 @@ export default async function Page() {
           <hr className="mb-4 h-px w-full bg-stone-400" />
         </div>
         <div className="flex flex-row gap-8">
-          {clothingSetBanners?.map((banner) => {
+          {data.clothingSetBanners?.map((banner) => {
             return (
               <div key={banner.id} className="flex flex-col items-center gap-4">
                 <Image
@@ -126,8 +161,8 @@ export default async function Page() {
         </div>
         <hr className="mb-4 h-px w-full bg-stone-400" />
       </div>
-      {products && (
-        <BasicSlider
+      {data.products && (
+        <BasicSlider<Product>
           setting={{
             ...sliderSetting,
             speed: 400,
@@ -136,13 +171,19 @@ export default async function Page() {
             cssEase: "linear",
           }}
           containerClass="mx-auto mb-24 mt-8 px-20"
-        >
-          {products.map((item) => {
+          items={data.products}
+          renderItem={(item, isSwiping) => {
             return (
               <Link
+                target="_blank"
                 key={item.id}
                 href={`${nextServerUrl}/products/${item.documentId}`}
                 className="cursor-pointer px-4 outline-none"
+                onClick={(e) => {
+                  if (isSwiping) e.preventDefault();
+                  else
+                    router.push(`${nextServerUrl}/products/${item.documentId}`);
+                }}
               >
                 <Image
                   src={apiBaseUrl + item.imagesByColor[0].images[0].url}
@@ -183,8 +224,8 @@ export default async function Page() {
                 </div>
               </Link>
             );
-          })}
-        </BasicSlider>
+          }}
+        />
       )}
     </div>
   );

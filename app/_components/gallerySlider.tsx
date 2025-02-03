@@ -28,11 +28,12 @@ export default function GallerySlider({
   const [viewMode, setViewMode] = useState<"default" | "expanded" | "zoomed">(
     "default"
   );
+  const [isSwiping, setIsSwiping] = useState<boolean>(false);
+
   if (!images || images.length === 0) {
     console.error("GallerySlider requires a non-empty images array.");
     return null;
   }
-
   const { width: imgThumbnailWidth, height: imgThumbnailHeight } =
     images[0].formats.thumbnail;
   const baseSetting = {
@@ -81,6 +82,7 @@ export default function GallerySlider({
             </Dialog.Close>
             <div className="">
               <Slider
+                onSwipeChange={(value) => setIsSwiping(value)}
                 containerClass={containerClass}
                 setting={{ ...baseSetting, ...setting }}
               >
@@ -96,11 +98,12 @@ export default function GallerySlider({
                       )}
                     >
                       <Image
-                        onClick={() =>
-                          viewMode === "expanded"
-                            ? setViewMode("zoomed")
-                            : setViewMode("expanded")
-                        }
+                        onClick={(e) => {
+                          if (isSwiping) e.preventDefault();
+                          else if (viewMode === "expanded")
+                            setViewMode("zoomed");
+                          else setViewMode("expanded");
+                        }}
                         src={apiBaseUrl + img.url}
                         width={img.width}
                         height={img.height}
@@ -126,26 +129,27 @@ export default function GallerySlider({
   return (
     <div>
       <Slider
+        onSwipeChange={(value) => setIsSwiping(value)}
         key={images.map((img) => img.id).join(",")}
         containerClass={containerClass}
         setting={{ ...baseSetting, ...setting }}
       >
         {images.map((img) => {
           return (
-            <div key={img.id}>
-              <Image
-                onClick={
-                  isExpandable ? () => setViewMode("expanded") : undefined
-                }
-                src={apiBaseUrl + img.url}
-                width={img.width}
-                height={img.height}
-                alt={img.alternativeText}
-                quality={100}
-                priority
-                className="cursor-zoomIn"
-              />
-            </div>
+            <Image
+              key={img.id}
+              onClick={(e) => {
+                if (isSwiping) e.preventDefault();
+                else if (isExpandable) setViewMode("expanded");
+              }}
+              src={apiBaseUrl + img.url}
+              width={img.width}
+              height={img.height}
+              alt={img.alternativeText}
+              quality={100}
+              priority
+              className="cursor-zoomIn"
+            />
           );
         })}
       </Slider>

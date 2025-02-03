@@ -4,6 +4,7 @@ import { apiBaseUrl, nextServerUrl } from "@config";
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import BasicSlider from "@/_components/basicSlider";
@@ -18,7 +19,7 @@ import SizeGuideModal from "./_components/sizeGuideModal";
 
 const sliderSetting = {
   infinite: false,
-  slidesToScroll: 5,
+  slidesToScroll: 1,
   slidesToShow: 5,
 };
 
@@ -31,6 +32,7 @@ export default function Product({ params }: { params: { productId: string } }) {
   const defaultColor = product?.getAvailableColors()[0].name;
   const [isSizeGuideModalOpen, setIsSizeGuideModalOpen] =
     useState<boolean>(false);
+  const router = useRouter();
 
   useEffect(() => {
     const getData = async () => {
@@ -77,44 +79,53 @@ export default function Product({ params }: { params: { productId: string } }) {
       />
       <div className="mb-20 flex w-full flex-col gap-4">
         <span className="text-lg">محصولات مشابه دیگر</span>
-        <BasicSlider setting={sliderSetting}>
-          {relatedProducts.map((item) => (
-            <Link
-              href={`${nextServerUrl}/products/${item.documentId}`}
-              key={item.id}
-              className="flex cursor-pointer flex-col items-center outline-none"
-            >
-              <Image
-                src={apiBaseUrl + item.imagesByColor[0].images[0].url}
-                alt={item.imagesByColor[0].images[0].alternativeText}
-                width={item.imagesByColor[0].images[0].width}
-                height={item.imagesByColor[0].images[0].height}
-                quality={100}
-              />
-
-              <div
-                style={{ direction: "rtl" }}
-                className="mt-4 flex flex-col items-center gap-2 text-center text-sm text-stone-600"
+        <BasicSlider<ProductType>
+          setting={sliderSetting}
+          items={relatedProducts}
+          renderItem={(item, isSwiping) => {
+            return (
+              <Link
+                target="_blank"
+                href={`${nextServerUrl}/products/${item.documentId}`}
+                key={item.id}
+                className="flex cursor-pointer flex-col items-center outline-none"
+                onClick={(e) => {
+                  if (isSwiping) e.preventDefault();
+                  else
+                    router.push(`${nextServerUrl}/products/${item.documentId}`);
+                }}
               >
-                <span className="font-medium">
-                  {item.id.toLocaleString("fa-IR")} {item.name}
-                </span>
-                <div className="flex flex-row items-center gap-3">
-                  <span
-                    className={classNames(item.salePrice && "line-through")}
-                  >
-                    {item.originalPrice.toLocaleString("fa-IR")} تومان
+                <Image
+                  src={apiBaseUrl + item.imagesByColor[0].images[0].url}
+                  alt={item.imagesByColor[0].images[0].alternativeText}
+                  width={item.imagesByColor[0].images[0].width}
+                  height={item.imagesByColor[0].images[0].height}
+                  quality={100}
+                />
+                <div
+                  style={{ direction: "rtl" }}
+                  className="mt-4 flex flex-col items-center gap-2 text-center text-sm text-stone-600"
+                >
+                  <span className="font-medium">
+                    {item.id.toLocaleString("fa-IR")} {item.name}
                   </span>
-                  {item.salePrice ? (
-                    <span className="text-red-600">
-                      {item.salePrice.toLocaleString("fa-IR")} تومان
+                  <div className="flex flex-row items-center gap-3">
+                    <span
+                      className={classNames(item.salePrice && "line-through")}
+                    >
+                      {item.originalPrice.toLocaleString("fa-IR")} تومان
                     </span>
-                  ) : null}
+                    {item.salePrice ? (
+                      <span className="text-red-600">
+                        {item.salePrice.toLocaleString("fa-IR")} تومان
+                      </span>
+                    ) : null}
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
-        </BasicSlider>
+              </Link>
+            );
+          }}
+        />
       </div>
       <SizeGuideModal
         isOpen={isSizeGuideModalOpen}

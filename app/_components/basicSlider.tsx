@@ -5,16 +5,16 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { CustomArrowProps } from "react-slick";
 import { Settings } from "react-slick";
 
 import Slider from "@/_components/slider";
+import { Category, Product } from "@/_lib/definitions";
 import styles from "@/_styles/basicSlider.module.css";
 
 function LeftArrow(props: CustomArrowProps) {
   const { className, style, onClick } = props;
-
   return (
     <div
       className={`${className} ${styles.slickPrev}`}
@@ -54,17 +54,21 @@ function RightArrow(props: CustomArrowProps) {
   );
 }
 
-export default function BasicSlider({
+export default function BasicSlider<T extends Product | Category>({
   containerClass,
   setting,
-  children,
+  items,
+  renderItem,
 }: {
   containerClass?: string;
   setting?: Settings;
-  children: ReactNode;
+  items: T[];
+  renderItem: (item: T, isSwiping: boolean) => ReactNode;
 }) {
+  const [isSwiping, setIsSwiping] = useState<boolean>(false);
   return (
     <Slider
+      onSwipeChange={(value) => setIsSwiping(value)}
       containerClass={containerClass}
       setting={{
         nextArrow: <RightArrow />,
@@ -72,7 +76,9 @@ export default function BasicSlider({
         ...setting,
       }}
     >
-      {children}
+      {items.map((item) => {
+        return renderItem(item, isSwiping);
+      })}
     </Slider>
   );
 }
