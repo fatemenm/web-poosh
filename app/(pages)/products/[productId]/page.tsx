@@ -64,7 +64,7 @@ export default function Product({ params }: { params: { productId: string } }) {
   ];
 
   return (
-    <div className="mx-auto flex w-10/12 flex-col gap-20">
+    <div className="mx-auto flex w-10/12 flex-col gap-16">
       <BreadCrumb items={breadcrumbItems} />
       <ProductDetails
         onClickSizeGuideLink={() => setIsSizeGuideModalOpen(true)}
