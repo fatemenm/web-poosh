@@ -15,7 +15,7 @@ export class ProductModel {
         return { ...color, isAvailable: true };
       });
   }
-  getAvailableSizes(colorFilter: string) {
+  getAvailableSizes(colorFilter?: string) {
     return this.data.sizes.map((size) => {
       let sizeAvailability;
       if (colorFilter)
