@@ -29,7 +29,7 @@ export default async function RootLayout({
         <link rel="icon" href="/icon.ico" sizes="any" />
       </Head>
       <body className="flex min-h-screen flex-col">
-        <Header promoBannerData={banner} navbarItemsData={navbarItems} />
+        <Header promoBanner={banner} navbarItems={navbarItems} />
         <main className="shrink-0 grow">{children}</main>
         <Footer />
       </body>

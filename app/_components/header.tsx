@@ -9,7 +9,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import PromoBanner from "@/_components/promoBanner";
 import {
@@ -43,21 +43,14 @@ function createSublinkGrid(items: NavigationLink[] | undefined) {
 }
 
 export default function Header({
-  promoBannerData,
-  navbarItemsData,
+  promoBanner,
+  navbarItems,
 }: {
-  promoBannerData: PromoBannerType | undefined;
-  navbarItemsData: NavbarItem[] | undefined;
+  promoBanner: PromoBannerType | undefined;
+  navbarItems: NavbarItem[] | undefined;
 }) {
-  const [promoBanner, setPromoBanner] = useState<PromoBannerType>();
-  const [navbarItems, setNavbarItems] = useState<Array<NavbarItem>>();
   const [hoveredNavbarItem, setHoveredNavbarItem] =
     useState<NavbarItem | null>();
-
-  useEffect(() => {
-    setNavbarItems(navbarItemsData);
-    setPromoBanner(promoBannerData);
-  }, []);
 
   return (
     <header className="flex shrink-0 flex-col items-center">
