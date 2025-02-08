@@ -1,6 +1,5 @@
 "use client";
 
-// import SizeGuideModal from "./sizeGuideModal";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -15,12 +14,12 @@ export default function ProductDetails({
   product,
   selectedColor,
   onSelectColor,
-  onSelectSizeGuideLink,
+  onClickSizeGuideLink,
 }: {
   product: ProductModel;
   selectedColor: string;
   onSelectColor: (value: string) => void;
-  onSelectSizeGuideLink: (value: boolean) => void;
+  onClickSizeGuideLink: () => void;
 }) {
   const [selectedSize, setSelectedSize] = useState<string | undefined>();
   const [isSizeErrorVisible, setIsSizeErrorVisible] = useState<boolean>(false);
@@ -77,7 +76,7 @@ export default function ProductDetails({
           }}
         />
         <button
-          onClick={() => onSelectSizeGuideLink(true)}
+          onClick={onClickSizeGuideLink}
           className="border-non flex w-fit flex-row gap-3 border-none pr-1 text-sm text-blue-500 underline underline-offset-8"
         >
           <Image

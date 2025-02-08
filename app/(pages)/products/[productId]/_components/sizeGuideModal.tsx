@@ -6,20 +6,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Image as ImageType } from "@/_lib/definitions";
 
-export default function SizeGuideModal({
-  productImages,
-  sizeTableInfo,
-  sizeGuideImage,
-  information,
-  productName,
-  productId,
-  isOpen,
-  onOpenChange,
-}: {
+type dataType = {
   productImages: ImageType[];
   sizeTableInfo: Record<string, string>[];
   sizeGuideImage: ImageType;
@@ -30,22 +21,35 @@ export default function SizeGuideModal({
   };
   productName: string;
   productId: number;
+};
+
+export default function SizeGuideModal({
+  isOpen,
+  onChangeOpen,
+  data,
+}: {
   isOpen: boolean;
-  onOpenChange: (value: boolean) => void;
+  onChangeOpen: (value: boolean) => void;
+  data: dataType;
 }) {
   const [activeTab, setActiveTab] = useState<"sizeTable" | "measurementMethod">(
     "sizeTable"
   );
-  useEffect(() => {
-    if (isOpen) setActiveTab("sizeTable");
-  }, [isOpen]);
-
+  const {
+    sizeTableInfo,
+    information,
+    sizeGuideImage,
+    productId,
+    productName,
+    productImages,
+  } = data;
   return (
     <Dialog.Root
       modal
       open={isOpen}
       onOpenChange={(open) => {
-        onOpenChange(open);
+        if (!open) setActiveTab("sizeTable");
+        onChangeOpen(open);
       }}
     >
       <Dialog.Portal>

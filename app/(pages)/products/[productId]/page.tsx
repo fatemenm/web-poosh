@@ -67,13 +67,13 @@ export default function Product({ params }: { params: { productId: string } }) {
     <div className="mx-auto flex w-10/12 flex-col gap-20">
       <BreadCrumb items={breadcrumbItems} />
       <ProductDetails
-        onSelectSizeGuideLink={setIsSizeGuideModalOpen}
+        onClickSizeGuideLink={() => setIsSizeGuideModalOpen(true)}
         product={product}
         selectedColor={selectedColor ?? defaultColor}
         onSelectColor={(value: string) => setSelectedColor(value)}
       />
       <ProductDescription
-        onSelectSizeGuideLink={setIsSizeGuideModalOpen}
+        onClickSizeGuideLink={() => setIsSizeGuideModalOpen(true)}
         product={product}
         images={product.getImagesByColor(selectedColor ?? defaultColor)}
       />
@@ -82,7 +82,7 @@ export default function Product({ params }: { params: { productId: string } }) {
         <BasicSlider<ProductType>
           setting={sliderSetting}
           items={relatedProducts}
-          renderItem={(item, isSwiping) => {
+          renderItem={(item, ctx: { isSwiping: boolean }) => {
             return (
               <Link
                 target="_blank"
@@ -90,7 +90,7 @@ export default function Product({ params }: { params: { productId: string } }) {
                 key={item.id}
                 className="flex cursor-pointer flex-col items-center outline-none"
                 onClick={(e) => {
-                  if (isSwiping) e.preventDefault();
+                  if (ctx.isSwiping) e.preventDefault();
                   else
                     router.push(`${nextServerUrl}/products/${item.documentId}`);
                 }}
@@ -129,13 +129,17 @@ export default function Product({ params }: { params: { productId: string } }) {
       </div>
       <SizeGuideModal
         isOpen={isSizeGuideModalOpen}
-        onOpenChange={setIsSizeGuideModalOpen}
-        productImages={product.getImagesByColor(defaultColor)}
-        sizeTableInfo={product.data.category.sizeTable}
-        information={product.data.information}
-        sizeGuideImage={product.data.category.sizeGuideImage}
-        productId={product.data.id}
-        productName={product.data.name}
+        onChangeOpen={(value: boolean) => setIsSizeGuideModalOpen(value)}
+        data={{
+          sizeTableInfo: product.data.category.sizeTable,
+          information: product.data.information,
+          sizeGuideImage: product.data.category.sizeGuideImage,
+          productId: product.data.id,
+          productName: product.data.name,
+          productImages: product.getImagesByColor(
+            selectedColor ?? defaultColor
+          ),
+        }}
       />
     </div>
   );

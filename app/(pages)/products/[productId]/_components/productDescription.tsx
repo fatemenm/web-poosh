@@ -9,17 +9,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
 
-import { Image as ImageType } from "@/_lib/definitions";
+import { Image as ProductImage } from "@/_lib/definitions";
 import { ProductModel } from "@/_models/product.model";
 
 export default function ProductDescription({
   product,
   images,
-  onSelectSizeGuideLink,
+  onClickSizeGuideLink,
 }: {
   product: ProductModel;
-  images: ImageType[];
-  onSelectSizeGuideLink: (value: boolean) => void;
+  images: ProductImage[];
+  onClickSizeGuideLink: () => void;
 }) {
   return (
     <div className="flex flex-row items-stretch justify-center gap-28 bg-stone-100 p-10">
@@ -53,7 +53,7 @@ export default function ProductDescription({
         </div>
         <div className="flex flex-row gap-20 text-xs">
           <button
-            onClick={() => onSelectSizeGuideLink(true)}
+            onClick={onClickSizeGuideLink}
             className="border-non flex w-fit flex-row items-center gap-3 border-none pr-1 text-xs text-blue-500"
           >
             <Image
