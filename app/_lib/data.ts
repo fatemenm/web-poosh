@@ -13,18 +13,40 @@ import {
 } from "./definitions";
 
 const urls = {
-  getBanners: new URL("/api/banners", apiBaseUrl),
-  getNavbarItems: new URL("/api/navbar-items", apiBaseUrl),
-  getHeroBanners: new URL("/api/hero-banners", apiBaseUrl),
-  getCategories: new URL("/api/categories", apiBaseUrl),
-  getClotheSetBanners: new URL("/api/clothe-set-banners", apiBaseUrl),
-  getProductById: new URL("/api/products/:id", apiBaseUrl),
-  getProducts: new URL("/api/products", apiBaseUrl),
+  getBanners: apiBaseUrl + "/api/banners",
+  getNavbarItems: apiBaseUrl + "/api/navbar-items",
+  getHeroBanners: apiBaseUrl + "/api/hero-banners",
+  getCategories: apiBaseUrl + "/api/categories",
+  getClotheSetBanners: apiBaseUrl + "/api/clothe-set-banners",
+  getProductById: apiBaseUrl + "/api/products/:id",
+  getProducts: apiBaseUrl + "/api/products",
 };
+type optionsType = {
+  sort?: string;
+  populates?: string[];
+  pathParams?: Record<string, string>;
+};
+
+function createUrl(baseUrl: string, options: optionsType = {}) {
+  const url = new URL(baseUrl);
+  const params = new URLSearchParams({});
+  if (options.sort) params.append("sort", options.sort);
+  if (options.populates)
+    for (const [index, query] of options.populates.entries()) {
+      params.append(`populate[${index}]`, query);
+    }
+  if (options.pathParams) {
+    for (const [key, value] of Object.entries(options.pathParams)) {
+      url.pathname = url.pathname.replace(`:${key}`, value);
+    }
+  }
+  url.search = params.toString();
+  return url;
+}
 
 export async function getPromoBannerData() {
   try {
-    const url = new URL(urls.getBanners);
+    const url = createUrl(urls.getBanners);
     const response = await fetch(url.href);
     if (!response.ok) {
       throw new Error("Failed to fetch data");
@@ -53,11 +75,10 @@ export async function getPromoBannerData() {
 }
 export async function getNavbarItems() {
   try {
-    const url = new URL(urls.getNavbarItems);
-    url.search = new URLSearchParams({
+    const url = createUrl(urls.getNavbarItems, {
       sort: "index",
-      populate: "image",
-    }).toString();
+      populates: ["image"],
+    });
     const response = await fetch(url.href);
     if (!response.ok) {
       throw new Error("Failed to fetch data");
@@ -73,10 +94,7 @@ export async function getNavbarItems() {
 
 export async function getHeroBanners() {
   try {
-    const url = new URL(urls.getHeroBanners);
-    url.search = new URLSearchParams({
-      populate: "image",
-    }).toString();
+    const url = createUrl(urls.getHeroBanners, { populates: ["image"] });
     const response = await fetch(url.href);
     if (!response.ok) {
       throw new Error("Failed to fetch data");
@@ -92,20 +110,9 @@ export async function getHeroBanners() {
 
 export async function getCategories() {
   try {
-    const url = new URL(urls.getCategories);
-    const populateFields = [
-      "filters",
-      "filters.image",
-      "image",
-      "sizeGuideImage",
-    ];
-    const params = new URLSearchParams();
-    params.append("sort", "index");
-    populateFields.forEach((field, index) =>
-      params.append(`populate[${index}]`, field)
-    );
-
-    url.search = params.toString();
+    const url = createUrl(urls.getCategories, {
+      populates: ["filters", "filters.image", "image", "sizeGuideImage"],
+    });
     const response = await fetch(url.href);
     if (!response.ok) {
       throw new Error("Failed to fetch data");
@@ -121,10 +128,7 @@ export async function getCategories() {
 
 export async function getClotheSetBanners() {
   try {
-    const url = new URL(urls.getClotheSetBanners);
-    url.search = new URLSearchParams({
-      populate: "image",
-    }).toString();
+    const url = createUrl(urls.getClotheSetBanners, { populates: ["image"] });
     const response = await fetch(url.href);
     if (!response.ok) {
       throw new Error("Failed to fetch data");
@@ -140,20 +144,15 @@ export async function getClotheSetBanners() {
 
 export async function getProducts() {
   try {
-    const url = new URL(urls.getProducts);
-    const populateFields = [
-      "imagesByColor",
-      "imagesByColor.images",
-      "category",
-      "category.image",
-      "category.sizeGuideImage",
-    ];
-    const params = new URLSearchParams();
-    populateFields.forEach((field, index) =>
-      params.append(`populate[${index}]`, field)
-    );
-
-    url.search = params.toString();
+    const url = createUrl(urls.getProducts, {
+      populates: [
+        "imagesByColor",
+        "imagesByColor.images",
+        "category",
+        "category.image",
+        "category.sizeGuideImage",
+      ],
+    });
     const response = await fetch(url.href);
     if (!response.ok) {
       throw new Error("Failed to fetch data");
@@ -168,20 +167,16 @@ export async function getProducts() {
 }
 export async function getProductById(documentId: string) {
   try {
-    const url = new URL(urls.getProductById);
-    url.pathname = url.pathname.replace(":id", documentId);
-    const populateFields = [
-      "imagesByColor",
-      "imagesByColor.images",
-      "category",
-      "category.image",
-      "category.sizeGuideImage",
-    ];
-    const params = new URLSearchParams();
-    populateFields.forEach((field, index) =>
-      params.append(`populate[${index}]`, field)
-    );
-    url.search = params.toString();
+    const url = createUrl(urls.getProductById, {
+      populates: [
+        "imagesByColor",
+        "imagesByColor.images",
+        "category",
+        "category.image",
+        "category.sizeGuideImage",
+      ],
+      pathParams: { id: documentId },
+    });
     const response = await fetch(url.href);
     if (!response.ok) {
       throw new Error("Failed to fetch data");
