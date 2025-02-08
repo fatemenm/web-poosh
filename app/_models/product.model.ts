@@ -35,15 +35,13 @@ export class ProductModel {
         ?.images || []
     );
   }
-  private hasStockBy(type: "color" | "size") {
-    const filter = type === "color" ? "size" : "color";
+  private hasStockBy(groupProp: "color" | "size") {
+    const valueProp = groupProp === "color" ? "size" : "color";
     return this.data.stocks.reduce(
       (acc, currStock) => {
         if (currStock.quantity) {
-          if (!Array.isArray(acc[currStock[type]])) {
-            acc[currStock[type]] = [];
-          }
-          acc[currStock[type]].push(currStock[filter]);
+          acc[currStock[groupProp]] ??= [];
+          acc[currStock[groupProp]]?.push(currStock[valueProp]);
         }
         return acc;
       },
