@@ -28,7 +28,6 @@ export default function GallerySlider({
   const [viewMode, setViewMode] = useState<"default" | "expanded" | "zoomed">(
     "default"
   );
-  const [isSwiping, setIsSwiping] = useState<boolean>(false);
 
   if (!images || images.length === 0) {
     console.error("GallerySlider requires a non-empty images array.");
@@ -82,11 +81,10 @@ export default function GallerySlider({
             </Dialog.Close>
             <div className="">
               <Slider
-                onSwipeChange={(value) => setIsSwiping(value)}
                 containerClass={containerClass}
                 setting={{ ...baseSetting, ...setting }}
-              >
-                {images.map((img) => {
+                items={images}
+                renderItem={(img, ctx: { isSwiping: boolean }) => {
                   return (
                     <div
                       key={img.id}
@@ -99,7 +97,7 @@ export default function GallerySlider({
                     >
                       <Image
                         onClick={(e) => {
-                          if (isSwiping) e.preventDefault();
+                          if (ctx.isSwiping) e.preventDefault();
                           else if (viewMode === "expanded")
                             setViewMode("zoomed");
                           else setViewMode("expanded");
@@ -117,8 +115,8 @@ export default function GallerySlider({
                       />
                     </div>
                   );
-                })}
-              </Slider>
+                }}
+              />
             </div>
           </Dialog.Content>
         </Dialog.Overlay>
@@ -129,17 +127,16 @@ export default function GallerySlider({
   return (
     <div>
       <Slider
-        onSwipeChange={(value) => setIsSwiping(value)}
         key={images.map((img) => img.id).join(",")}
         containerClass={containerClass}
         setting={{ ...baseSetting, ...setting }}
-      >
-        {images.map((img) => {
+        items={images}
+        renderItem={(img, ctx: { isSwiping: boolean }) => {
           return (
             <Image
               key={img.id}
               onClick={(e) => {
-                if (isSwiping) e.preventDefault();
+                if (ctx.isSwiping) e.preventDefault();
                 else if (isExpandable) setViewMode("expanded");
               }}
               src={apiBaseUrl + img.url}
@@ -151,8 +148,8 @@ export default function GallerySlider({
               className="cursor-zoomIn"
             />
           );
-        })}
-      </Slider>
+        }}
+      />
       {modal}
     </div>
   );

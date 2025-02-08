@@ -1,39 +1,43 @@
 "use client";
 
-import { ReactNode, useRef } from "react";
+import { ReactNode, useState } from "react";
 import SlickSlider from "react-slick";
 import { Settings } from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 
-export default function Slider({
+type ctxType = {
+  isSwiping: boolean;
+};
+
+export default function Slider<T>({
   containerClass,
   setting,
-  children,
-  onSwipeChange,
+  items,
+  renderItem,
 }: {
   containerClass?: string;
   setting?: Settings;
-  children: ReactNode;
-  onSwipeChange: (value: boolean) => void;
+  items: T[];
+  renderItem: (item: T, ctx: ctxType) => ReactNode;
 }) {
-  const sliderRef = useRef(null);
+  const [isSwiping, setIsSwiping] = useState<boolean>(false);
   const finalSetting = {
     ...setting,
     swipeToSlide: true,
     beforeChange: () => {
-      if (document.activeElement instanceof HTMLElement)
-        document.activeElement.blur();
-      onSwipeChange(true);
+      setIsSwiping(true);
     },
     afterChange: () => {
-      onSwipeChange(false);
+      setIsSwiping(false);
     },
   };
   return (
     <div className={`w-full ${containerClass}`}>
-      <SlickSlider ref={sliderRef} {...finalSetting}>
-        {children}
+      <SlickSlider {...finalSetting}>
+        {items.map((item) => {
+          return renderItem(item, { isSwiping });
+        })}
       </SlickSlider>
     </div>
   );
