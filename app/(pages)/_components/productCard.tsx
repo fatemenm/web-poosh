@@ -10,11 +10,11 @@ import { useState } from "react";
 import { Product } from "@/_lib/definitions";
 import { ProductModel } from "@/_models/product.model";
 
-// import ProductModal from "./productModal";
+import ProductModal from "./productModal";
 
-export default function productCard({ data }: { data: Product }) {
+export default function ProductCard({ data }: { data: Product }) {
   const [isQuickViewVisible, setIsQuickViewVisible] = useState<boolean>(false);
-  // const [isProductModalOpen, setIsProductModalOpen] = useState<boolean>(false);
+  const [isProductModalOpen, setIsProductModalOpen] = useState<boolean>(false);
   const router = useRouter();
   const product = new ProductModel(data);
   const availableColors = product.getAvailableColors();
@@ -24,12 +24,14 @@ export default function productCard({ data }: { data: Product }) {
     : product.getImagesByColor(availableColors[0].name)[0];
   return (
     <div className="group flex flex-col gap-4">
-      <div className="">
+      <div
+        className="relative"
+        onMouseOver={() => setIsQuickViewVisible(true)}
+        onMouseOut={() => setIsQuickViewVisible(false)}
+      >
         <Link
           href={`${nextServerUrl}/products/${product.data.documentId}`}
-          className="relative"
-          onMouseOver={() => setIsQuickViewVisible(true)}
-          onMouseOut={() => setIsQuickViewVisible(false)}
+          className=""
           onClick={() =>
             router.push(`${nextServerUrl}/products/${product.data.documentId}`)
           }
@@ -40,14 +42,14 @@ export default function productCard({ data }: { data: Product }) {
             width={defaultImage.width}
             height={defaultImage.height}
           />
-          <button
-            // onClick={() => setIsProductModalOpen(true)}
-            className="invisible absolute bottom-4 left-0 right-0 m-auto flex w-4/5 flex-row items-center justify-center gap-2 bg-stone-800 bg-opacity-70 px-4 py-3 text-sm text-white hover:bg-opacity-85 group-hover:visible"
-          >
-            مشاهده سریع
-            <FontAwesomeIcon icon={faSearch} className="text-sm" />
-          </button>
         </Link>
+        <button
+          onClick={() => setIsProductModalOpen(true)}
+          className="invisible absolute bottom-4 left-0 right-0 m-auto flex w-4/5 flex-row items-center justify-center gap-2 bg-stone-800 bg-opacity-70 px-4 py-3 text-sm text-white hover:bg-opacity-85 group-hover:visible"
+        >
+          مشاهده سریع
+          <FontAwesomeIcon icon={faSearch} className="text-sm" />
+        </button>
       </div>
 
       <div className="flex flex-col gap-3">
@@ -56,7 +58,7 @@ export default function productCard({ data }: { data: Product }) {
           href={`${nextServerUrl}/products/${product.data.documentId}`}
           className="text-sm font-medium text-stone-600"
         >
-          {product.data.name + " " + product.data.id}
+          {product.data.name + " " + product.data.id.toLocaleString("fa-ir")}
         </Link>
         {/* price */}
         <div className="flex flex-row items-center gap-2 text-[13px] text-stone-600">
@@ -105,11 +107,11 @@ export default function productCard({ data }: { data: Product }) {
           ))}
         </div>
       </div>
-      {/* <ProductModal
+      <ProductModal
         product={product}
         isOpen={isProductModalOpen}
         onOpenChange={(value) => setIsProductModalOpen(value)}
-      /> */}
+      />
     </div>
   );
 }
