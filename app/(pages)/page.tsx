@@ -172,7 +172,7 @@ export default function Page() {
           }}
           containerClass="mx-auto mb-24 mt-8 px-20"
           items={data.products}
-          renderItem={(item, isSwiping) => {
+          renderItem={(item, ctx: { isSwiping: boolean }) => {
             return (
               <Link
                 target="_blank"
@@ -180,7 +180,7 @@ export default function Page() {
                 href={`${nextServerUrl}/products/${item.documentId}`}
                 className="cursor-pointer px-4 outline-none"
                 onClick={(e) => {
-                  if (isSwiping) e.preventDefault();
+                  if (ctx.isSwiping) e.preventDefault();
                   else
                     router.push(`${nextServerUrl}/products/${item.documentId}`);
                 }}
