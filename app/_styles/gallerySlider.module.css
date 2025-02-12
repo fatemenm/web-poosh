@@ -11,6 +11,7 @@
   text-align: center;
   right: -7.6rem;
 }
+
 .slickDots > li {
   display: block;
   width: 5rem;
@@ -33,4 +34,13 @@
 .slickDotsFullScreen {
   right: 6rem;
   top: 4rem;
+}
+.slickDotsModal {
+  composes: slickDots;
+  top: 3rem;
+  right: -5rem;
+}
+.slickDotsModal > li {
+  width: 4rem;
+  margin-bottom: 0.8rem;
 }

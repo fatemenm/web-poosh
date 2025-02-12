@@ -19,11 +19,13 @@ export default function GallerySlider({
   containerClass,
   setting = {},
   isExpandable = false,
+  dotsClassName = styles.slickDots,
 }: {
   images: ImageType[];
   containerClass?: string;
   setting?: Settings;
   isExpandable: boolean;
+  dotsClassName?: string;
 }) {
   const [viewMode, setViewMode] = useState<"default" | "expanded" | "zoomed">(
     "default"
@@ -49,7 +51,7 @@ export default function GallerySlider({
       );
     },
     dots: true,
-    dotsClass: classNames(styles.slickDots, {
+    dotsClass: classNames(dotsClassName, {
       [styles.slickDotsFullScreen]: viewMode !== "default",
     }),
     speed: 800,
@@ -145,7 +147,7 @@ export default function GallerySlider({
               alt={img.alternativeText}
               quality={100}
               priority
-              className="cursor-zoomIn"
+              className={classNames({ "cursor-zoomIn": isExpandable })}
             />
           );
         }}
