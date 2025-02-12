@@ -54,7 +54,7 @@ export default function SizeGuideModal({
     >
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 flex justify-center overflow-y-auto bg-black/50">
-          <Dialog.Content className="absolute my-6 flex w-full min-w-[300px] max-w-4xl flex-col rounded-md border border-stone-500 bg-white p-0">
+          <Dialog.Content className="absolute my-6 flex w-full min-w-[300px] max-w-4xl flex-col border border-stone-500 bg-white p-0">
             <VisuallyHidden.Root asChild>
               <Dialog.Title> راهنمای سایز</Dialog.Title>
             </VisuallyHidden.Root>
