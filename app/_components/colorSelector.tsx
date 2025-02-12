@@ -18,7 +18,7 @@ export default function ColorSelector({
 }) {
   return (
     <ToggleGroup.Root
-      className="flex flex-row-reverse flex-wrap gap-3"
+      className="flex flex-row-reverse flex-wrap gap-2"
       value={selectedColor}
       onValueChange={(value: string) => value && onSelect(value)}
       type="single"
