@@ -64,6 +64,7 @@ export default function ProductDetails({
             onSelect={(color: string) => {
               onSelectColor(color);
               setSelectedSize("");
+              setIsSizeErrorVisible(false);
             }}
           />
         </div>
