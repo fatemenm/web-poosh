@@ -10,7 +10,7 @@ export default function ColorSelector({
 }: {
   colors: {
     name: string;
-    colorHex: string;
+    hexCode: string;
     isAvailable: boolean;
   }[];
   selectedColor: string;
@@ -31,7 +31,7 @@ export default function ColorSelector({
             value={color.name}
             key={index}
             style={{
-              color: color.colorHex,
+              color: color.hexCode,
             }}
             className="relative h-10 w-10 rounded-full border-2 bg-white p-2 before:absolute before:inset-0 before:top-0 before:rounded-full before:border-2 before:border-white before:bg-current hover:border-2 hover:border-black data-[state=on]:border-2 data-[state=on]:border-black"
           />

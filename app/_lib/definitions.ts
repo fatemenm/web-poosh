@@ -30,8 +30,7 @@ export type NavbarItem = {
 };
 
 export type NavigationLink = {
-  linkText: string;
-  linkUrl: string;
+  name: string;
   row: number;
   col: number;
 };
@@ -67,18 +66,19 @@ export type HeroBanner = {
 };
 
 export type Category = {
+  documentId: string;
   id: number;
   index: number;
   name: string;
   image: Image;
-  filters: Filter[];
+  preSetFilters: Filter[];
   sizeGuideImage: Image;
   sizeTable: Record<string, string>[];
   careTips: string[];
 };
 
 export type Filter = {
-  query: string;
+  query: Record<string, string>;
   image: Image;
   index: number;
 };
@@ -114,7 +114,7 @@ export type Product = {
 
 export type Color = {
   name: string;
-  colorHex: string;
+  hexCode: string;
 };
 
 export type Stock = {
