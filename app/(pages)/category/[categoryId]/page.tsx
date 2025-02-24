@@ -112,7 +112,7 @@ export default function Page({ params }: { params: { categoryId: string } }) {
                 <Image
                   data-active={subCategoryType === img.alternativeText}
                   key={img.id}
-                  className="cursor-pointer px-2 pb-2 hover:border-b-2 hover:border-stone-700 data-[active=true]:border-b-2 data-[active=true]:border-stone-700"
+                  className="cursor-pointer border-b-2 border-b-transparent px-2 pb-2 hover:border-b-2 hover:border-stone-700 data-[active=true]:border-b-2 data-[active=true]:border-stone-700"
                   onClick={(e) => {
                     if (isSwiping) e.preventDefault();
                     else {
@@ -258,7 +258,8 @@ export default function Page({ params }: { params: { categoryId: string } }) {
               <div key={index}>
                 <ProductCard
                   product={item}
-                  hoverMode={showModelImage ? "none" : "image-only"}
+                  hoverMode="image-hover"
+                  isModelViewActive={showModelImage}
                 />
               </div>
             ))}
