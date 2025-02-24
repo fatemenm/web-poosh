@@ -72,6 +72,7 @@ export default function BasicSlider<T>({
       setting={{
         nextArrow: <RightArrow />,
         prevArrow: <LeftArrow />,
+        initialSlide: Math.floor(items.length / 2),
         ...setting,
       }}
     />

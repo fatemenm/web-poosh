@@ -9,11 +9,11 @@ import ProductCard from "@/(pages)/_components/productCard";
 import Accordion from "@/_components/accordion";
 import BreadCrumb from "@/_components/breadcrumb";
 import { getCategories, getProducts } from "@/_lib/data";
-import { Category, Product } from "@/_lib/definitions";
+import { Category } from "@/_lib/definitions";
+import { ProductModel } from "@/_models/product.model";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -33,7 +33,7 @@ const breadcrumbItems = [
 
 export default function Page() {
   const [categories, setCategories] = useState<Category[] | null>();
-  const [products, setProducts] = useState<Product[] | null>();
+  const [products, setProducts] = useState<ProductModel[] | null>();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const productsPerPage = 12;
   const currentPageProducts = products?.slice(
@@ -82,7 +82,7 @@ export default function Page() {
           <div className="grid grid-cols-4 gap-x-8 gap-y-14">
             {currentPageProducts.map((item, index) => (
               <div key={index}>
-                <ProductCard data={item} />
+                <ProductCard product={item} hoverMode="full-hover" />
               </div>
             ))}
           </div>

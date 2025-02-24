@@ -14,12 +14,8 @@ import {
   getHeroBanners,
   getProducts,
 } from "@/_lib/data";
-import {
-  Category,
-  ClotheSetBanner,
-  HeroBanner,
-  Product,
-} from "@/_lib/definitions";
+import { Category, ClotheSetBanner, HeroBanner } from "@/_lib/definitions";
+import { ProductModel } from "@/_models/product.model";
 
 const sliderSetting = {
   infinite: true,
@@ -30,7 +26,7 @@ type Data = {
   heroBanners: HeroBanner[];
   categories: Category[];
   clothingSetBanners: ClotheSetBanner[];
-  products: Product[];
+  products: ProductModel[];
 };
 export default function Page() {
   const [data, setData] = useState<Data | null>(null);
@@ -162,7 +158,7 @@ export default function Page() {
         <hr className="mb-4 h-px w-full bg-stone-400" />
       </div>
       {data.products && (
-        <BasicSlider<Product>
+        <BasicSlider<ProductModel>
           setting={{
             ...sliderSetting,
             speed: 400,
@@ -176,47 +172,51 @@ export default function Page() {
             return (
               <Link
                 target="_blank"
-                key={item.id}
-                href={`${nextServerUrl}/products/${item.documentId}`}
+                key={item.data.id}
+                href={`${nextServerUrl}/products/${item.data.documentId}`}
                 className="cursor-pointer px-4 outline-none"
                 onClick={(e) => {
                   if (ctx.isSwiping) e.preventDefault();
                   else
-                    router.push(`${nextServerUrl}/products/${item.documentId}`);
+                    router.push(
+                      `${nextServerUrl}/products/${item.data.documentId}`
+                    );
                 }}
               >
                 <Image
-                  src={apiBaseUrl + item.imagesByColor[0].images[0].url}
-                  alt={item.imagesByColor[0].images[0].alternativeText}
-                  width={item.imagesByColor[0].images[0].width}
-                  height={item.imagesByColor[0].images[0].height}
+                  src={apiBaseUrl + item.data.imagesByColor[0].images[0].url}
+                  alt={item.data.imagesByColor[0].images[0].alternativeText}
+                  width={item.data.imagesByColor[0].images[0].width}
+                  height={item.data.imagesByColor[0].images[0].height}
                 />
                 <div
                   style={{ direction: "rtl" }}
                   className="mt-4 flex flex-col items-center gap-2 text-center text-sm text-stone-600"
                 >
                   <span className="font-medium">
-                    {item.id.toLocaleString("fa-IR")} {item.name}
+                    {item.data.id.toLocaleString("fa-IR")} {item.data.name}
                   </span>
                   <div className="flex flex-row items-center gap-3">
                     <span
-                      className={classNames(item.salePrice && "line-through")}
+                      className={classNames(
+                        item.data.salePrice && "line-through"
+                      )}
                     >
-                      {item.originalPrice.toLocaleString("fa-IR")} تومان
+                      {item.data.originalPrice.toLocaleString("fa-IR")} تومان
                     </span>
-                    {item.salePrice ? (
+                    {item.data.salePrice ? (
                       <div className="flex flex-row items-center gap-3">
                         <span className="text-sm">
                           (
                           {(
-                            ((item.originalPrice - item.salePrice) /
-                              item.originalPrice) *
+                            ((item.data.originalPrice - item.data.salePrice) /
+                              item.data.originalPrice) *
                             100
                           ).toLocaleString("fa-IR")}
                           %)
                         </span>
                         <span className="text-red-600">
-                          {item.salePrice.toLocaleString("fa-IR")} تومان
+                          {item.data.salePrice.toLocaleString("fa-IR")} تومان
                         </span>
                       </div>
                     ) : null}

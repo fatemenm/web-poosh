@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 import BasicSlider from "@/_components/basicSlider";
 import BreadCrumb from "@/_components/breadcrumb";
 import { getProductById, getProducts } from "@/_lib/data";
-import { Product as ProductType } from "@/_lib/definitions";
 import { ProductModel } from "@/_models/product.model";
 
 import ProductDescription from "./_components/productDescription";
@@ -25,7 +24,7 @@ const sliderSetting = {
 
 export default function Product({ params }: { params: { productId: string } }) {
   const [product, setProduct] = useState<ProductModel | null>(null);
-  const [relatedProducts, setRelatedProducts] = useState<ProductType[] | null>(
+  const [relatedProducts, setRelatedProducts] = useState<ProductModel[] | null>(
     null
   );
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
@@ -79,27 +78,29 @@ export default function Product({ params }: { params: { productId: string } }) {
       />
       <div className="mb-20 flex w-full flex-col gap-4">
         <span className="text-lg">محصولات مشابه دیگر</span>
-        <BasicSlider<ProductType>
+        <BasicSlider<ProductModel>
           setting={sliderSetting}
           items={relatedProducts}
           renderItem={(item, ctx: { isSwiping: boolean }) => {
             return (
               <Link
                 target="_blank"
-                href={`${nextServerUrl}/products/${item.documentId}`}
-                key={item.id}
+                href={`${nextServerUrl}/products/${item.data.documentId}`}
+                key={item.data.id}
                 className="flex cursor-pointer flex-col items-center outline-none"
                 onClick={(e) => {
                   if (ctx.isSwiping) e.preventDefault();
                   else
-                    router.push(`${nextServerUrl}/products/${item.documentId}`);
+                    router.push(
+                      `${nextServerUrl}/products/${item.data.documentId}`
+                    );
                 }}
               >
                 <Image
-                  src={apiBaseUrl + item.imagesByColor[0].images[0].url}
-                  alt={item.imagesByColor[0].images[0].alternativeText}
-                  width={item.imagesByColor[0].images[0].width}
-                  height={item.imagesByColor[0].images[0].height}
+                  src={apiBaseUrl + item.data.imagesByColor[0].images[0].url}
+                  alt={item.data.imagesByColor[0].images[0].alternativeText}
+                  width={item.data.imagesByColor[0].images[0].width}
+                  height={item.data.imagesByColor[0].images[0].height}
                   quality={100}
                 />
                 <div
@@ -107,17 +108,19 @@ export default function Product({ params }: { params: { productId: string } }) {
                   className="mt-4 flex flex-col items-center gap-2 text-center text-sm text-stone-600"
                 >
                   <span className="font-medium">
-                    {item.id.toLocaleString("fa-IR")} {item.name}
+                    {item.data.id.toLocaleString("fa-IR")} {item.data.name}
                   </span>
                   <div className="flex flex-row items-center gap-3">
                     <span
-                      className={classNames(item.salePrice && "line-through")}
+                      className={classNames(
+                        item.data.salePrice && "line-through"
+                      )}
                     >
-                      {item.originalPrice.toLocaleString("fa-IR")} تومان
+                      {item.data.originalPrice.toLocaleString("fa-IR")} تومان
                     </span>
-                    {item.salePrice ? (
+                    {item.data.salePrice ? (
                       <span className="text-red-600">
-                        {item.salePrice.toLocaleString("fa-IR")} تومان
+                        {item.data.salePrice.toLocaleString("fa-IR")} تومان
                       </span>
                     ) : null}
                   </div>
