@@ -17,6 +17,7 @@ const urls = {
   getNavbarItems: apiBaseUrl + "/api/navbar-items",
   getHeroBanners: apiBaseUrl + "/api/hero-banners",
   getCategories: apiBaseUrl + "/api/categories",
+  getCategoryById: apiBaseUrl + "/api/categories/:id",
   getClotheSetBanners: apiBaseUrl + "/api/clothe-set-banners",
   getProductById: apiBaseUrl + "/api/products/:id",
   getProducts: apiBaseUrl + "/api/products",
@@ -111,7 +112,8 @@ export async function getHeroBanners() {
 export async function getCategories() {
   try {
     const url = createUrl(urls.getCategories, {
-      populates: ["filters", "filters.image", "image", "sizeGuideImage"],
+      populates: ["preSetFilters", "preSetFilters.image", "image", "sizeGuideImage"],
+      sort: "index",
     });
     const response = await fetch(url.href);
     if (!response.ok) {
@@ -119,6 +121,34 @@ export async function getCategories() {
     }
     const body: responseBody = await response.json();
     const data = body.data as Category[];
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function getCategoryById(documentId: string) {
+  try {
+    const url = new URL(urls.getCategoryById);
+    url.pathname = url.pathname.replace(":id", documentId);
+    const populateFields = [
+      "image",
+      "sizeGuideImage",
+      "preSetFilters",
+      "preSetFilters.image",
+    ];
+    const params = new URLSearchParams();
+    populateFields.forEach((field, index) =>
+      params.append(`populate[${index}]`, field)
+    );
+    url.search = params.toString();
+    const response = await fetch(url.href);
+    if (!response.ok) {
+      throw new Error("Failed to fetch data");
+    }
+    const body: responseBody = await response.json();
+    const data = body.data as Category;
     return data;
   } catch (error) {
     console.error(error);
@@ -142,7 +172,15 @@ export async function getClotheSetBanners() {
   }
 }
 
-export async function getProducts() {
+export async function getProducts(
+  categoryName?: string,
+  filters?: {
+    color?: string[];
+    size?: string[];
+    onSale?: boolean;
+    categoryFilter?: string;
+  }
+) {
   try {
     const url = createUrl(urls.getProducts, {
       populates: [
@@ -159,7 +197,39 @@ export async function getProducts() {
     }
     const body: responseBody = await response.json();
     const data = body.data as Product[];
-    return data;
+    let products = data.map((item) => new ProductModel(item));
+    if (categoryName) {
+      products = products.filter(
+        (item) => item.data.category.name === categoryName
+      );
+      if (categoryName === "شلوار جین" && filters && filters.categoryFilter) {
+        products = products.filter((p) =>
+          p.data.name.includes(filters.categoryFilter as string)
+        );
+      }
+    }
+    if (filters) {
+      Object.keys(filters).forEach((key) => {
+        if (key === "color" && filters.color?.length) {
+          products = products?.filter((product) => {
+            return product
+              .getAvailableColors()
+              .some((color) => filters.color!.includes(color.hexCode));
+          });
+        }
+        if (key === "size" && filters.size?.length) {
+          products = products?.filter((product) => {
+            return product
+              .getAvailableSizes()
+              .some((size) => filters.size!.includes(size.value));
+          });
+        }
+        if (key === "onSale" && filters.onSale) {
+          products = products.filter((p) => p.data.salePrice);
+        }
+      });
+    }
+    return products;
   } catch (error) {
     console.error(error);
     throw error;
@@ -188,4 +258,29 @@ export async function getProductById(documentId: string) {
     console.error(error);
     throw error;
   }
+}
+
+export async function getCategoryColors(category: Category) {
+  return [
+    {
+      name: "آبی تیره",
+      hexCode: "#3D5061",
+    },
+    {
+      name: "آبی",
+      hexCode: "#A2A9A7",
+    },
+    {
+      name: "آبی روشن",
+      hexCode: "#5F8099",
+    },
+    {
+      name: "آبی",
+      hexCode: "#5B6B80",
+    },
+  ];
+}
+
+export async function getCategorySizes(category: Category) {
+  return ["31", "32", "33", "34", "35"];
 }
