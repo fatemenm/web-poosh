@@ -4,37 +4,61 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { Product } from "@/_lib/definitions";
 import { ProductModel } from "@/_models/product.model";
 
 import ProductModal from "./productModal";
 
-export default function ProductCard({ data }: { data: Product }) {
-  const [isQuickViewVisible, setIsQuickViewVisible] = useState<boolean>(false);
+export default function ProductCard({
+  product,
+  hoverMode,
+}: {
+  product: ProductModel;
+  hoverMode: "image-only" | "full-hover" | "none";
+}) {
+  const [isImageHovered, setIsImageHovered] = useState<boolean>(false);
   const [isProductModalOpen, setIsProductModalOpen] = useState<boolean>(false);
-  const router = useRouter();
-  const product = new ProductModel(data);
   const availableColors = product.getAvailableColors();
   const availableSizes = product.getAvailableSizes();
-  const defaultImage = isQuickViewVisible
-    ? product.getImagesByColor(availableColors[0].name)[1]
-    : product.getImagesByColor(availableColors[0].name)[0];
+
+  const defaultImage =
+    isImageHovered || hoverMode === "none"
+      ? product.getImagesByColor(availableColors[0].name)[1]
+      : product.getImagesByColor(availableColors[0].name)[0];
   return (
     <div className="group flex flex-col gap-4">
-      <div
-        className="relative"
-        onMouseOver={() => setIsQuickViewVisible(true)}
-        onMouseOut={() => setIsQuickViewVisible(false)}
-      >
+      {hoverMode === "full-hover" && (
+        <div
+          className="relative"
+          onMouseOver={() => setIsImageHovered(true)}
+          onMouseOut={() => setIsImageHovered(false)}
+        >
+          <Link
+            href={`${nextServerUrl}/products/${product.data.documentId}`}
+            className=""
+          >
+            <Image
+              src={apiBaseUrl + defaultImage.url}
+              alt={defaultImage.alternativeText}
+              width={defaultImage.width}
+              height={defaultImage.height}
+            />
+          </Link>
+          <button
+            onClick={() => setIsProductModalOpen(true)}
+            className="invisible absolute bottom-4 left-0 right-0 m-auto flex w-4/5 flex-row items-center justify-center gap-2 bg-stone-800 bg-opacity-70 px-4 py-3 text-sm text-white hover:bg-opacity-85 group-hover:visible"
+          >
+            مشاهده سریع
+            <FontAwesomeIcon icon={faSearch} className="text-sm" />
+          </button>
+        </div>
+      )}
+      {hoverMode === "image-only" && (
         <Link
+          onMouseOver={() => setIsImageHovered(true)}
+          onMouseOut={() => setIsImageHovered(false)}
           href={`${nextServerUrl}/products/${product.data.documentId}`}
-          className=""
-          onClick={() =>
-            router.push(`${nextServerUrl}/products/${product.data.documentId}`)
-          }
         >
           <Image
             src={apiBaseUrl + defaultImage.url}
@@ -43,15 +67,17 @@ export default function ProductCard({ data }: { data: Product }) {
             height={defaultImage.height}
           />
         </Link>
-        <button
-          onClick={() => setIsProductModalOpen(true)}
-          className="invisible absolute bottom-4 left-0 right-0 m-auto flex w-4/5 flex-row items-center justify-center gap-2 bg-stone-800 bg-opacity-70 px-4 py-3 text-sm text-white hover:bg-opacity-85 group-hover:visible"
-        >
-          مشاهده سریع
-          <FontAwesomeIcon icon={faSearch} className="text-sm" />
-        </button>
-      </div>
-
+      )}
+      {hoverMode === "none" && (
+        <Link href={`${nextServerUrl}/products/${product.data.documentId}`}>
+          <Image
+            src={apiBaseUrl + defaultImage.url}
+            alt={defaultImage.alternativeText}
+            width={defaultImage.width}
+            height={defaultImage.height}
+          />
+        </Link>
+      )}
       <div className="flex flex-col gap-3">
         {/* product name */}
         <Link
@@ -86,13 +112,17 @@ export default function ProductCard({ data }: { data: Product }) {
         </div>
       </div>
       {/* product colors and sizes */}
-      <div className="invisible flex flex-col gap-3 group-hover:visible">
+      <div
+        className={classNames("flex flex-col gap-3", {
+          "invisible group-hover:visible": hoverMode === "full-hover",
+        })}
+      >
         <div className="flex flex-row gap-1">
           {availableColors.map((color, index) => (
             <span
               key={index}
               className="h-4 w-4 rounded-full"
-              style={{ backgroundColor: color.colorHex }}
+              style={{ backgroundColor: color.hexCode }}
             />
           ))}
         </div>
