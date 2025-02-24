@@ -12,7 +12,6 @@ import * as Toggle from "@radix-ui/react-toggle";
 import * as ToggleGroup from "@radix-ui/react-toggle-group";
 import classNames from "classnames";
 import Image from "next/image";
-import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -50,10 +49,8 @@ export default function Page({ params }: { params: { categoryId: string } }) {
   const selectedSizes = searchParams.getAll("size");
   const onSale = Boolean(searchParams.get("on-sale"));
   const subCategoryType = searchParams.get("jean") ?? "";
-  const [cardImageView, setCardImageView] = useState<"default" | "hover">(
-    "default"
-  );
-  const [gridColumns, setGridColumns] = useState<5 | 7>(7);
+  const [showModelImage, setShowImageModel] = useState<boolean>(false);
+  const [gridColumns, setGridColumns] = useState<5 | 7>(5);
 
   useEffect(() => {
     const getData = async () => {
@@ -115,7 +112,7 @@ export default function Page({ params }: { params: { categoryId: string } }) {
                 <Image
                   data-active={subCategoryType === img.alternativeText}
                   key={img.id}
-                  className="cursor-pointer px-2 pb-2 data-[active=true]:border-b-2 data-[active=true]:border-stone-800"
+                  className="cursor-pointer px-2 pb-2 hover:border-b-2 hover:border-stone-700 data-[active=true]:border-b-2 data-[active=true]:border-stone-700"
                   onClick={(e) => {
                     if (isSwiping) e.preventDefault();
                     else {
@@ -171,11 +168,7 @@ export default function Page({ params }: { params: { categoryId: string } }) {
             {/* change product cart images */}
             <button
               className="text-stone-600 hover:text-stone-800"
-              onClick={() =>
-                setCardImageView((prev) =>
-                  prev === "default" ? "hover" : "default"
-                )
-              }
+              onClick={() => setShowImageModel((prev) => !prev)}
             >
               <FontAwesomeIcon icon={faTShirt} className="text-md" />
             </button>
@@ -253,11 +246,10 @@ export default function Page({ params }: { params: { categoryId: string } }) {
             </div>
           </div>
         )}
-
         <div
-          className={classNames("grid", {
-            "grid grid-cols-5 gap-x-8 gap-y-14": gridColumns === 5,
-            "grid grid-cols-7 gap-x-2 gap-y-14": gridColumns === 7,
+          className={classNames("grid gap-y-14", {
+            "grid-cols-5 gap-x-8": gridColumns === 5,
+            "grid-cols-7 gap-x-2": gridColumns === 7,
           })}
         >
           {[...products]
@@ -266,9 +258,7 @@ export default function Page({ params }: { params: { categoryId: string } }) {
               <div key={index}>
                 <ProductCard
                   product={item}
-                  hoverMode={
-                    cardImageView === "default" ? "image-only" : "none"
-                  }
+                  hoverMode={showModelImage ? "none" : "image-only"}
                 />
               </div>
             ))}
