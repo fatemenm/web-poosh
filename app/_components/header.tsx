@@ -1,6 +1,6 @@
 "use client";
 
-import { apiBaseUrl } from "@config";
+import { apiBaseUrl, nextServerUrl } from "@config";
 import {
   faBagShopping,
   faSearch,
@@ -13,6 +13,7 @@ import { useState } from "react";
 
 import PromoBanner from "@/_components/promoBanner";
 import {
+  Category,
   NavbarItem,
   NavigationLink,
   PromoBanner as PromoBannerType,
@@ -22,7 +23,7 @@ import logo from "@public/logo.png";
 
 function getClassNames(item: NavbarItem, isHovered: boolean) {
   const baseClasses =
-    "flex items-center text-stone-700 font-medium border-b-2 ";
+    "flex items-center text-stone-700 font-medium border-b-2 px-5" + " ";
   let situationalClasses = "";
   if (isHovered && item.isExpandable)
     situationalClasses = "cursor-pointer border-b-transparent";
@@ -45,9 +46,11 @@ function createSublinkGrid(items: NavigationLink[] | undefined) {
 export default function Header({
   promoBanner,
   navbarItems,
+  categories,
 }: {
   promoBanner: PromoBannerType | undefined;
   navbarItems: NavbarItem[] | undefined;
+  categories: Category[] | undefined;
 }) {
   const [hoveredNavbarItem, setHoveredNavbarItem] =
     useState<NavbarItem | null>();
@@ -67,7 +70,7 @@ export default function Header({
             </Link>
           </div>
           {navbarItems && (
-            <nav className="flex flex-row justify-between gap-8 text-sm">
+            <nav className="flex flex-row justify-between text-sm">
               {navbarItems.map((item) => {
                 return (
                   <Link
@@ -117,9 +120,16 @@ export default function Header({
                         className="flex flex-col gap-5 text-right text-sm font-normal text-stone-600"
                       >
                         {col.map((item, rowNumber) => {
+                          const categoryDocumentId = categories?.find(
+                            (category) => category.name === item.name
+                          )?.documentId;
                           return (
                             <li key={rowNumber}>
-                              <a href={item.linkUrl}>{item.linkText}</a>
+                              <Link
+                                href={`${nextServerUrl}/category/${categoryDocumentId}`}
+                              >
+                                {item.name}
+                              </Link>
                             </li>
                           );
                         })}
