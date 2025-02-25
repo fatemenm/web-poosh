@@ -17,7 +17,7 @@ export default function ProductCard({
 }: {
   product: ProductModel;
   hoverMode: "image-hover" | "full-hover";
-  isModelViewActive: boolean;
+  isModelViewActive?: boolean;
 }) {
   const [isImageHovered, setIsImageHovered] = useState<boolean>(false);
   const [isProductModalOpen, setIsProductModalOpen] = useState<boolean>(false);
@@ -41,7 +41,7 @@ export default function ProductCard({
       className="relative block"
     >
       <Image
-        className={`absolute inset-0 transition-opacity duration-500 ${
+        className={`absolute inset-0 transition-opacity duration-700 ${
           isImageHovered || isModelViewActive ? "opacity-0" : "opacity-100"
         }`}
         src={apiBaseUrl + frontImage.url}
@@ -50,7 +50,7 @@ export default function ProductCard({
         height={frontImage.height}
       />
       <Image
-        className={`transition-opacity duration-500 ${
+        className={`transition-opacity duration-700 ${
           isImageHovered || isModelViewActive ? "opacity-100" : "opacity-0"
         }`}
         src={apiBaseUrl + modelImage.url}
