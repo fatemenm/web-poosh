@@ -132,51 +132,60 @@ export default function Page({ params }: { params: { categoryId: string } }) {
           </div>
         ) : null}
       </div>
-      <div className="flex flex-col gap-8">
-        <div className="flex flex-row items-center justify-between px-2">
-          <div className="flex flex-row gap-6">
-            <button
-              className="flex flex-row items-center gap-1 text-stone-600 hover:text-stone-800"
-              onClick={() => setFilterOpen((prev) => !prev)}
-            >
-              <FontAwesomeIcon icon={faFilter} className="text-lg" />
-              فیلتر
-            </button>
-            {searchParams.size ? (
+      <div className="flex flex-col gap-3">
+        <div>
+          <div className="flex flex-row items-center justify-between px-2">
+            <div className="flex flex-row gap-6">
               <button
                 className="flex flex-row items-center gap-1 text-stone-600 hover:text-stone-800"
-                onClick={() => {
-                  router.push(pathname, { scroll: false });
-                }}
+                onClick={() => setFilterOpen((prev) => !prev)}
               >
-                <FontAwesomeIcon
-                  icon={faClose}
-                  className="text-lg font-medium"
-                />
-                حذف فیلتر
+                <FontAwesomeIcon icon={faFilter} className="text-lg" />
+                فیلتر
               </button>
-            ) : null}
+              {searchParams.size ? (
+                <button
+                  className="flex flex-row items-center gap-1 text-stone-600 hover:text-stone-800"
+                  onClick={() => {
+                    router.push(pathname, { scroll: false });
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faClose}
+                    className="text-lg font-medium"
+                  />
+                  حذف فیلتر
+                </button>
+              ) : null}
+            </div>
+            <div className="flex flex-row items-center gap-2">
+              {/* change grid columns */}
+              <button
+                className="text-stone-600 hover:text-stone-800"
+                onClick={() => setGridColumns((prev) => (prev === 5 ? 7 : 5))}
+              >
+                <FontAwesomeIcon icon={faBorderAll} className="text-lg" />
+              </button>
+              {/* change product cart images */}
+              <button
+                className="text-stone-600 hover:text-stone-800"
+                onClick={() => setShowImageModel((prev) => !prev)}
+              >
+                <FontAwesomeIcon icon={faTShirt} className="text-md" />
+              </button>
+            </div>
           </div>
-          <div className="flex flex-row items-center gap-2">
-            {/* change grid columns */}
-            <button
-              className="text-stone-600 hover:text-stone-800"
-              onClick={() => setGridColumns((prev) => (prev === 5 ? 7 : 5))}
-            >
-              <FontAwesomeIcon icon={faBorderAll} className="text-lg" />
-            </button>
-            {/* change product cart images */}
-            <button
-              className="text-stone-600 hover:text-stone-800"
-              onClick={() => setShowImageModel((prev) => !prev)}
-            >
-              <FontAwesomeIcon icon={faTShirt} className="text-md" />
-            </button>
-          </div>
-        </div>
-        {filterOpen && (
-          <div className="flex flex-col gap-8 pr-9 text-xs font-medium text-stone-800">
-            <div className="flex flex-col gap-4">
+          {/* filter section */}
+          <div
+            className={classNames(
+              "flex flex-col gap-8 overflow-hidden pr-9 text-xs font-medium text-stone-800 transition-[max-height] duration-500",
+              {
+                "max-h-0": !filterOpen,
+                "max-h-[500px]": filterOpen,
+              }
+            )}
+          >
+            <div className="flex flex-col gap-4 pt-6">
               سایز
               <div className="flex flex-row items-center gap-2">
                 <ToggleGroup.Root
@@ -231,7 +240,7 @@ export default function Page({ params }: { params: { categoryId: string } }) {
                 </ToggleGroup.Root>
               </div>
             </div>
-            <div className="flex flex-col justify-start gap-4">
+            <div className="flex flex-col justify-start gap-4 pb-6">
               نمایش
               <Toggle.Root
                 pressed={onSale}
@@ -245,7 +254,7 @@ export default function Page({ params }: { params: { categoryId: string } }) {
               </Toggle.Root>
             </div>
           </div>
-        )}
+        </div>
         <div
           className={classNames("grid gap-y-14", {
             "grid-cols-5 gap-x-8": gridColumns === 5,
