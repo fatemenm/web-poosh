@@ -49,11 +49,9 @@ export default function Page() {
       const productCount = await getProductsCount();
       setCategories(categories);
       setProductCount(productCount);
-      const products = await getProducts({
-        page: {
-          number: pageNumber,
-          products: 12,
-        },
+      const products = await getProducts(undefined, undefined, {
+        number: pageNumber,
+        products: 12,
       });
 
       setProducts(products);
