@@ -172,23 +172,19 @@ export async function getClotheSetBanners() {
   }
 }
 
-export async function getProducts({
-  categoryName,
-  filters,
-  page,
-}: {
-  categoryName?: string;
+export async function getProducts(
+  categoryName?: string,
   filters?: {
     color?: string[];
     size?: string[];
     onSale?: boolean;
     categoryFilter?: string;
-  };
+  },
   page?: {
     number: number;
     products: number;
-  };
-}) {
+  }
+) {
   try {
     const url = createUrl(urls.getProducts, {
       populates: [
