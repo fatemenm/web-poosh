@@ -88,7 +88,7 @@ export default function Page() {
           renderItem={(item, isSwiping) => {
             return (
               <Link
-                href="/"
+                href={nextServerUrl + "/category/" + item.documentId}
                 key={item.id}
                 className="flex cursor-pointer flex-col items-center px-4 outline-none"
                 onClick={(e) => {
