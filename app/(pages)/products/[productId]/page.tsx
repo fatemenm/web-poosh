@@ -54,7 +54,7 @@ export default function Product({ params }: { params: { productId: string } }) {
     },
     {
       label: product.data.category.name,
-      href: "/products",
+      href: nextServerUrl + "/category/" + product.data.category.documentId,
     },
     {
       label: product.data.name + " " + product.data.id,
