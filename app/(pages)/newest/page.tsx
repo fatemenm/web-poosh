@@ -1,5 +1,6 @@
 "use client";
 
+import { nextServerUrl } from "@config";
 import classNames from "classnames";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -66,7 +67,9 @@ export default function Page() {
               <ul className="flex flex-col space-y-3 pr-3">
                 {categories.map((item, index) => (
                   <li className="text-sm font-light text-stone-700" key={index}>
-                    <Link href="/">{item.name}</Link>
+                    <Link href={nextServerUrl + "/category/" + item.documentId}>
+                      {item.name}
+                    </Link>
                   </li>
                 ))}
               </ul>,
