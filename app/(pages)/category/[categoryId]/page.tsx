@@ -62,11 +62,14 @@ export default function Page({ params }: { params: { categoryId: string } }) {
       setColors(colors);
       setSizes(sizes);
 
-      const products = await getProducts(category.name, {
-        color: selectedColors,
-        size: selectedSizes,
-        onSale: onSale,
-        categoryFilter: subCategoryType,
+      const products = await getProducts({
+        categoryName: category.name,
+        filters: {
+          color: selectedColors,
+          size: selectedSizes,
+          onSale: onSale,
+          categoryFilter: subCategoryType,
+        },
       });
 
       setProducts(products);
