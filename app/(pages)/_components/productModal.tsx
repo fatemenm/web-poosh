@@ -63,6 +63,7 @@ export default function ProductModal({
               <FontAwesomeIcon icon={faClose} className="text-[16px]" />
             </Dialog.Close>
             <div className="flex flex-row">
+              {/* gallery slider */}
               <div className="mr-24 w-1/2">
                 <GallerySlider
                   dotsClassName={styles.slickDotsModal}
@@ -72,9 +73,10 @@ export default function ProductModal({
                   isExpandable={false}
                 />
               </div>
+              {/* product overview */}
               <div className="flex w-1/2 flex-col justify-between">
                 <ScrollArea.Root
-                  className="h-[530px] w-full overflow-hidden pt-6"
+                  className="h-[510px] w-full overflow-hidden pt-6"
                   dir="rtl"
                 >
                   <ScrollArea.Viewport className="size-full rounded px-6">
@@ -176,7 +178,7 @@ export default function ProductModal({
                       <hr />
                       <Link
                         href={`${nextServerUrl}/products/${product.data.documentId}`}
-                        className="mb-2 border border-stone-700 px-8 py-4 text-center text-sm font-normal text-stone-900 hover:bg-stone-600 hover:text-white"
+                        className="mb-6 border border-stone-700 px-8 py-4 text-center text-sm font-normal text-stone-900 hover:bg-stone-600 hover:text-white"
                       >
                         مشاهده تمامی اطلاعات محصول
                       </Link>
@@ -191,7 +193,7 @@ export default function ProductModal({
                 </ScrollArea.Root>
                 <div className="w-full p-4 shadow-[0_-4px_6px_-4px_rgba(0,0,0,0.5)]">
                   {isSizeErrorVisible && (
-                    <div className="bg-red-700 px-4 py-3 text-sm font-light text-white">
+                    <div className="bg-red-700 px-4 py-2 text-sm font-light text-white">
                       لطفا سایز را انتخاب کنید
                     </div>
                   )}
@@ -201,7 +203,7 @@ export default function ProductModal({
                       else console.log(selectedProduct);
                     }}
                     className={
-                      "mt-2 w-full bg-green-700 py-5 text-sm text-white hover:bg-green-800"
+                      "mt-2 w-full bg-green-700 py-4 text-sm text-white hover:bg-green-800"
                     }
                   >
                     اضافه به سبد خرید
