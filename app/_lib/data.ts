@@ -172,15 +172,23 @@ export async function getClotheSetBanners() {
   }
 }
 
-export async function getProducts(
-  categoryName?: string,
+export async function getProducts({
+  categoryName,
+  filters,
+  page,
+}: {
+  categoryName?: string;
   filters?: {
     color?: string[];
     size?: string[];
     onSale?: boolean;
     categoryFilter?: string;
-  }
-) {
+  };
+  page?: {
+    number: number;
+    products: number;
+  };
+}) {
   try {
     const url = createUrl(urls.getProducts, {
       populates: [
@@ -229,7 +237,26 @@ export async function getProducts(
         }
       });
     }
+    if (page) {
+      const startIndex = page.products * (page.number - 1);
+      products = products?.slice(startIndex, startIndex + page.products);
+    }
     return products;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+export async function getProductsCount() {
+  try {
+    const url = new URL(urls.getProducts);
+    const response = await fetch(url.href);
+    if (!response.ok) {
+      throw new Error("Failed to fetch data");
+    }
+    const body: responseBody = await response.json();
+    const products = body.data as Product[];
+    return products.length;
   } catch (error) {
     console.error(error);
     throw error;

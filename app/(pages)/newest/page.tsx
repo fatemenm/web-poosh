@@ -3,13 +3,14 @@
 import { nextServerUrl } from "@config";
 import classNames from "classnames";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import React from "react";
 
 import ProductCard from "@/(pages)/_components/productCard";
 import Accordion from "@/_components/accordion";
 import BreadCrumb from "@/_components/breadcrumb";
-import { getCategories, getProducts } from "@/_lib/data";
+import { getCategories, getProducts, getProductsCount } from "@/_lib/data";
 import { Category } from "@/_lib/definitions";
 import { ProductModel } from "@/_models/product.model";
 import {
@@ -31,28 +32,42 @@ const breadcrumbItems = [
     href: "",
   },
 ];
+const productsPerPage = 12;
 
 export default function Page() {
   const [categories, setCategories] = useState<Category[] | null>();
   const [products, setProducts] = useState<ProductModel[] | null>();
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const productsPerPage = 12;
-  const currentPageProducts = products?.slice(
-    productsPerPage * (currentPage - 1),
-    productsPerPage * (currentPage - 1) + productsPerPage
-  );
+  const [productCount, setProductCount] = useState<number>(0);
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const pageNumber = Number(searchParams.get("page") ?? 1);
+  const totalPages = Math.ceil(productCount / productsPerPage);
+
   useEffect(() => {
     const getData = async () => {
       const categories = await getCategories();
-      const products = await getProducts();
+      const productCount = await getProductsCount();
       setCategories(categories);
+      setProductCount(productCount);
+      const products = await getProducts({
+        page: {
+          number: pageNumber,
+          products: 12,
+        },
+      });
+
       setProducts(products);
     };
     getData();
-  }, []);
-  if (!categories || !products || !currentPageProducts)
-    return <div>data is not available</div>;
-  const totalPages = products?.length / productsPerPage;
+  }, [searchParams]);
+
+  function updatePageNumber(pageNum: number) {
+    const params = new URLSearchParams({ page: pageNum.toString() });
+    return `${pathname}?${params.toString()}`;
+  }
+
+  if (!categories || !products) return <div>data is not available</div>;
+
   return (
     <div className="mx-auto flex w-10/12 flex-col gap-16">
       <BreadCrumb items={breadcrumbItems} />
@@ -83,42 +98,36 @@ export default function Page() {
             <hr className="h-px w-full bg-stone-400" />
           </div>
           <div className="grid grid-cols-4 gap-x-8 gap-y-14">
-            {currentPageProducts.map((item, index) => (
+            {products.map((item, index) => (
               <div key={index}>
                 <ProductCard product={item} hoverMode="full-hover" />
               </div>
             ))}
           </div>
-          {/* pagination */}
           <Pagination className="mr-0 w-fit">
             <PaginationContent>
               <PaginationItem>
                 <PaginationPrevious
-                  onClick={(e) => {
-                    if (currentPage < 2) e.preventDefault();
-                    else setCurrentPage((prev) => prev - 1);
-                  }}
                   className={classNames("rounded-none", {
-                    "pointer-events-none text-gray-400": currentPage < 2,
+                    "pointer-events-none text-gray-400": pageNumber < 2,
                   })}
-                  href="#"
+                  href={updatePageNumber(pageNumber - 1)}
                 />
               </PaginationItem>
-              {Array(Math.ceil(totalPages))
+              {Array(totalPages)
                 .fill(0)
                 .map((item, index) => (
                   <div key={index}>
                     <PaginationItem>
                       <PaginationLink
-                        onClick={() => setCurrentPage(index + 1)}
                         className={classNames(
                           "rounded-none font-medium text-stone-700",
                           {
                             "pointer-events-none bg-stone-800 text-white":
-                              currentPage === index + 1,
+                              pageNumber === index + 1,
                           }
                         )}
-                        href="#"
+                        href={updatePageNumber(index + 1)}
                       >
                         {index + 1}
                       </PaginationLink>
@@ -127,15 +136,11 @@ export default function Page() {
                 ))}
               <PaginationItem>
                 <PaginationNext
-                  onClick={(e) => {
-                    if (currentPage > totalPages) e.preventDefault();
-                    else setCurrentPage((prev) => prev + 1);
-                  }}
                   className={classNames("rounded-none", {
                     "pointer-events-none text-gray-400":
-                      currentPage > totalPages,
+                      pageNumber + 1 > totalPages,
                   })}
-                  href="#"
+                  href={updatePageNumber(pageNumber + 1)}
                 />
               </PaginationItem>
             </PaginationContent>
