@@ -7,6 +7,7 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -90,18 +91,44 @@ export default function Header({
             </nav>
           )}
         </div>
-        <div className="flex flex-row justify-between gap-8">
-          <button>
-            <FontAwesomeIcon icon={faSearch} className="text-xl" />
-          </button>
-
-          <button>
-            <FontAwesomeIcon icon={faUser} className="text-xl" />
-          </button>
-          <button>
-            <FontAwesomeIcon icon={faBagShopping} className="text-xl" />
-          </button>
-        </div>
+        <NavigationMenu.Root dir="rtl" className="w-1/4">
+          <NavigationMenu.List className="flex flex-row justify-end gap-10">
+            <NavigationMenu.Item>
+              <NavigationMenu.Trigger>
+                <FontAwesomeIcon icon={faSearch} className="text-xl" />
+              </NavigationMenu.Trigger>
+              <NavigationMenu.Content className="absolute left-0 top-12 bg-gray-100">
+                <NavigationMenu.Link />
+              </NavigationMenu.Content>
+            </NavigationMenu.Item>
+            <NavigationMenu.Item>
+              <NavigationMenu.Trigger>
+                <FontAwesomeIcon icon={faUser} className="text-xl" />
+              </NavigationMenu.Trigger>
+              <NavigationMenu.Content>
+                <NavigationMenu.Link />
+              </NavigationMenu.Content>
+            </NavigationMenu.Item>
+            <NavigationMenu.Item>
+              <NavigationMenu.Trigger>
+                <FontAwesomeIcon icon={faBagShopping} className="text-xl" />
+              </NavigationMenu.Trigger>
+              <NavigationMenu.Content className="absolute left-0 top-12 w-full bg-white p-4">
+                <div className="flex flex-col gap-6">
+                  <span className="text-lg">سبد خرید</span>
+                  <button
+                    className={
+                      "w-full bg-green-700 py-2 text-sm text-white hover:bg-green-800"
+                    }
+                  >
+                    جزییات سبد خرید
+                  </button>
+                </div>
+                <NavigationMenu.Link />
+              </NavigationMenu.Content>
+            </NavigationMenu.Item>
+          </NavigationMenu.List>
+        </NavigationMenu.Root>
       </div>
       {hoveredNavbarItem?.isExpandable && (
         <div className="absolute top-24 z-10 w-screen">
