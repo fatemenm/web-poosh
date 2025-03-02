@@ -8,7 +8,6 @@ import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import classNames from "classnames";
 import Image from "next/image";
 import { useState } from "react";
-import { Settings } from "react-slick";
 
 import Slider from "@/_components/slider";
 import { Image as ImageType } from "@/_lib/definitions";
@@ -23,7 +22,7 @@ export default function GallerySlider({
 }: {
   images: ImageType[];
   containerClass?: string;
-  setting?: Settings;
+  setting?: Record<string, unknown>;
   isExpandable: boolean;
   dotsClassName?: string;
 }) {
@@ -129,7 +128,6 @@ export default function GallerySlider({
   return (
     <div>
       <Slider
-        key={images.map((img) => img.id).join(",")}
         containerClass={containerClass}
         setting={{ ...baseSetting, ...setting }}
         items={images}
@@ -138,8 +136,8 @@ export default function GallerySlider({
             <Image
               key={img.id}
               onClick={(e) => {
-                if (ctx.isSwiping) e.preventDefault();
-                else if (isExpandable) setViewMode("expanded");
+                if (!isExpandable || ctx.isSwiping) e.preventDefault();
+                else setViewMode("expanded");
               }}
               src={apiBaseUrl + img.url}
               width={img.width}

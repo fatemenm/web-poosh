@@ -17,12 +17,12 @@ export default function Slider<T>({
   renderItem,
 }: {
   containerClass?: string;
-  setting?: Settings;
+  setting?: Record<string, unknown>;
   items: T[];
   renderItem: (item: T, ctx: ctxType) => ReactNode;
 }) {
   const [isSwiping, setIsSwiping] = useState<boolean>(false);
-  const finalSetting = {
+  const slickSliderSetting: Settings = {
     ...setting,
     swipeToSlide: true,
     beforeChange: () => {
@@ -32,9 +32,10 @@ export default function Slider<T>({
       setIsSwiping(false);
     },
   };
+
   return (
     <div className={`w-full ${containerClass}`}>
-      <SlickSlider {...finalSetting}>
+      <SlickSlider {...slickSliderSetting}>
         {items.map((item) => {
           return renderItem(item, { isSwiping });
         })}

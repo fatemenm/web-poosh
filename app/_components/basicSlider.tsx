@@ -7,7 +7,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ReactNode } from "react";
 import { CustomArrowProps } from "react-slick";
-import { Settings } from "react-slick";
 
 import Slider from "@/_components/slider";
 import styles from "@/_styles/basicSlider.module.css";
@@ -60,7 +59,7 @@ export default function BasicSlider<T>({
   renderItem,
 }: {
   containerClass?: string;
-  setting?: Settings;
+  setting?: Record<string, unknown>;
   items: T[];
   renderItem: (item: T, ctx: { isSwiping: boolean }) => ReactNode;
 }) {
