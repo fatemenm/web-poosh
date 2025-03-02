@@ -8,87 +8,101 @@ import { useState } from "react";
 
 import { ProductModel } from "@/_models/product.model";
 
-import ProductModal from "./productModal";
-
 export default function ProductCard({
   product,
-  hoverMode,
-  isModelViewActive,
+  buttonOptions = null,
+  viewOptions = null,
 }: {
   product: ProductModel;
-  hoverMode: "image-hover" | "full-hover";
-  isModelViewActive?: boolean;
+  buttonOptions?: {
+    text?: string;
+    onClick?: (product: ProductModel, isModalOpen: boolean) => void;
+    iconName?: string;
+  } | null;
+  viewOptions?: {
+    colorVisibility?: "onHover" | "default";
+    sizeVisibility?: "onHover" | "default";
+    defaultImageIndex?: number;
+    hoverImageIndex?: number;
+    showModelImage?: boolean;
+  } | null;
 }) {
-  const [isImageHovered, setIsImageHovered] = useState<boolean>(false);
-  const [isProductModalOpen, setIsProductModalOpen] = useState<boolean>(false);
+  const [isImageHovered, setIsImageHovered] = useState<boolean>();
   const availableColors = product.getAvailableColors();
   const availableSizes = product.getAvailableSizes();
-  const frontImage = product.getImagesByColor(availableColors[0].name)[0];
-  const modelImage = product.getImagesByColor(availableColors[0].name)[1];
-
-  function handleMouseOver() {
-    setIsImageHovered(true);
-  }
-  function handleMouseOut() {
-    setIsImageHovered(false);
-  }
-
+  const finalViewOptions = {
+    colorVisibility: "default",
+    sizeVisibility: "default",
+    defaultImageIndex: 0,
+    hoverImageIndex: 1,
+    showModelImage: false,
+    ...viewOptions,
+  };
+  const defaultImage = product.getImagesByColor(availableColors[0].name)[
+    finalViewOptions.defaultImageIndex as number
+  ];
+  const hoverImage = product.getImagesByColor(availableColors[0].name)[
+    finalViewOptions.hoverImageIndex as number
+  ];
   const productCardImage = (
     <Link
-      onMouseOver={!isModelViewActive ? handleMouseOver : undefined}
-      onMouseOut={!isModelViewActive ? handleMouseOut : undefined}
       href={`${nextServerUrl}/products/${product.data.documentId}`}
       className="relative block"
     >
       <Image
         className={`absolute inset-0 transition-opacity duration-700 ${
-          isImageHovered || isModelViewActive ? "opacity-0" : "opacity-100"
+          finalViewOptions.showModelImage || isImageHovered
+            ? "opacity-0"
+            : "opacity-100"
         }`}
-        src={apiBaseUrl + frontImage.url}
-        alt={frontImage.alternativeText}
-        width={frontImage.width}
-        height={frontImage.height}
+        src={apiBaseUrl + defaultImage.url}
+        alt={defaultImage.alternativeText}
+        width={defaultImage.width}
+        height={defaultImage.height}
       />
       <Image
         className={`transition-opacity duration-700 ${
-          isImageHovered || isModelViewActive ? "opacity-100" : "opacity-0"
+          finalViewOptions.showModelImage || isImageHovered
+            ? "opacity-100"
+            : "opacity-0"
         }`}
-        src={apiBaseUrl + modelImage.url}
-        alt={modelImage.alternativeText}
-        width={modelImage.width}
-        height={modelImage.height}
+        src={apiBaseUrl + hoverImage.url}
+        alt={hoverImage.alternativeText}
+        width={hoverImage.width}
+        height={hoverImage.height}
       />
     </Link>
   );
-
   return (
     <div className="group flex flex-col gap-4">
-      {hoverMode === "full-hover" && (
-        <div
-          className="relative"
-          onMouseOver={handleMouseOver}
-          onMouseOut={handleMouseOut}
-        >
-          {productCardImage}
+      <div
+        className="relative"
+        onMouseOver={() => setIsImageHovered(true)}
+        onMouseOut={() => setIsImageHovered(false)}
+      >
+        {productCardImage}
+        {buttonOptions && (
           <button
-            onClick={() => setIsProductModalOpen(true)}
+            onClick={() =>
+              buttonOptions?.onClick
+                ? buttonOptions?.onClick(product, true)
+                : undefined
+            }
             className="invisible absolute bottom-4 left-0 right-0 m-auto flex w-4/5 flex-row items-center justify-center gap-2 bg-stone-800 bg-opacity-70 px-4 py-3 text-sm text-white hover:bg-opacity-85 group-hover:visible"
           >
             مشاهده سریع
             <FontAwesomeIcon icon={faSearch} className="text-sm" />
           </button>
-        </div>
-      )}
-      {hoverMode === "image-hover" && productCardImage}
+        )}
+      </div>
+      {/* product name & price */}
       <div className="flex flex-col gap-3">
-        {/* product name */}
         <Link
           href={`${nextServerUrl}/products/${product.data.documentId}`}
           className="text-sm font-medium text-stone-600"
         >
           {product.data.name + " " + product.data.id.toLocaleString("fa-ir")}
         </Link>
-        {/* price */}
         <div className="flex flex-row items-center gap-2 text-[13px] text-stone-600">
           <span
             className={classNames(product.data.salePrice && "line-through")}
@@ -114,12 +128,13 @@ export default function ProductCard({
         </div>
       </div>
       {/* product colors and sizes */}
-      <div
-        className={classNames("flex flex-col gap-3", {
-          "invisible group-hover:visible": hoverMode === "full-hover",
-        })}
-      >
-        <div className="flex flex-row gap-1">
+      <div className={classNames("flex flex-col gap-3")}>
+        <div
+          className={classNames("flex flex-row gap-1", {
+            "invisible group-hover:visible":
+              finalViewOptions.colorVisibility === "onHover",
+          })}
+        >
           {availableColors.map((color, index) => (
             <span
               key={index}
@@ -128,7 +143,12 @@ export default function ProductCard({
             />
           ))}
         </div>
-        <div className="flex flex-row gap-1">
+        <div
+          className={classNames("flex flex-row gap-1", {
+            "invisible group-hover:visible":
+              finalViewOptions.sizeVisibility === "onHover",
+          })}
+        >
           {availableSizes.map((size, index) => (
             <span
               key={index}
@@ -139,11 +159,6 @@ export default function ProductCard({
           ))}
         </div>
       </div>
-      <ProductModal
-        product={product}
-        isOpen={isProductModalOpen}
-        onOpenChange={(value) => setIsProductModalOpen(value)}
-      />
     </div>
   );
 }

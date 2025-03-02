@@ -22,23 +22,23 @@ export default function ProductModal({
 }: {
   isOpen: boolean;
   onOpenChange: (value: boolean) => void;
-  product: ProductModel;
+  product: ProductModel | null;
 }) {
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedSize, setSelectedSize] = useState<string | undefined>();
   const [isSizeErrorVisible, setIsSizeErrorVisible] = useState<boolean>(false);
+  if (!product) return <div>product is not available</div>;
   const defaultColor = product?.getAvailableColors()[0].name;
   const selectedProduct = {
-    id: product.data.id,
-    documentId: product.data.documentId,
-    name: product.data.name,
-    originalPrice: product.data.originalPrice,
-    salePrice: product.data.salePrice,
+    id: product?.data.id,
+    documentId: product?.data.documentId,
+    name: product?.data.name,
+    originalPrice: product?.data.originalPrice,
+    salePrice: product?.data.salePrice,
     color: selectedColor,
     size: selectedSize,
-    image: product.getImagesByColor(selectedColor ?? defaultColor)?.[0],
+    image: product?.getImagesByColor(selectedColor ?? defaultColor)?.[0],
   };
-
   return (
     <Dialog.Root
       modal
@@ -150,7 +150,7 @@ export default function ProductModal({
                         triggerButtonText={["توضیحات"]}
                         triggerButtonClass="font-medium text-base"
                         items={[
-                          <div className="flex flex-col gap-10">
+                          <div className="flex flex-col gap-10" key={0}>
                             <div className="flex flex-col gap-4 text-sm font-light text-stone-800">
                               {Object.values(product.data.information).map(
                                 (value, index) => (

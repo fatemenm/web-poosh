@@ -50,25 +50,25 @@ export default function Page({ params }: { params: { categoryId: string } }) {
   const onSale = Boolean(searchParams.get("on-sale"));
   const subCategoryType = searchParams.get("jean") ?? "";
   const [showModelImage, setShowImageModel] = useState<boolean>(false);
-  const [gridColumns, setGridColumns] = useState<5 | 7>(5);
+  const [gridColumns, setGridColumns] = useState<number>(5);
 
   useEffect(() => {
     const getData = async () => {
-      const category = await getCategoryById(params.categoryId);
-      const colors = await getCategoryColors(category);
-      const sizes = await getCategorySizes(category);
+      const [category, colors, sizes, products] = await Promise.all([
+        getCategoryById(params.categoryId),
+        getCategoryColors(),
+        getCategorySizes(),
+        getProducts(params.categoryId, {
+          color: selectedColors,
+          size: selectedSizes,
+          onSale: onSale,
+          categoryFilter: subCategoryType,
+        }),
+      ]);
 
       setCategory(category);
       setColors(colors);
       setSizes(sizes);
-
-      const products = await getProducts(category.name, {
-        color: selectedColors,
-        size: selectedSizes,
-        onSale: onSale,
-        categoryFilter: subCategoryType,
-      });
-
       setProducts(products);
     };
     getData();
@@ -267,8 +267,11 @@ export default function Page({ params }: { params: { categoryId: string } }) {
               <div key={index}>
                 <ProductCard
                   product={item}
-                  hoverMode="image-hover"
-                  isModelViewActive={showModelImage}
+                  viewOptions={{
+                    // defaultImageIndex: showModelImage ? 1 : 0,
+                    // hoverImageIndex: showModelImage ? 0 : 1,
+                    showModelImage: showModelImage ? true : false,
+                  }}
                 />
               </div>
             ))}

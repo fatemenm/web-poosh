@@ -3,11 +3,12 @@
 import { nextServerUrl } from "@config";
 import classNames from "classnames";
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import React from "react";
 
 import ProductCard from "@/(pages)/_components/productCard";
+import ProductModal from "@/(pages)/_components/productModal";
 import Accordion from "@/_components/accordion";
 import BreadCrumb from "@/_components/breadcrumb";
 import { getCategories, getProducts, getProductsCount } from "@/_lib/data";
@@ -38,6 +39,10 @@ export default function Page() {
   const [categories, setCategories] = useState<Category[] | null>();
   const [products, setProducts] = useState<ProductModel[] | null>();
   const [productCount, setProductCount] = useState<number>(0);
+  const [selectedProduct, setSelectedProduct] = useState<ProductModel | null>(
+    null
+  );
+  const [isProductModalOpen, setIsProductModalOpen] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const pageNumber = Number(searchParams.get("page") ?? 1);
@@ -77,15 +82,16 @@ export default function Page() {
             triggerButtonText={["لباس"]}
             triggerButtonClass="text-sm"
             items={[
-              <ul className="flex flex-col space-y-3 pr-3">
-                {categories.map((item, index) => (
-                  <li className="text-sm font-light text-stone-700" key={index}>
-                    <Link href={nextServerUrl + "/category/" + item.documentId}>
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>,
+              categories.map((item) => (
+                <div
+                  key={item.documentId}
+                  className="py-2 pr-3 text-sm font-light text-stone-700"
+                >
+                  <Link href={nextServerUrl + "/category/" + item.documentId}>
+                    {item.name}
+                  </Link>
+                </div>
+              )),
             ]}
           />
         </div>
@@ -98,7 +104,24 @@ export default function Page() {
           <div className="grid grid-cols-4 gap-x-8 gap-y-14">
             {products.map((item, index) => (
               <div key={index}>
-                <ProductCard product={item} hoverMode="full-hover" />
+                <ProductCard
+                  product={item}
+                  buttonOptions={{
+                    text: "مشاهده سریع",
+                    iconName: "faSearch",
+                    onClick: (
+                      product: ProductModel,
+                      isProductModalOpen: boolean
+                    ) => {
+                      setSelectedProduct(product);
+                      setIsProductModalOpen(isProductModalOpen);
+                    },
+                  }}
+                  viewOptions={{
+                    colorVisibility: "onHover",
+                    sizeVisibility: "onHover",
+                  }}
+                />
               </div>
             ))}
           </div>
@@ -145,6 +168,11 @@ export default function Page() {
           </Pagination>
         </div>
       </div>
+      <ProductModal
+        isOpen={isProductModalOpen}
+        product={selectedProduct}
+        onOpenChange={(value) => setIsProductModalOpen(value)}
+      />
     </div>
   );
 }
