@@ -42,7 +42,7 @@ export default function Accordion({
                 />
               </RadixAccordion.Trigger>
             </RadixAccordion.Header>
-            <RadixAccordion.Content className="mt-4 overflow-hidden px-5 data-[state=closed]:animate-slideUp data-[state=open]:animate-slideDown">
+            <RadixAccordion.Content className="mt-1 overflow-hidden px-5 data-[state=closed]:animate-slideUp data-[state=open]:animate-slideDown">
               {item}
             </RadixAccordion.Content>
           </RadixAccordion.Item>
