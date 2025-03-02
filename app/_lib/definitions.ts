@@ -31,6 +31,7 @@ export type NavbarItem = {
 
 export type NavigationLink = {
   name: string;
+  url: string;
   row: number;
   col: number;
 };
