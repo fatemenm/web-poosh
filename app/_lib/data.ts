@@ -33,8 +33,8 @@ function createUrl(baseUrl: string, options: optionsType = {}) {
   const params = new URLSearchParams({});
   if (options.sort) params.append("sort", options.sort);
   if (options.populates)
-    for (const [index, query] of options.populates.entries()) {
-      params.append(`populate[${index}]`, query);
+    for (const [index, value] of options.populates.entries()) {
+      params.append(`populate[${index}]`, value);
     }
   if (options.pathParams) {
     for (const [key, value] of Object.entries(options.pathParams)) {
@@ -112,7 +112,12 @@ export async function getHeroBanners() {
 export async function getCategories() {
   try {
     const url = createUrl(urls.getCategories, {
-      populates: ["preSetFilters", "preSetFilters.image", "image", "sizeGuideImage"],
+      populates: [
+        "preSetFilters",
+        "preSetFilters.image",
+        "image",
+        "sizeGuideImage",
+      ],
       sort: "index",
     });
     const response = await fetch(url.href);
@@ -173,7 +178,7 @@ export async function getClotheSetBanners() {
 }
 
 export async function getProducts(
-  categoryName?: string,
+  categoryId?: string,
   filters?: {
     color?: string[];
     size?: string[];
@@ -202,11 +207,16 @@ export async function getProducts(
     const body: responseBody = await response.json();
     const data = body.data as Product[];
     let products = data.map((item) => new ProductModel(item));
-    if (categoryName) {
+    if (categoryId) {
       products = products.filter(
-        (item) => item.data.category.name === categoryName
+        (item) => item.data.category.documentId === categoryId
       );
-      if (categoryName === "شلوار جین" && filters && filters.categoryFilter) {
+      // TODO: fix this
+      if (
+        categoryId === "p8fth3i5mmkeo0ij4fgm4tsh" &&
+        filters &&
+        filters.categoryFilter
+      ) {
         products = products.filter((p) =>
           p.data.name.includes(filters.categoryFilter as string)
         );
@@ -283,7 +293,7 @@ export async function getProductById(documentId: string) {
   }
 }
 
-export async function getCategoryColors(category: Category) {
+export async function getCategoryColors() {
   return [
     {
       name: "آبی تیره",
@@ -304,6 +314,6 @@ export async function getCategoryColors(category: Category) {
   ];
 }
 
-export async function getCategorySizes(category: Category) {
+export async function getCategorySizes() {
   return ["31", "32", "33", "34", "35"];
 }
