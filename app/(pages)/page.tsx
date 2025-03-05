@@ -38,7 +38,7 @@ export default function Page() {
           getHeroBanners(),
           getCategories(),
           getClotheSetBanners(),
-          getProducts(),
+          (await getProducts()).products,
         ]);
       const data = { heroBanners, categories, clothingSetBanners, products };
       setData(data);
@@ -46,6 +46,7 @@ export default function Page() {
     getData();
   }, []);
   if (!data) return <div>data is not available</div>;
+
   return (
     <div className="flex flex-col items-center">
       {/* Hero Banners */}
@@ -85,15 +86,15 @@ export default function Page() {
           containerClass="my-16 px-20"
           setting={sliderSetting}
           items={data.categories}
-          renderItem={(item, isSwiping) => {
+          renderItem={(item, ctx: { isSwiping: boolean }) => {
             return (
               <Link
+                target="_blank"
                 href={nextServerUrl + "/category/" + item.documentId}
                 key={item.id}
                 className="flex cursor-pointer flex-col items-center px-4 outline-none"
                 onClick={(e) => {
-                  if (isSwiping) e.preventDefault();
-                  else console.log(item.name);
+                  if (ctx.isSwiping) e.preventDefault();
                 }}
               >
                 <Image
@@ -177,10 +178,6 @@ export default function Page() {
                 className="cursor-pointer px-4 outline-none"
                 onClick={(e) => {
                   if (ctx.isSwiping) e.preventDefault();
-                  else
-                    router.push(
-                      `${nextServerUrl}/products/${item.data.documentId}`
-                    );
                 }}
               >
                 <Image
@@ -193,9 +190,7 @@ export default function Page() {
                   style={{ direction: "rtl" }}
                   className="mt-4 flex flex-col items-center gap-2 text-center text-sm text-stone-600"
                 >
-                  <span className="font-medium">
-                    {item.data.id.toLocaleString("fa-IR")} {item.data.name}
-                  </span>
+                  <span className="font-medium">{item.data.name}</span>
                   <div className="flex flex-row items-center gap-3">
                     <span
                       className={classNames(
@@ -216,7 +211,9 @@ export default function Page() {
                           %)
                         </span>
                         <span className="text-red-600">
-                          {item.data.salePrice.toLocaleString("fa-IR")} تومان
+                          {Boolean(item.data.salePrice) &&
+                            item.data.salePrice.toLocaleString("fa-IR")}{" "}
+                          تومان
                         </span>
                       </div>
                     ) : null}
