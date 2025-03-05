@@ -17,7 +17,7 @@ import ProductDetails from "./_components/productDetails";
 import SizeGuideModal from "./_components/sizeGuideModal";
 
 const sliderSetting = {
-  infinite: false,
+  infinite: true,
   slidesToScroll: 1,
   slidesToShow: 5,
 };
@@ -35,12 +35,10 @@ export default function Product({ params }: { params: { productId: string } }) {
 
   useEffect(() => {
     const getData = async () => {
-      const [product, relatedProducts] = await Promise.all([
-        getProductById(params.productId),
-        getProducts(),
-      ]);
+      const product = await getProductById(params.productId);
+      const res = await getProducts();
       setProduct(product);
-      setRelatedProducts(relatedProducts);
+      setRelatedProducts(res.products);
     };
     getData();
   }, [params.productId]);
@@ -57,7 +55,7 @@ export default function Product({ params }: { params: { productId: string } }) {
       href: nextServerUrl + "/category/" + product.data.category.documentId,
     },
     {
-      label: product.data.name + " " + product.data.id,
+      label: product.data.name,
       href: ".",
     },
   ];
@@ -90,10 +88,6 @@ export default function Product({ params }: { params: { productId: string } }) {
                 className="flex cursor-pointer flex-col items-center outline-none"
                 onClick={(e) => {
                   if (ctx.isSwiping) e.preventDefault();
-                  else
-                    router.push(
-                      `${nextServerUrl}/products/${item.data.documentId}`
-                    );
                 }}
               >
                 <Image
@@ -107,9 +101,7 @@ export default function Product({ params }: { params: { productId: string } }) {
                   style={{ direction: "rtl" }}
                   className="mt-4 flex flex-col items-center gap-2 text-center text-sm text-stone-600"
                 >
-                  <span className="font-medium">
-                    {item.data.id.toLocaleString("fa-IR")} {item.data.name}
-                  </span>
+                  <span className="font-medium">{item.data.name}</span>
                   <div className="flex flex-row items-center gap-3">
                     <span
                       className={classNames(
@@ -137,7 +129,6 @@ export default function Product({ params }: { params: { productId: string } }) {
           sizeTableInfo: product.data.category.sizeTable,
           information: product.data.information,
           sizeGuideImage: product.data.category.sizeGuideImage,
-          productId: product.data.id,
           productName: product.data.name,
           productImages: product.getImagesByColor(
             selectedColor ?? defaultColor

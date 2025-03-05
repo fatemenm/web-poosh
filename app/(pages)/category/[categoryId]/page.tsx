@@ -54,22 +54,25 @@ export default function Page({ params }: { params: { categoryId: string } }) {
 
   useEffect(() => {
     const getData = async () => {
-      const [category, colors, sizes, products] = await Promise.all([
+      const [category, colors, sizes, res] = await Promise.all([
         getCategoryById(params.categoryId),
-        getCategoryColors(),
-        getCategorySizes(),
-        getProducts(params.categoryId, {
-          color: selectedColors,
-          size: selectedSizes,
-          onSale: onSale,
-          categoryFilter: subCategoryType,
+        getCategoryColors(params.categoryId),
+        getCategorySizes(params.categoryId),
+        getProducts({
+          filters: {
+            categoryId: params.categoryId,
+            color: selectedColors,
+            size: selectedSizes,
+            onSale: onSale,
+            categoryFilter: subCategoryType,
+          },
         }),
       ]);
 
       setCategory(category);
       setColors(colors);
       setSizes(sizes);
-      setProducts(products);
+      setProducts(res.products);
     };
     getData();
   }, [params.categoryId, searchParams]);
@@ -97,7 +100,6 @@ export default function Page({ params }: { params: { categoryId: string } }) {
 
   if (!category || !products || !sizes || !colors)
     return <div> data is not available.</div>;
-
   return (
     <div className="mx-auto mb-10 flex w-10/12 flex-col gap-8">
       <div className="flex flex-col items-center gap-4">
@@ -228,7 +230,7 @@ export default function Page({ params }: { params: { categoryId: string } }) {
                   {colors.map((color, index) => {
                     return (
                       <ToggleGroup.Item
-                        value={color.hexCode}
+                        value={color.name}
                         key={index}
                         style={{
                           color: color.hexCode,
