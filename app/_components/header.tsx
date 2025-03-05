@@ -1,15 +1,16 @@
 "use client";
 
-import { apiBaseUrl } from "@config";
+import { apiBaseUrl, nextServerUrl } from "@config";
 import {
   faBagShopping,
   faSearch,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import PromoBanner from "@/_components/promoBanner";
 import {
@@ -22,14 +23,14 @@ import logo from "@public/logo.png";
 
 function getClassNames(item: NavbarItem, isHovered: boolean) {
   const baseClasses =
-    "flex items-center text-stone-700 font-medium border-b-2 ";
+    "flex items-center text-stone-700 font-medium border-b-2 px-5";
   let situationalClasses = "";
   if (isHovered && item.isExpandable)
     situationalClasses = "cursor-pointer border-b-transparent";
   else if (isHovered && !item.isExpandable)
     situationalClasses = "cursor-pointer border-gray-900";
   else situationalClasses = "border-b-transparent";
-  return baseClasses + situationalClasses;
+  return baseClasses + " " + situationalClasses;
 }
 
 function createSublinkGrid(items: NavigationLink[] | undefined) {
@@ -43,21 +44,14 @@ function createSublinkGrid(items: NavigationLink[] | undefined) {
 }
 
 export default function Header({
-  promoBannerData,
-  navbarItemsData,
+  promoBanner,
+  navbarItems,
 }: {
-  promoBannerData: PromoBannerType | undefined;
-  navbarItemsData: NavbarItem[] | undefined;
+  promoBanner: PromoBannerType | undefined;
+  navbarItems: NavbarItem[] | undefined;
 }) {
-  const [promoBanner, setPromoBanner] = useState<PromoBannerType>();
-  const [navbarItems, setNavbarItems] = useState<Array<NavbarItem>>();
   const [hoveredNavbarItem, setHoveredNavbarItem] =
     useState<NavbarItem | null>();
-
-  useEffect(() => {
-    setNavbarItems(navbarItemsData);
-    setPromoBanner(promoBannerData);
-  }, []);
 
   return (
     <header className="flex shrink-0 flex-col items-center">
@@ -74,7 +68,7 @@ export default function Header({
             </Link>
           </div>
           {navbarItems && (
-            <nav className="flex flex-row justify-between gap-8 text-sm">
+            <nav className="flex flex-row justify-between text-sm">
               {navbarItems.map((item) => {
                 return (
                   <Link
@@ -94,18 +88,44 @@ export default function Header({
             </nav>
           )}
         </div>
-        <div className="flex flex-row justify-between gap-8">
-          <button>
-            <FontAwesomeIcon icon={faSearch} className="text-xl" />
-          </button>
-
-          <button>
-            <FontAwesomeIcon icon={faUser} className="text-xl" />
-          </button>
-          <button>
-            <FontAwesomeIcon icon={faBagShopping} className="text-xl" />
-          </button>
-        </div>
+        <NavigationMenu.Root dir="rtl" className="w-1/4">
+          <NavigationMenu.List className="flex flex-row justify-end gap-10">
+            <NavigationMenu.Item>
+              <NavigationMenu.Trigger>
+                <FontAwesomeIcon icon={faSearch} className="text-xl" />
+              </NavigationMenu.Trigger>
+              <NavigationMenu.Content className="absolute left-0 top-12 bg-gray-100">
+                <NavigationMenu.Link />
+              </NavigationMenu.Content>
+            </NavigationMenu.Item>
+            <NavigationMenu.Item>
+              <NavigationMenu.Trigger>
+                <FontAwesomeIcon icon={faUser} className="text-xl" />
+              </NavigationMenu.Trigger>
+              <NavigationMenu.Content>
+                <NavigationMenu.Link />
+              </NavigationMenu.Content>
+            </NavigationMenu.Item>
+            <NavigationMenu.Item>
+              <NavigationMenu.Trigger>
+                <FontAwesomeIcon icon={faBagShopping} className="text-xl" />
+              </NavigationMenu.Trigger>
+              <NavigationMenu.Content className="absolute left-0 top-12 w-full bg-white p-4">
+                <div className="flex flex-col gap-6">
+                  <span className="text-lg">سبد خرید</span>
+                  <button
+                    className={
+                      "w-full bg-green-700 py-2 text-sm text-white hover:bg-green-800"
+                    }
+                  >
+                    جزییات سبد خرید
+                  </button>
+                </div>
+                <NavigationMenu.Link />
+              </NavigationMenu.Content>
+            </NavigationMenu.Item>
+          </NavigationMenu.List>
+        </NavigationMenu.Root>
       </div>
       {hoveredNavbarItem?.isExpandable && (
         <div className="absolute top-24 z-10 w-screen">
@@ -126,7 +146,9 @@ export default function Header({
                         {col.map((item, rowNumber) => {
                           return (
                             <li key={rowNumber}>
-                              <a href={item.linkUrl}>{item.linkText}</a>
+                              <Link href={nextServerUrl + item.url}>
+                                {item.name}
+                              </Link>
                             </li>
                           );
                         })}

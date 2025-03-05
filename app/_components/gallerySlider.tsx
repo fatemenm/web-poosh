@@ -8,7 +8,6 @@ import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import classNames from "classnames";
 import Image from "next/image";
 import { useState } from "react";
-import { Settings } from "react-slick";
 
 import Slider from "@/_components/slider";
 import { Image as ImageType } from "@/_lib/definitions";
@@ -19,20 +18,22 @@ export default function GallerySlider({
   containerClass,
   setting = {},
   isExpandable = false,
+  dotsClassName = styles.slickDots,
 }: {
   images: ImageType[];
   containerClass?: string;
-  setting?: Settings;
+  setting?: Record<string, unknown>;
   isExpandable: boolean;
+  dotsClassName?: string;
 }) {
   const [viewMode, setViewMode] = useState<"default" | "expanded" | "zoomed">(
     "default"
   );
+
   if (!images || images.length === 0) {
     console.error("GallerySlider requires a non-empty images array.");
     return null;
   }
-
   const { width: imgThumbnailWidth, height: imgThumbnailHeight } =
     images[0].formats.thumbnail;
   const baseSetting = {
@@ -49,7 +50,7 @@ export default function GallerySlider({
       );
     },
     dots: true,
-    dotsClass: classNames(styles.slickDots, {
+    dotsClass: classNames(dotsClassName, {
       [styles.slickDotsFullScreen]: viewMode !== "default",
     }),
     speed: 800,
@@ -83,8 +84,8 @@ export default function GallerySlider({
               <Slider
                 containerClass={containerClass}
                 setting={{ ...baseSetting, ...setting }}
-              >
-                {images.map((img) => {
+                items={images}
+                renderItem={(img, ctx: { isSwiping: boolean }) => {
                   return (
                     <div
                       key={img.id}
@@ -96,11 +97,12 @@ export default function GallerySlider({
                       )}
                     >
                       <Image
-                        onClick={() =>
-                          viewMode === "expanded"
-                            ? setViewMode("zoomed")
-                            : setViewMode("expanded")
-                        }
+                        onClick={(e) => {
+                          if (ctx.isSwiping) e.preventDefault();
+                          else if (viewMode === "expanded")
+                            setViewMode("zoomed");
+                          else setViewMode("expanded");
+                        }}
                         src={apiBaseUrl + img.url}
                         width={img.width}
                         height={img.height}
@@ -114,8 +116,8 @@ export default function GallerySlider({
                       />
                     </div>
                   );
-                })}
-              </Slider>
+                }}
+              />
             </div>
           </Dialog.Content>
         </Dialog.Overlay>
@@ -128,26 +130,26 @@ export default function GallerySlider({
       <Slider
         containerClass={containerClass}
         setting={{ ...baseSetting, ...setting }}
-      >
-        {images.map((img) => {
+        items={images}
+        renderItem={(img, ctx: { isSwiping: boolean }) => {
           return (
-            <div key={img.id}>
-              <Image
-                onClick={
-                  isExpandable ? () => setViewMode("expanded") : undefined
-                }
-                src={apiBaseUrl + img.url}
-                width={img.width}
-                height={img.height}
-                alt={img.alternativeText}
-                quality={100}
-                priority
-                className="cursor-zoomIn"
-              />
-            </div>
+            <Image
+              key={img.id}
+              onClick={(e) => {
+                if (!isExpandable || ctx.isSwiping) e.preventDefault();
+                else setViewMode("expanded");
+              }}
+              src={apiBaseUrl + img.url}
+              width={img.width}
+              height={img.height}
+              alt={img.alternativeText}
+              quality={100}
+              priority
+              className={classNames({ "cursor-zoomIn": isExpandable })}
+            />
           );
-        })}
-      </Slider>
+        }}
+      />
       {modal}
     </div>
   );

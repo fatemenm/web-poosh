@@ -8,14 +8,9 @@ export type PromoBanner = {
 };
 
 export type responseBody = {
-  data: Record<string, unknown>[] | unknown;
-  meta: {
-    pagination: {
-      page: number;
-      pageSize: number;
-      pageCount: number;
-      total: number;
-    };
+  data?: Record<string, unknown>[] | unknown;
+  meta?: {
+    pagination: Pagination;
   };
 };
 
@@ -30,8 +25,8 @@ export type NavbarItem = {
 };
 
 export type NavigationLink = {
-  linkText: string;
-  linkUrl: string;
+  name: string;
+  url: string;
   row: number;
   col: number;
 };
@@ -67,10 +62,21 @@ export type HeroBanner = {
 };
 
 export type Category = {
+  documentId: string;
   id: number;
   index: number;
   name: string;
   image: Image;
+  preSetFilters: Filter[];
+  sizeGuideImage: Image;
+  sizeTable: Record<string, string>[];
+  careTips: string[];
+};
+
+export type Filter = {
+  query: Record<string, string>;
+  image: Image;
+  index: number;
 };
 
 export type ClotheSetBanner = {
@@ -81,10 +87,42 @@ export type ClotheSetBanner = {
   title: string;
 };
 
-export type ClotheProduct = {
-  documentId: string;
+export type Product = {
   id: number;
+  documentId: string;
   name: string;
-  price: string;
-  images: Image[];
+  originalPrice: number;
+  salePrice: number;
+  category: Category;
+  sizes: string[];
+  colors: Color[];
+  stocks: Stock[];
+  information: {
+    productInfo: string;
+    modelSizeInfo: string;
+    colorInfo: string;
+  };
+  imagesByColor: Array<{
+    color: string;
+    images: Image[];
+  }>;
+};
+
+export type Color = {
+  name: string;
+  hexCode: string;
+};
+
+export type Stock = {
+  id: number;
+  size: string;
+  color: string;
+  quantity: number;
+};
+
+export type Pagination = {
+  page: number;
+  pageSize: number;
+  pageCount: number;
+  total: number;
 };

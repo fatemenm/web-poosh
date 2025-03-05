@@ -7,14 +7,12 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ReactNode } from "react";
 import { CustomArrowProps } from "react-slick";
-import { Settings } from "react-slick";
 
 import Slider from "@/_components/slider";
 import styles from "@/_styles/basicSlider.module.css";
 
 function LeftArrow(props: CustomArrowProps) {
   const { className, style, onClick } = props;
-
   return (
     <div
       className={`${className} ${styles.slickPrev}`}
@@ -54,26 +52,28 @@ function RightArrow(props: CustomArrowProps) {
   );
 }
 
-export default function BasicSlider({
+export default function BasicSlider<T>({
   containerClass,
   setting,
-  children,
+  items,
+  renderItem,
 }: {
   containerClass?: string;
-  setting?: Settings;
-  children: ReactNode;
+  setting?: Record<string, unknown>;
+  items: T[];
+  renderItem: (item: T, ctx: { isSwiping: boolean }) => ReactNode;
 }) {
   return (
     <Slider
+      renderItem={renderItem}
+      items={items}
       containerClass={containerClass}
       setting={{
-        infinite: true,
         nextArrow: <RightArrow />,
         prevArrow: <LeftArrow />,
+        initialSlide: Math.floor(items.length / 2),
         ...setting,
       }}
-    >
-      {children}
-    </Slider>
+    />
   );
 }

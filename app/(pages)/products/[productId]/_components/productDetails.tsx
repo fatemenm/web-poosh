@@ -1,51 +1,55 @@
 "use client";
 
-import {
-  faChevronLeft,
-  faLocationDot,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
 import { useState } from "react";
 
+import ColorSelector from "@/_components/colorSelector";
 import GallerySlider from "@/_components/gallerySlider";
-import { ClotheProduct } from "@/_lib/definitions";
+import SizeSelector from "@/_components/sizeSelector";
+import { ProductModel } from "@/_models/product.model";
 
-import ColorSelector from "./colorSelector";
 import { ProductHeader } from "./productHeader";
-import SizeGuide from "./sizeGuide";
-import SizeSelector from "./sizeSelector";
-
-const colors = [
-  { name: "آبی روشن", colorCode: "#90b3de", isAvailable: true },
-  { name: "خاکستری", colorCode: "#808080", isAvailable: false },
-];
-const sizes = [
-  { value: "31", isAvailable: true },
-  { value: "32", isAvailable: true },
-  { value: "33", isAvailable: false },
-  { value: "34", isAvailable: true },
-  { value: "35", isAvailable: true },
-];
-const defaultColor = "آبی روشن";
 
 export default function ProductDetails({
   product,
+  selectedColor,
+  onSelectColor,
+  onClickSizeGuideLink,
 }: {
-  product: ClotheProduct;
+  product: ProductModel;
+  selectedColor: string;
+  onSelectColor: (value: string) => void;
+  onClickSizeGuideLink: () => void;
 }) {
-  const [isProductAvailable, setIsProductAvailable] = useState<boolean>(false);
-  const [selectedColor, setSelectedColor] = useState<string>(defaultColor);
-  console.log(setIsProductAvailable);
+  const [selectedSize, setSelectedSize] = useState<string | undefined>();
+  const [isSizeErrorVisible, setIsSizeErrorVisible] = useState<boolean>(false);
+
+  const selectedProduct = {
+    id: product.data.id,
+    documentId: product.data.documentId,
+    name: product.data.name,
+    originalPrice: product.data.originalPrice,
+    salePrice: product.data.salePrice,
+    color: selectedColor,
+    size: selectedSize,
+    image: product.getImagesByColor(selectedColor)?.[0],
+  };
+
   return (
     <div className="flex flex-row justify-end gap-10">
       <div className="block w-5/12">
-        <GallerySlider images={product.images} isExpandable={true} />
+        {
+          <GallerySlider
+            images={product.getImagesByColor(selectedColor)}
+            isExpandable={true}
+          />
+        }
       </div>
       <div className="ml-32 flex w-3/12 flex-col gap-6 text-right">
         <ProductHeader
-          name={product.name}
-          price={product.price}
-          id={product.id}
+          name={product.data.name}
+          originalPrice={product.data.originalPrice}
+          salePrice={product.data.salePrice}
         />
         <hr />
         <div className="flex flex-col gap-6 text-stone-800">
@@ -54,36 +58,55 @@ export default function ProductDetails({
             <span className="pr-1 font-normal">{selectedColor}</span>
           </div>
           <ColorSelector
-            colors={colors}
-            onSelect={setSelectedColor}
-            defaultColor={defaultColor}
+            selectedColor={selectedColor}
+            colors={product.getAvailableColors()}
+            onSelect={(color: string) => {
+              onSelectColor(color);
+              setSelectedSize("");
+              setIsSizeErrorVisible(false);
+            }}
           />
         </div>
-
-        <SizeSelector sizes={sizes} />
-        <SizeGuide images={product.images} />
+        <SizeSelector
+          sizes={product.getAvailableSizes(selectedColor)}
+          selectedSize={selectedSize}
+          onSelect={(size: string) => {
+            setSelectedSize(size);
+            setIsSizeErrorVisible(false);
+          }}
+        />
+        <button
+          onClick={onClickSizeGuideLink}
+          className="border-non flex w-fit flex-row gap-3 border-none pr-1 text-sm text-blue-500 underline underline-offset-8"
+        >
+          <Image
+            className="rotate-45"
+            src="/ruler.png"
+            width="24"
+            height="24"
+            alt="راهنمای سایز"
+            quality={100}
+          />
+          <span className="text-blue-500 underline underline-offset-8">
+            راهنمای سایز
+          </span>
+        </button>
         <span className="text-sm font-light text-stone-800">
           ارسال رایگان برای خرید بالای ۲,۰۰۰,۰۰۰ تومان
         </span>
+        {isSizeErrorVisible && (
+          <div className="bg-red-700 px-4 py-3 text-sm font-light text-white">
+            لطفا سایز را انتخاب کنید
+          </div>
+        )}
         <button
-          onClick={() => console.log("clicked")}
-          disabled={isProductAvailable}
-          className={`py-5 text-sm text-white ${isProductAvailable ? "bg-neutral-400 hover:bg-neutral-400" : "bg-green-700 hover:bg-green-800"}`}
+          onClick={() => {
+            if (!selectedProduct.size) setIsSizeErrorVisible(true);
+            else console.log(selectedProduct);
+          }}
+          className={"bg-green-700 py-5 text-sm text-white hover:bg-green-800"}
         >
-          {isProductAvailable ? "ناموجود" : "اضافه به سبد خرید"}
-        </button>
-
-        <button
-          onClick={() => console.log("clicked second button")}
-          className="mt-4 flex flex-row justify-between px-4 py-3 text-sm text-stone-800 outline outline-1 hover:bg-stone-800 hover:text-stone-50"
-        >
-          <span>
-            <FontAwesomeIcon icon={faLocationDot} className="text-[20px]" />
-          </span>
-          مشاهده موجودی در فروشگاه حضوری
-          <span>
-            <FontAwesomeIcon icon={faChevronLeft} className="text-[20px]" />
-          </span>
+          اضافه به سبد خرید
         </button>
       </div>
     </div>

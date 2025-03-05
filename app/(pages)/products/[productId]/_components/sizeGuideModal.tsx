@@ -6,33 +6,53 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 
-import { Image as ProductImage } from "@/_lib/definitions";
+import { Image as ImageType } from "@/_lib/definitions";
 
-export default function SizeGuide({ images }: { images: ProductImage[] }) {
+type dataType = {
+  productImages: ImageType[];
+  sizeTableInfo: Record<string, string>[];
+  sizeGuideImage: ImageType;
+  information: {
+    productInfo: string;
+    modelSizeInfo: string;
+    colorInfo: string;
+  };
+  productName: string;
+};
+
+export default function SizeGuideModal({
+  isOpen,
+  onChangeOpen,
+  data,
+}: {
+  isOpen: boolean;
+  onChangeOpen: (value: boolean) => void;
+  data: dataType;
+}) {
   const [activeTab, setActiveTab] = useState<"sizeTable" | "measurementMethod">(
     "sizeTable"
   );
+  const {
+    sizeTableInfo,
+    information,
+    sizeGuideImage,
+    productName,
+    productImages,
+  } = data;
   return (
-    <Dialog.Root>
-      <Dialog.Trigger className="border-non mt-2 flex w-fit flex-row gap-3 border-none pr-1 text-sm text-blue-500 underline underline-offset-8">
-        <Image
-          className="rotate-45"
-          src="/ruler.png"
-          width="24"
-          height="24"
-          alt="راهنمای سایز"
-          quality={100}
-        />
-        <span className="text-sm text-blue-500 underline underline-offset-8">
-          راهنمای سایز
-        </span>
-      </Dialog.Trigger>
+    <Dialog.Root
+      modal
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) setActiveTab("sizeTable");
+        onChangeOpen(open);
+      }}
+    >
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 flex justify-center overflow-y-auto bg-black/50">
-          <Dialog.Content className="absolute my-6 flex w-full min-w-[300px] max-w-4xl flex-col rounded-md border border-stone-500 bg-white p-0">
+          <Dialog.Content className="absolute my-6 flex w-full min-w-[300px] max-w-4xl flex-col border border-stone-500 bg-white p-0">
             <VisuallyHidden.Root asChild>
               <Dialog.Title> راهنمای سایز</Dialog.Title>
             </VisuallyHidden.Root>
@@ -50,30 +70,29 @@ export default function SizeGuide({ images }: { images: ProductImage[] }) {
               <div className="flex w-1/2 flex-row items-center justify-center rounded-tr-md bg-stone-100">
                 <div className="flex w-fit flex-col gap-2 rounded-md bg-white px-4 py-5 shadow-sm">
                   <span className="text-xl font-normal text-stone-800">
-                    شلوار اسلش ۲۱۱۵۸
+                    {productName}
                   </span>
                   <hr />
                   <span className="text-sm text-stone-600">
-                    مدل با قد 183 سانتی‌متر و وزن 73 کیلوگرم سایز L را پوشیده
-                    است
+                    {information.modelSizeInfo}
                   </span>
                 </div>
               </div>
               <div className="w-1/4">
                 <Image
-                  src={apiBaseUrl + images[1].url}
-                  height={images[1].height}
-                  width={images[1].width}
-                  alt={images[1].alternativeText}
+                  src={apiBaseUrl + productImages[1].url}
+                  height={productImages[1].height}
+                  width={productImages[1].width}
+                  alt={productImages[1].alternativeText}
                 />
               </div>
               <div className="w-1/4">
                 <Image
                   className="rounded-tl-md"
-                  src={apiBaseUrl + images[0].url}
-                  height={images[0].height}
-                  width={images[0].width}
-                  alt={images[0].alternativeText}
+                  src={apiBaseUrl + productImages[0].url}
+                  height={productImages[0].height}
+                  width={productImages[0].width}
+                  alt={productImages[0].alternativeText}
                 />
               </div>
             </div>
@@ -98,13 +117,12 @@ export default function SizeGuide({ images }: { images: ProductImage[] }) {
                   <div className="text-sm font-light text-stone-800">
                     <p className="pb-2">
                       لطفا طبق{" "}
-                      <Link
-                        href="#"
+                      <button
                         onClick={() => setActiveTab("measurementMethod")}
                         className="text-blue-600"
                       >
                         روش اندازه گیری
-                      </Link>{" "}
+                      </button>{" "}
                       ارائه شده سایز مناسب خود را از جدول زیر انتخاب نمایید
                     </p>
                     <ul className="list-inside list-disc pr-4">
@@ -121,42 +139,36 @@ export default function SizeGuide({ images }: { images: ProductImage[] }) {
                   <table className="border-collapse border text-center">
                     <thead>
                       <tr>
-                        {[
-                          "سایز",
-                          "عرض کمر",
-                          "عرض ران",
-                          "طول فاق",
-                          "طول شلوار",
-                          " عرض دمپا",
-                        ].map((item, index) => (
+                        {Object.keys(sizeTableInfo[0]).map((label, index) => (
                           <th
-                            key={index}
                             className="border bg-stone-100 px-4 py-3 text-sm font-medium"
                             scope="col"
+                            key={index}
                           >
-                            {item}
+                            {label}
                           </th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
-                      {["L", "XL", "XXL", "XXXL"].map((item, index) => (
-                        <tr key={index}>
-                          <th className="border bg-stone-50 px-4 py-3 text-sm font-medium">
-                            {item}
-                          </th>
-                          {["۳۷", "۳۰", "۱۰۲", "۱۴", "۳۰"].map(
-                            (item, index) => (
+                      {sizeTableInfo.map((sizeData, index) => {
+                        const labels = Object.keys(sizeData);
+                        return (
+                          <tr key={index}>
+                            <th className="border bg-stone-50 px-4 py-3 text-sm font-medium">
+                              {sizeData[labels[0]]}
+                            </th>
+                            {labels.slice(1).map((label, index) => (
                               <td
                                 key={index}
                                 className="border px-4 py-2 text-sm"
                               >
-                                {item}
+                                {sizeData[label]}
                               </td>
-                            )
-                          )}
-                        </tr>
-                      ))}
+                            ))}
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
@@ -166,22 +178,20 @@ export default function SizeGuide({ images }: { images: ProductImage[] }) {
                   <p className="text-sm font-light text-stone-800">
                     لطفا طبق تصویر زیر اندازه ها را به دست آورید . سپس با مقایسه
                     اندازه های خود با{" "}
-                    <Link
-                      href="#"
+                    <button
                       onClick={() => setActiveTab("sizeTable")}
                       className="text-blue-600"
                     >
                       جدول سایز
-                    </Link>{" "}
+                    </button>{" "}
                     ارائه شده، سایز مناسب خود را انتخاب نمایید.
                   </p>
                   <div>
-                    {" "}
                     <Image
-                      src="/sizingGuide.jpg"
-                      alt="sizing guide"
-                      width={1600}
-                      height={2000}
+                      src={apiBaseUrl + sizeGuideImage.url}
+                      alt={sizeGuideImage.alternativeText}
+                      width={sizeGuideImage.width}
+                      height={sizeGuideImage.height}
                     />
                   </div>
                 </div>

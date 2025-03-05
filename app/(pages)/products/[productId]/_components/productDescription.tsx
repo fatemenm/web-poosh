@@ -9,67 +9,66 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
 
-import { ClotheProduct } from "@/_lib/definitions";
-
-import SizeGuide from "./sizeGuide";
-
-const descriptionData = {
-  intro: [
-    "کفش روزمره بندی مردانه، راحت و ساخته شده از چرم طبیعی با کیفیت، شیک و اسپرت",
-    " با توجه به تفاوت نمایش رنگ‌ها در صفحه نمایش دستگاه‌های مختلف، رنگ محصولات در تصویر تا 20% با واقعیت متفاوت خواهد بود",
-  ],
-
-  maintenance: [
-    "برای تمیز کردن کفش یک دستمال یا اسفنج مرطوب را با کف شامپو آغشته کنید و به نرمی بر روی سطح کفش بکشید. سپس سطح کفش را با پارچه‌ی تمیز خشک کنید.",
-    "کفش های چرم ، جیر و نبوک را با ماشین لباسشویی نشویید.",
-    "از برخورد کفش با اشیاء نوک تیز جلوگیری کنید.",
-    "درصورت خیس شدن کفش‌، آنرا بدور از حرارت و نور خورشید و در دمای معمولی اتاق خشک کنید",
-  ],
-};
+import { Image as ProductImage } from "@/_lib/definitions";
+import { ProductModel } from "@/_models/product.model";
 
 export default function ProductDescription({
   product,
+  images,
+  onClickSizeGuideLink,
 }: {
-  product: ClotheProduct;
+  product: ProductModel;
+  images: ProductImage[];
+  onClickSizeGuideLink: () => void;
 }) {
-  const productImage = product.images[0];
   return (
     <div className="flex flex-row items-stretch justify-center gap-28 bg-stone-100 p-10">
       <div className="w-3/12">
         <Image
-          src={apiBaseUrl + productImage.url}
-          alt={productImage.alternativeText}
-          width={productImage.width}
-          height={productImage.height}
+          src={apiBaseUrl + images[0].url}
+          alt={images[0].alternativeText}
+          width={images[0].width}
+          height={images[0].height}
           quality={100}
         />
       </div>
       <div className="flex w-6/12 flex-col justify-between py-3 text-stone-800">
-        <h2 className="text-xl">
-          توضیحات {product.name} {product.id.toLocaleString("fa-IR")}
-        </h2>
+        <h2 className="text-xl">توضیحات {product.data.name}</h2>
         <p className="flex flex-col gap-4 text-sm font-light">
-          {descriptionData.intro.map((item, index) => (
-            <span key={index}>{item}</span>
-          ))}
+          <span>{product.data.information.productInfo}</span>
+          <span> {product.data.information.modelSizeInfo}</span>
+          <span> {product.data.information.colorInfo}</span>
         </p>
         <div className="flex flex-col gap-5">
           <span className="text-sm font-medium">روش شستشو و نگهداری</span>
           <div className="flex-row justify-between gap-12 pr-8 text-sm font-light leading-7">
             <ul className="list-disc columns-2 gap-8">
-              {descriptionData.maintenance.map((item, index) => (
+              {product.data.category.careTips.map((item, index) => (
                 <li key={index}>{item}</li>
               ))}
             </ul>
           </div>
         </div>
-        <div className="flex flex-row gap-20">
-          <SizeGuide images={product.images} />
+        <div className="flex flex-row gap-20 text-xs">
+          <button
+            onClick={onClickSizeGuideLink}
+            className="border-non flex w-fit flex-row items-center gap-3 border-none pr-1 text-xs text-blue-500"
+          >
+            <Image
+              className="rotate-45"
+              src="/ruler.png"
+              width="24"
+              height="24"
+              alt="راهنمای سایز"
+              quality={100}
+            />
+            <span className="text-blue-500">راهنمای سایز</span>
+          </button>
           <Link href="" className="flex flex-row items-center gap-2 text-xs">
             <FontAwesomeIcon className="text-[12px]" icon={faTruckFast} />
             روش ارسال
           </Link>
-          <Link href="" className="flex flex-row items-center gap-2 text-xs">
+          <Link href="" className="flex flex-row items-center gap-2">
             <FontAwesomeIcon
               icon={faArrowRightArrowLeft}
               className="text-[12px]"
@@ -80,7 +79,7 @@ export default function ProductDescription({
         <div className="flex flex-col gap-4">
           <hr />
           <span className="text-xs font-light text-neutral-400">
-            کد محصول: ۴۳۷۵۳۴۸۹
+            کد محصول: {product.data.id.toLocaleString("fa-IR")}
           </span>
         </div>
       </div>
