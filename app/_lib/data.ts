@@ -1,10 +1,12 @@
 import { apiBaseUrl } from "@config";
+import qs from "qs";
 
 import { ProductModel } from "@/_models/product.model";
 
 import {
   Category,
   ClotheSetBanner,
+  Color,
   HeroBanner,
   NavbarItem,
   Product,
@@ -18,302 +20,275 @@ const urls = {
   getHeroBanners: apiBaseUrl + "/api/hero-banners",
   getCategories: apiBaseUrl + "/api/categories",
   getCategoryById: apiBaseUrl + "/api/categories/:id",
+  getCategoryAvailableOptions:
+    apiBaseUrl + "/api/categories/:id/available-options",
   getClotheSetBanners: apiBaseUrl + "/api/clothe-set-banners",
   getProductById: apiBaseUrl + "/api/products/:id",
   getProducts: apiBaseUrl + "/api/products",
 };
-type optionsType = {
-  sort?: string;
-  populates?: string[];
-  pathParams?: Record<string, string>;
+
+type queryType = {
+  filters?: Record<string, unknown>;
+  populate?: Record<string, unknown>;
+  sort?: string[];
+  fields?: string[];
 };
 
-function createUrl(baseUrl: string, options: optionsType = {}) {
-  const url = new URL(baseUrl);
-  const params = new URLSearchParams({});
-  if (options.sort) params.append("sort", options.sort);
-  if (options.populates)
-    for (const [index, value] of options.populates.entries()) {
-      params.append(`populate[${index}]`, value);
+async function fetchData(data: {
+  baseUrl: string;
+  query?: queryType;
+  pathParams?: Record<string, string>;
+}) {
+  try {
+    const url = new URL(data.baseUrl);
+    if (data.pathParams) {
+      for (const [key, value] of Object.entries(data.pathParams)) {
+        url.pathname = url.pathname.replace(`:${key}`, value);
+      }
     }
-  if (options.pathParams) {
-    for (const [key, value] of Object.entries(options.pathParams)) {
-      url.pathname = url.pathname.replace(`:${key}`, value);
+    const query = qs.stringify(data.query);
+    url.search = query;
+    const response = await fetch(url.href);
+    if (!response.ok) {
+      throw new Error("Failed to fetch data");
     }
+    const body: responseBody = await response.json();
+    return body;
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
-  url.search = params.toString();
-  return url;
 }
 
 export async function getPromoBannerData() {
-  try {
-    const url = createUrl(urls.getBanners);
-    const response = await fetch(url.href);
-    if (!response.ok) {
-      throw new Error("Failed to fetch data");
-    }
-    const body: responseBody = await response.json();
-    if (!Array.isArray(body.data)) {
-      throw new Error("invalid data");
-    }
-    const data = body?.data?.map((item) => ({
-      ...item,
-      startDate: new Date(item.startDate as string),
-      endDate: new Date(item.endDate as string),
-    })) as PromoBanner[];
-    const now: Date = new Date();
-    const earliestActiveBanner = data
-      .filter((banner) => {
-        return banner.startDate < now && banner.endDate > now && banner;
-      })
-      .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
-      .pop();
-    return earliestActiveBanner;
-  } catch (error) {
-    console.error(error);
-    throw error;
+  const body: responseBody = await fetchData({ baseUrl: urls.getBanners });
+  if (!Array.isArray(body.data)) {
+    throw new Error("invalid data");
   }
+  const data = body?.data?.map((item) => ({
+    ...item,
+    startDate: new Date(item.startDate as string),
+    endDate: new Date(item.endDate as string),
+  })) as PromoBanner[];
+  const now: Date = new Date();
+  const earliestActiveBanner = data
+    .filter((banner) => {
+      return banner.startDate < now && banner.endDate > now && banner;
+    })
+    .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+    .pop();
+  return earliestActiveBanner;
 }
+
 export async function getNavbarItems() {
-  try {
-    const url = createUrl(urls.getNavbarItems, {
-      sort: "index",
-      populates: ["image"],
-    });
-    const response = await fetch(url.href);
-    if (!response.ok) {
-      throw new Error("Failed to fetch data");
-    }
-    const body: responseBody = await response.json();
-    const data = body.data as NavbarItem[];
-    return data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+  const body: responseBody = await fetchData({
+    baseUrl: urls.getNavbarItems,
+    query: {
+      sort: ["index"],
+      populate: {
+        image: "*",
+      },
+    },
+  });
+
+  return body.data as NavbarItem[];
 }
 
 export async function getHeroBanners() {
-  try {
-    const url = createUrl(urls.getHeroBanners, { populates: ["image"] });
-    const response = await fetch(url.href);
-    if (!response.ok) {
-      throw new Error("Failed to fetch data");
-    }
-    const body: responseBody = await response.json();
-    const data = body.data as HeroBanner[];
-    return data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+  const body: responseBody = await fetchData({
+    baseUrl: urls.getHeroBanners,
+    query: {
+      populate: {
+        image: "*",
+      },
+    },
+  });
+  return body.data as HeroBanner[];
 }
 
 export async function getCategories() {
-  try {
-    const url = createUrl(urls.getCategories, {
-      populates: [
-        "preSetFilters",
-        "preSetFilters.image",
-        "image",
-        "sizeGuideImage",
-      ],
-      sort: "index",
-    });
-    const response = await fetch(url.href);
-    if (!response.ok) {
-      throw new Error("Failed to fetch data");
-    }
-    const body: responseBody = await response.json();
-    const data = body.data as Category[];
-    return data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+  const body: responseBody = await fetchData({
+    baseUrl: urls.getCategories,
+    query: {
+      populate: {
+        preSetFilters: {
+          populate: {
+            image: "*",
+          },
+        },
+        image: "*",
+        sizeGuideImage: "*",
+      },
+      sort: ["index"],
+    },
+  });
+
+  return body.data as Category[];
 }
 
 export async function getCategoryById(documentId: string) {
-  try {
-    const url = new URL(urls.getCategoryById);
-    url.pathname = url.pathname.replace(":id", documentId);
-    const populateFields = [
-      "image",
-      "sizeGuideImage",
-      "preSetFilters",
-      "preSetFilters.image",
-    ];
-    const params = new URLSearchParams();
-    populateFields.forEach((field, index) =>
-      params.append(`populate[${index}]`, field)
-    );
-    url.search = params.toString();
-    const response = await fetch(url.href);
-    if (!response.ok) {
-      throw new Error("Failed to fetch data");
-    }
-    const body: responseBody = await response.json();
-    const data = body.data as Category;
-    return data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+  const body: responseBody = await fetchData({
+    baseUrl: urls.getCategoryById,
+    query: {
+      populate: {
+        image: "*",
+        sizeGuideImage: "*",
+        preSetFilters: {
+          populate: {
+            image: "*",
+          },
+        },
+      },
+    },
+    pathParams: {
+      id: documentId,
+    },
+  });
+
+  return body.data as Category;
 }
 
 export async function getClotheSetBanners() {
-  try {
-    const url = createUrl(urls.getClotheSetBanners, { populates: ["image"] });
-    const response = await fetch(url.href);
-    if (!response.ok) {
-      throw new Error("Failed to fetch data");
-    }
-    const body: responseBody = await response.json();
-    const data = body.data as ClotheSetBanner[];
-    return data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+  const body: responseBody = await fetchData({
+    baseUrl: urls.getClotheSetBanners,
+    query: {
+      populate: {
+        image: "*",
+      },
+    },
+  });
+
+  return body.data as ClotheSetBanner[];
 }
 
-export async function getProducts(
-  categoryId?: string,
+export async function getProductById(documentId: string) {
+  const body: responseBody = await fetchData({
+    baseUrl: urls.getProductById,
+    query: {
+      populate: {
+        imagesByColor: {
+          populate: {
+            images: "*",
+          },
+        },
+        category: {
+          populate: {
+            image: "*",
+            sizeGuideImage: "*",
+          },
+        },
+        stocks: "*",
+      },
+    },
+    pathParams: { id: documentId },
+  });
+  return new ProductModel(body.data as Product);
+}
+
+export async function getProducts(queryParams?: {
   filters?: {
+    categoryId?: string;
     color?: string[];
     size?: string[];
     onSale?: boolean;
     categoryFilter?: string;
-  },
-  page?: {
-    number: number;
-    products: number;
-  }
-) {
-  try {
-    const url = createUrl(urls.getProducts, {
-      populates: [
-        "imagesByColor",
-        "imagesByColor.images",
-        "category",
-        "category.image",
-        "category.sizeGuideImage",
-      ],
-    });
-    const response = await fetch(url.href);
-    if (!response.ok) {
-      throw new Error("Failed to fetch data");
-    }
-    const body: responseBody = await response.json();
-    const data = body.data as Product[];
-    let products = data.map((item) => new ProductModel(item));
-    if (categoryId) {
-      products = products.filter(
-        (item) => item.data.category.documentId === categoryId
-      );
-      // TODO: fix this
-      if (
-        categoryId === "p8fth3i5mmkeo0ij4fgm4tsh" &&
-        filters &&
-        filters.categoryFilter
-      ) {
-        products = products.filter((p) =>
-          p.data.name.includes(filters.categoryFilter as string)
-        );
-      }
-    }
-    if (filters) {
-      Object.keys(filters).forEach((key) => {
-        if (key === "color" && filters.color?.length) {
-          products = products?.filter((product) => {
-            return product
-              .getAvailableColors()
-              .some((color) => filters.color!.includes(color.hexCode));
-          });
-        }
-        if (key === "size" && filters.size?.length) {
-          products = products?.filter((product) => {
-            return product
-              .getAvailableSizes()
-              .some((size) => filters.size!.includes(size.value));
-          });
-        }
-        if (key === "onSale" && filters.onSale) {
-          products = products.filter((p) => p.data.salePrice);
-        }
-      });
-    }
-    if (page) {
-      const startIndex = page.products * (page.number - 1);
-      products = products?.slice(startIndex, startIndex + page.products);
-    }
-    return products;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-export async function getProductsCount() {
-  try {
-    const url = new URL(urls.getProducts);
-    const response = await fetch(url.href);
-    if (!response.ok) {
-      throw new Error("Failed to fetch data");
-    }
-    const body: responseBody = await response.json();
-    const products = body.data as Product[];
-    return products.length;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-export async function getProductById(documentId: string) {
-  try {
-    const url = createUrl(urls.getProductById, {
-      populates: [
-        "imagesByColor",
-        "imagesByColor.images",
-        "category",
-        "category.image",
-        "category.sizeGuideImage",
-      ],
-      pathParams: { id: documentId },
-    });
-    const response = await fetch(url.href);
-    if (!response.ok) {
-      throw new Error("Failed to fetch data");
-    }
-    const body: responseBody = await response.json();
-    const data = body.data as Product;
-    return new ProductModel(data);
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+    stockQuantity?: number;
+  };
+  pagination?: {
+    page: number;
+    pageSize: number;
+  };
+}) {
+  const query = {
+    populate: {
+      imagesByColor: {
+        populate: {
+          images: "*",
+        },
+      },
+      category: {
+        populate: {
+          image: "*",
+          sizeGuideImage: "*",
+        },
+      },
+      stocks: "*",
+    },
+    filters: {
+      category: { documentId: { $eq: queryParams?.filters?.categoryId } },
+      salePrice: queryParams?.filters?.onSale ? { $gt: 0 } : undefined,
+      name: { $contains: queryParams?.filters?.categoryFilter },
+      stocks: {
+        $and: [
+          {
+            $and: [
+              {
+                quantity: {
+                  $gt: 0,
+                },
+              },
+              {
+                color: {
+                  $in: queryParams?.filters?.color?.map((c) => c.trim()),
+                },
+              },
+            ],
+          },
+          {
+            $and: [
+              {
+                quantity: {
+                  $gt: 0,
+                },
+              },
+              {
+                size: {
+                  $in: queryParams?.filters?.size?.map((s) => s.trim()),
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+    pagination: {
+      page: queryParams?.pagination?.page,
+      pageSize: queryParams?.pagination?.pageSize,
+      withCount: true,
+    },
+  };
+  const body: responseBody = await fetchData({
+    baseUrl: urls.getProducts,
+    query: query,
+  });
+
+  const products = body.data as Product[];
+  return {
+    products: products.map((item) => new ProductModel(item)),
+    pagination: body.meta?.pagination,
+  };
 }
 
-export async function getCategoryColors() {
-  return [
-    {
-      name: "آبی تیره",
-      hexCode: "#3D5061",
-    },
-    {
-      name: "آبی",
-      hexCode: "#A2A9A7",
-    },
-    {
-      name: "آبی روشن",
-      hexCode: "#5F8099",
-    },
-    {
-      name: "آبی",
-      hexCode: "#5B6B80",
-    },
-  ];
+export async function getCategoryColors(categoryId: string) {
+  const body: responseBody = await fetchData({
+    baseUrl: urls.getCategoryAvailableOptions,
+    pathParams: { id: categoryId },
+  });
+  const { colors } = body.data as {
+    sizes: string[];
+    colors: Color[];
+  };
+  return colors;
 }
 
-export async function getCategorySizes() {
-  return ["31", "32", "33", "34", "35"];
+export async function getCategorySizes(categoryId: string) {
+  const body: responseBody = await fetchData({
+    baseUrl: urls.getCategoryAvailableOptions,
+    pathParams: { id: categoryId },
+  });
+  const { sizes } = body.data as {
+    sizes: string[];
+    colors: Color[];
+  };
+  return sizes;
 }
