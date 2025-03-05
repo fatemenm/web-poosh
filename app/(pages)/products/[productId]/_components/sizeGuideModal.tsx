@@ -20,7 +20,6 @@ type dataType = {
     colorInfo: string;
   };
   productName: string;
-  productId: number;
 };
 
 export default function SizeGuideModal({
@@ -39,7 +38,6 @@ export default function SizeGuideModal({
     sizeTableInfo,
     information,
     sizeGuideImage,
-    productId,
     productName,
     productImages,
   } = data;
@@ -72,7 +70,7 @@ export default function SizeGuideModal({
               <div className="flex w-1/2 flex-row items-center justify-center rounded-tr-md bg-stone-100">
                 <div className="flex w-fit flex-col gap-2 rounded-md bg-white px-4 py-5 shadow-sm">
                   <span className="text-xl font-normal text-stone-800">
-                    {productName} {productId}
+                    {productName}
                   </span>
                   <hr />
                   <span className="text-sm text-stone-600">

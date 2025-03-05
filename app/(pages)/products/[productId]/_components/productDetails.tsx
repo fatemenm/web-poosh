@@ -50,7 +50,6 @@ export default function ProductDetails({
           name={product.data.name}
           originalPrice={product.data.originalPrice}
           salePrice={product.data.salePrice}
-          id={product.data.id}
         />
         <hr />
         <div className="flex flex-col gap-6 text-stone-800">

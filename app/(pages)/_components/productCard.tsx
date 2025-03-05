@@ -101,7 +101,7 @@ export default function ProductCard({
           href={`${nextServerUrl}/products/${product.data.documentId}`}
           className="text-sm font-medium text-stone-600"
         >
-          {product.data.name + " " + product.data.id.toLocaleString("fa-ir")}
+          {product.data.name}
         </Link>
         <div className="flex flex-row items-center gap-2 text-[13px] text-stone-600">
           <span

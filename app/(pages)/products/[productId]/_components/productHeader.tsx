@@ -7,19 +7,15 @@ export function ProductHeader({
   name,
   originalPrice,
   salePrice,
-  id,
 }: {
   name: string;
   originalPrice: number;
   salePrice: number;
-  id: number;
 }) {
   return (
     <div className="flex flex-col gap-6">
       {/* title */}
-      <h1 className="text-2xl">
-        {name} {id.toLocaleString("fa-IR")}
-      </h1>
+      <h1 className="text-2xl">{name}</h1>
       {/* price */}
       <div className="flex flex-row items-center gap-3">
         <span className={classNames(salePrice && "line-through")}>

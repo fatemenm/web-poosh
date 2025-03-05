@@ -33,9 +33,7 @@ export default function ProductDescription({
         />
       </div>
       <div className="flex w-6/12 flex-col justify-between py-3 text-stone-800">
-        <h2 className="text-xl">
-          توضیحات {product.data.name} {product.data.id.toLocaleString("fa-IR")}
-        </h2>
+        <h2 className="text-xl">توضیحات {product.data.name}</h2>
         <p className="flex flex-col gap-4 text-sm font-light">
           <span>{product.data.information.productInfo}</span>
           <span> {product.data.information.modelSizeInfo}</span>
