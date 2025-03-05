@@ -8,14 +8,9 @@ export type PromoBanner = {
 };
 
 export type responseBody = {
-  data: Record<string, unknown>[] | unknown;
-  meta: {
-    pagination: {
-      page: number;
-      pageSize: number;
-      pageCount: number;
-      total: number;
-    };
+  data?: Record<string, unknown>[] | unknown;
+  meta?: {
+    pagination: Pagination;
   };
 };
 
@@ -123,4 +118,11 @@ export type Stock = {
   size: string;
   color: string;
   quantity: number;
+};
+
+export type Pagination = {
+  page: number;
+  pageSize: number;
+  pageCount: number;
+  total: number;
 };
