@@ -22,12 +22,11 @@ export default function ProductModal({
 }: {
   isOpen: boolean;
   onOpenChange: (value: boolean) => void;
-  product: ProductModel | null;
+  product: ProductModel;
 }) {
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedSize, setSelectedSize] = useState<string | undefined>();
   const [isSizeErrorVisible, setIsSizeErrorVisible] = useState<boolean>(false);
-  if (!product) return <div>product is not available</div>;
   const defaultColor = product?.getAvailableColors()[0].name;
   const selectedProduct = {
     id: product?.data.id,
