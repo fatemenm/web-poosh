@@ -11,8 +11,9 @@ import ProductCard from "@/(pages)/_components/productCard";
 import ProductModal from "@/(pages)/_components/productModal";
 import Accordion from "@/_components/accordion";
 import BreadCrumb from "@/_components/breadcrumb";
-import { getCategories, getProducts, getProductsCount } from "@/_lib/data";
+import { getCategories, getProducts } from "@/_lib/data";
 import { Category } from "@/_lib/definitions";
+import { Pagination as PaginationType } from "@/_lib/definitions";
 import { ProductModel } from "@/_models/product.model";
 import {
   Pagination,
@@ -38,28 +39,27 @@ const productsPerPage = 12;
 export default function Page() {
   const [categories, setCategories] = useState<Category[] | null>();
   const [products, setProducts] = useState<ProductModel[] | null>();
-  const [productCount, setProductCount] = useState<number>(0);
   const [selectedProduct, setSelectedProduct] = useState<ProductModel | null>(
     null
   );
+  const [pagination, setPagination] = useState<PaginationType | undefined>();
   const [isProductModalOpen, setIsProductModalOpen] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const pageNumber = Number(searchParams.get("page") ?? 1);
-  const totalPages = Math.ceil(productCount / productsPerPage);
 
   useEffect(() => {
     const getData = async () => {
       const categories = await getCategories();
-      const productCount = await getProductsCount();
       setCategories(categories);
-      setProductCount(productCount);
-      const products = await getProducts(undefined, undefined, {
-        number: pageNumber,
-        products: 12,
+      const { products, pagination } = await getProducts({
+        pagination: {
+          page: pageNumber,
+          pageSize: 1,
+        },
       });
-
       setProducts(products);
+      setPagination(pagination);
     };
     getData();
   }, [searchParams]);
@@ -74,7 +74,7 @@ export default function Page() {
   return (
     <div className="mx-auto flex w-10/12 flex-col gap-16">
       <BreadCrumb items={breadcrumbItems} />
-      <div className="flex flex-row gap-20">
+      <div className="flex flex-row gap-20 pb-10">
         {/* right navbar */}
         <div className="w-72">
           <Accordion
@@ -125,54 +125,58 @@ export default function Page() {
               </div>
             ))}
           </div>
-          <Pagination className="mr-0 w-fit">
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  className={classNames("rounded-none", {
-                    "pointer-events-none text-gray-400": pageNumber < 2,
-                  })}
-                  href={updatePageNumber(pageNumber - 1)}
-                />
-              </PaginationItem>
-              {Array(totalPages)
-                .fill(0)
-                .map((item, index) => (
-                  <div key={index}>
-                    <PaginationItem>
-                      <PaginationLink
-                        className={classNames(
-                          "rounded-none font-medium text-stone-700",
-                          {
-                            "pointer-events-none bg-stone-800 text-white":
-                              pageNumber === index + 1,
-                          }
-                        )}
-                        href={updatePageNumber(index + 1)}
-                      >
-                        {index + 1}
-                      </PaginationLink>
-                    </PaginationItem>
-                  </div>
-                ))}
-              <PaginationItem>
-                <PaginationNext
-                  className={classNames("rounded-none", {
-                    "pointer-events-none text-gray-400":
-                      pageNumber + 1 > totalPages,
-                  })}
-                  href={updatePageNumber(pageNumber + 1)}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+          {pagination?.pageCount && (
+            <Pagination className="mr-0 w-fit">
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    className={classNames("rounded-none", {
+                      "pointer-events-none text-gray-400": pageNumber < 2,
+                    })}
+                    href={updatePageNumber(pageNumber - 1)}
+                  />
+                </PaginationItem>
+                {Array(pagination?.pageCount)
+                  .fill(0)
+                  .map((item, index) => (
+                    <div key={index}>
+                      <PaginationItem>
+                        <PaginationLink
+                          className={classNames(
+                            "rounded-none font-medium text-stone-700",
+                            {
+                              "pointer-events-none bg-stone-800 text-white":
+                                pageNumber === index + 1,
+                            }
+                          )}
+                          href={updatePageNumber(index + 1)}
+                        >
+                          {index + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    </div>
+                  ))}
+                <PaginationItem>
+                  <PaginationNext
+                    className={classNames("rounded-none", {
+                      "pointer-events-none text-gray-400":
+                        pageNumber + 1 > pagination?.pageCount,
+                    })}
+                    href={updatePageNumber(pageNumber + 1)}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          )}
         </div>
       </div>
-      <ProductModal
-        isOpen={isProductModalOpen}
-        product={selectedProduct}
-        onOpenChange={(value) => setIsProductModalOpen(value)}
-      />
+      {selectedProduct && (
+        <ProductModal
+          isOpen={isProductModalOpen}
+          product={selectedProduct}
+          onOpenChange={(value) => setIsProductModalOpen(value)}
+        />
+      )}
     </div>
   );
 }
