@@ -192,7 +192,9 @@ export async function getProducts(queryParams?: {
     size?: string[];
     onSale?: boolean;
     categoryFilter?: string;
-    stockQuantity?: number;
+  };
+  search?: {
+    name?: string;
   };
   pagination?: {
     page: number;
@@ -217,7 +219,10 @@ export async function getProducts(queryParams?: {
     filters: {
       category: { documentId: { $eq: queryParams?.filters?.categoryId } },
       salePrice: queryParams?.filters?.onSale ? { $gt: 0 } : undefined,
-      name: { $contains: queryParams?.filters?.categoryFilter },
+      name: {
+        $contains:
+          queryParams?.search?.name ?? queryParams?.filters?.categoryFilter,
+      },
       stocks: {
         $and: [
           {
