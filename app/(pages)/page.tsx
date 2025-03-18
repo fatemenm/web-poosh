@@ -4,7 +4,6 @@ import { apiBaseUrl, nextServerUrl } from "@config";
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import BasicSlider from "@/_components/basicSlider";
@@ -30,7 +29,6 @@ type Data = {
 };
 export default function Page() {
   const [data, setData] = useState<Data | null>(null);
-  const router = useRouter();
   useEffect(() => {
     const getData = async () => {
       const [heroBanners, categories, clothingSetBanners, products] =

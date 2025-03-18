@@ -34,7 +34,6 @@ const breadcrumbItems = [
     href: "",
   },
 ];
-const productsPerPage = 12;
 
 export default function Page() {
   const [categories, setCategories] = useState<Category[] | null>();
