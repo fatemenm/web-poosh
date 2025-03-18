@@ -101,7 +101,7 @@ export default function Page({ params }: { params: { categoryId: string } }) {
   if (!category || !products || !sizes || !colors)
     return <div> data is not available.</div>;
   return (
-    <div className="mx-auto mb-10 flex w-10/12 flex-col gap-8">
+    <div className="mx-auto mb-10 flex w-10/12 flex-col gap-8 border-t pt-8">
       <div className="flex flex-col items-center gap-4">
         <h4 className="text-lg font-normal">{category.name}</h4>
         {category.preSetFilters.length ? (
