@@ -3,10 +3,6 @@
 import { apiBaseUrl, nextServerUrl } from "@config";
 import {
   faBagShopping,
-  faChevronLeft,
-  faClose,
-  faList,
-  faSearch,
   faUser,
   faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
@@ -14,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import PromoBanner from "@/_components/promoBanner";
 import { getProducts } from "@/_lib/data";
@@ -26,6 +22,8 @@ import {
 import { ProductModel } from "@/_models/product.model";
 
 import logo from "@public/logo.png";
+
+import SearchBar from "./searchBar";
 
 function getClassNames(item: NavbarItem, isHovered: boolean) {
   const baseClasses =
@@ -63,7 +61,6 @@ export default function Header({
   const [isSearchBarOpen, setIsSearchBarOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [products, setProducts] = useState<ProductModel[]>([]);
-  const searchInputRef = useRef(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -79,113 +76,6 @@ export default function Header({
     if (searchQuery && isSearchBarOpen) getData();
     return () => setProducts([]);
   }, [searchQuery, isSearchBarOpen]);
-
-  function renderSearchBar() {
-    return (
-      <div className="relative flex items-center justify-end pl-4">
-        <button
-          className={`absolute left-4 top-2 w-fit ${isSearchBarOpen ? "right-4 top-2 cursor-default text-stone-500" : "text-stone-600 hover:text-stone-800"}`}
-          onMouseDown={(e) => e.preventDefault()}
-          onClick={
-            isSearchBarOpen
-              ? undefined
-              : () => {
-                  setIsSearchBarOpen(true);
-                  if (searchInputRef && searchInputRef.current) {
-                    const element = searchInputRef.current as HTMLInputElement;
-                    element.focus();
-                  }
-                }
-          }
-        >
-          <FontAwesomeIcon icon={faSearch} className="text-xl" />
-        </button>
-        <input
-          ref={searchInputRef}
-          value={searchQuery}
-          onFocus={() => setIsSearchBarOpen(true)}
-          onBlur={() => {
-            setIsSearchBarOpen(false);
-            setSearchQuery("");
-          }}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          type="search"
-          placeholder="جستجو..."
-          className={`rounded-sm bg-white py-2 placeholder:text-sm placeholder:text-stone-500 ${isSearchBarOpen ? "block w-full border border-stone-300 pl-9 pr-11 focus:outline-none" : "w-0 p-0"}`}
-        />
-        {isSearchBarOpen && (
-          <button
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={() => {
-              setSearchQuery("");
-              if (searchInputRef && searchInputRef.current) {
-                const element = searchInputRef.current as HTMLInputElement;
-                element.focus();
-              }
-            }}
-            className="absolute left-7 top-3 w-fit"
-          >
-            <FontAwesomeIcon
-              icon={faClose}
-              className="text-lg text-stone-500 hover:text-stone-800"
-            />
-          </button>
-        )}
-        {isSearchBarOpen && products?.length > 0 && (
-          <div className="absolute left-4 top-12 z-20 flex w-[21vw] flex-col gap-5 rounded-sm border bg-white p-6">
-            <p className="flex items-center gap-3 text-stone-600">
-              <FontAwesomeIcon
-                icon={faChevronLeft}
-                className="text-md hover:text-stone-800"
-              />
-              <span className="pt-1 text-sm font-medium"> لیست محصولات</span>
-            </p>
-            <div className="flex flex-col gap-2">
-              {products.map((p) => {
-                const img = p.data.imagesByColor[0].images[0];
-                return (
-                  <Link
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => {
-                      setIsSearchBarOpen(false);
-                      setSearchQuery("");
-                    }}
-                    href={nextServerUrl + "/products/" + p.data.documentId}
-                    className="flex items-center gap-3 text-stone-600 hover:text-stone-900"
-                    key={p.data.documentId}
-                  >
-                    <div className="w-12">
-                      <Image
-                        width={img.width}
-                        height={img.height}
-                        alt={img.alternativeText}
-                        src={apiBaseUrl + img.url}
-                      />
-                    </div>
-                    <span className="text-sm">{p.data.name}</span>
-                  </Link>
-                );
-              })}
-            </div>
-            <p className="flex items-center gap-3 text-stone-600 hover:text-stone-900">
-              <FontAwesomeIcon icon={faList} className="text-md" />
-              <Link
-                onClick={() => {
-                  setIsSearchBarOpen(false);
-                  setSearchQuery("");
-                }}
-                onMouseDown={(e) => e.preventDefault()}
-                href={`${nextServerUrl}/search-result?search=${encodeURIComponent(searchQuery)}`}
-                className="text-sm font-medium underline underline-offset-8"
-              >
-                مشاهده همه نتایج محصول
-              </Link>
-            </p>
-          </div>
-        )}
-      </div>
-    );
-  }
 
   return (
     <header className="flex shrink-0 flex-col items-center">
@@ -231,7 +121,13 @@ export default function Header({
         </div>
         {/* left navbar */}
         <div className="flex w-1/4 items-center justify-end">
-          {renderSearchBar()}
+          <SearchBar
+            isOpen={isSearchBarOpen}
+            searchQuery={searchQuery}
+            onChangeOpen={setIsSearchBarOpen}
+            onChangeSearchQuery={setSearchQuery}
+            items={products}
+          />
           <NavigationMenu.Root
             dir="rtl"
             className="relative flex items-stretch justify-end [&>div]:w-full"
