@@ -8,11 +8,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
+import * as ScrollArea from "@radix-ui/react-scroll-area";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import PromoBanner from "@/_components/promoBanner";
+import { useBasket } from "@/_lib/context/basketContext";
 import { getProducts } from "@/_lib/data";
 import {
   NavbarItem,
@@ -25,6 +27,7 @@ import logo from "@public/logo.png";
 
 import SearchBar from "./searchBar";
 
+// TODO: should these functions be here? outside of the component.
 function getClassNames(item: NavbarItem, isHovered: boolean) {
   const baseClasses =
     "flex items-center text-stone-700 font-medium border-b-2 px-5";
@@ -57,10 +60,14 @@ export default function Header({
   const [hoveredNavbarItem, setHoveredNavbarItem] =
     useState<NavbarItem | null>();
   const [isRightNavExpanded, setIsRightNavExpanded] = useState<boolean>(false);
-  const [navbarItem, setNavbarItem] = useState<string>();
+  const [leftNavbarItem, setLeftNavbarItem] = useState<string>();
   const [isSearchBarOpen, setIsSearchBarOpen] = useState<boolean>(false);
+  const [hoveredBasketItem, setHoveredBasketItem] = useState<number | null>(
+    null
+  );
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [products, setProducts] = useState<ProductModel[]>([]);
+  const { items, removeItem } = useBasket();
 
   useEffect(() => {
     const getData = async () => {
@@ -76,7 +83,6 @@ export default function Header({
     if (searchQuery && isSearchBarOpen) getData();
     return () => setProducts([]);
   }, [searchQuery, isSearchBarOpen]);
-
   return (
     <header className="flex shrink-0 flex-col items-center">
       {promoBanner ? (
@@ -131,8 +137,8 @@ export default function Header({
           <NavigationMenu.Root
             dir="rtl"
             className="relative flex items-stretch justify-end [&>div]:w-full"
-            value={navbarItem}
-            onValueChange={(value) => setNavbarItem(value)}
+            value={leftNavbarItem}
+            onValueChange={(value) => setLeftNavbarItem(value)}
           >
             <NavigationMenu.List className="flex h-full w-full flex-row items-stretch justify-end">
               <NavigationMenu.Item value="user">
@@ -142,7 +148,7 @@ export default function Header({
                     className="text-xl text-stone-600 hover:text-stone-800"
                   />
                 </NavigationMenu.Trigger>
-                <NavigationMenu.Content className="absolute left-0 top-12 z-10 w-[21vw] bg-white p-4">
+                <NavigationMenu.Content className="absolute left-0 top-12 z-20 w-[21vw] bg-white p-4">
                   <div className="flex flex-col gap-6">
                     <button className="flex gap-6">
                       <FontAwesomeIcon
@@ -162,22 +168,112 @@ export default function Header({
                     className="text-xl text-stone-600 hover:text-stone-800"
                   />
                 </NavigationMenu.Trigger>
-                <NavigationMenu.Content className="absolute left-0 top-12 z-10 w-[21vw] bg-white p-4">
-                  <div className="flex flex-col gap-10">
-                    <span className="text-lg">سبد خرید</span>
-                    <Link
-                      href={nextServerUrl + "/basket"}
-                      className={
-                        "w-full bg-green-700 py-2 text-center text-sm text-white hover:bg-green-800"
-                      }
-                    >
-                      جزییات سبد خرید
-                    </Link>
-                    <div className="flex flex-col gap-6 text-center font-extralight">
-                      <hr />
-                      <p>سبد خرید شما خالیست</p>
-                      <hr />
-                    </div>
+                <NavigationMenu.Content className="absolute left-0 top-12 z-20 w-[21vw] bg-white">
+                  <div>
+                    {items?.length ? (
+                      <ScrollArea.Root
+                        dir="rtl"
+                        className="h-[600px] w-full overflow-hidden"
+                      >
+                        <ScrollArea.Viewport className="size-full px-6 py-4">
+                          <div className="flex flex-col gap-10">
+                            <div className="flex justify-between text-sm">
+                              <span className=" ">سبد خرید</span>
+                              <span className="flex gap-1">
+                                {(() => {
+                                  let totalPrice = 0;
+                                  items.forEach((item) => {
+                                    totalPrice += item.product.data.salePrice
+                                      ? item.product.data.salePrice
+                                      : item.product.data.originalPrice;
+                                  });
+                                  return totalPrice.toLocaleString("fa-ir");
+                                })()}
+                                <span>تومان</span>
+                              </span>
+                            </div>
+                            <Link
+                              href={nextServerUrl + "/basket"}
+                              className={
+                                "w-full bg-green-700 py-2 text-center text-sm text-white hover:bg-green-800"
+                              }
+                            >
+                              مشاهده سبد خرید
+                            </Link>
+                            <div className="grid grid-cols-3 justify-center gap-x-6 gap-y-6">
+                              {items.map((item) => {
+                                return (
+                                  <div
+                                    onMouseEnter={() =>
+                                      setHoveredBasketItem(item.id)
+                                    }
+                                    onMouseLeave={() =>
+                                      setHoveredBasketItem(null)
+                                    }
+                                    key={item.id}
+                                    className="flex flex-col gap-2 text-xs"
+                                  >
+                                    <div className="w-full">
+                                      <Image
+                                        src={apiBaseUrl + item.image.url}
+                                        width={item.image.width}
+                                        height={item.image.height}
+                                        alt={item.image.alternativeText}
+                                      />
+                                    </div>
+                                    {item.id === hoveredBasketItem ? (
+                                      <button
+                                        onClick={() => removeItem(item)}
+                                        className="w-full border border-stone-700 bg-white py-1 text-center text-stone-800 hover:bg-stone-700 hover:text-white"
+                                      >
+                                        حذف
+                                      </button>
+                                    ) : (
+                                      <div className="flex flex-col gap-1">
+                                        <span>{item.product.data.name}</span>
+                                        <span>
+                                          {item.color}, {item.size}
+                                        </span>
+                                        <span>
+                                          {(item.product.data.salePrice
+                                            ? item.product.data.salePrice
+                                            : item.product.data.originalPrice
+                                          ).toLocaleString("fa-ir")}{" "}
+                                          تومان
+                                        </span>
+                                      </div>
+                                    )}
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </ScrollArea.Viewport>
+                        <ScrollArea.Scrollbar
+                          className="flex touch-none select-none rounded-[10px] p-0.5 transition-colors duration-150 ease-out data-[orientation=horizontal]:h-2.5 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col"
+                          orientation="vertical"
+                        >
+                          <ScrollArea.Thumb className="relative flex-1 rounded-[10px] bg-gray-400 before:absolute before:left-1/2 before:top-1/2 before:size-full before:min-h-11 before:min-w-11 before:-translate-x-1/2 before:-translate-y-1/2" />
+                        </ScrollArea.Scrollbar>
+                      </ScrollArea.Root>
+                    ) : (
+                      <div className="flex flex-col gap-5 px-6 py-4">
+                        <span className="text-lg">سبد خرید</span>
+                        <div className="flex flex-col gap-6 text-center font-extralight">
+                          <hr />
+                          <p>سبد خرید شما خالیست</p>
+                          <hr />
+                          <Link
+                            href={nextServerUrl + "/basket"}
+                            className={
+                              "w-full bg-green-700 py-2 text-center text-sm font-normal text-white hover:bg-green-800"
+                            }
+                          >
+                            مشاهده سبد خرید
+                          </Link>
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <NavigationMenu.Link />
                 </NavigationMenu.Content>
@@ -187,7 +283,7 @@ export default function Header({
         </div>
       </div>
       {hoveredNavbarItem?.isExpandable && isRightNavExpanded && (
-        <div className="absolute top-24 z-10 w-screen">
+        <div className="absolute top-28 z-20 w-screen">
           <div
             className="flex flex-row justify-center bg-stone-100 py-5"
             onMouseEnter={() => {
@@ -238,8 +334,8 @@ export default function Header({
           <div className="h-screen bg-stone-800 bg-opacity-50" />
         </div>
       )}
-      {(navbarItem === "user" || navbarItem === "basket") && (
-        <div className="absolute left-0 top-28 h-full w-screen bg-stone-800 bg-opacity-50" />
+      {(leftNavbarItem === "user" || leftNavbarItem === "basket") && (
+        <div className="absolute left-0 top-28 z-10 h-full w-screen bg-stone-800 bg-opacity-50" />
       )}
     </header>
   );

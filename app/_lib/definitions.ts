@@ -1,3 +1,5 @@
+import { ProductModel } from "@/_models/product.model";
+
 export type PromoBanner = {
   startDate: Date;
   endDate: Date;
@@ -125,4 +127,12 @@ export type Pagination = {
   pageSize: number;
   pageCount: number;
   total: number;
+};
+
+export type BasketItem = {
+  id: number;
+  product: ProductModel;
+  color: string;
+  size: string;
+  image: Image;
 };

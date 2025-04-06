@@ -1,11 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import ColorSelector from "@/_components/colorSelector";
 import GallerySlider from "@/_components/gallerySlider";
 import SizeSelector from "@/_components/sizeSelector";
+import { useBasket } from "@/_lib/context/basketContext";
 import { ProductModel } from "@/_models/product.model";
 
 import { ProductHeader } from "./productHeader";
@@ -21,15 +22,13 @@ export default function ProductDetails({
   onSelectColor: (value: string) => void;
   onClickSizeGuideLink: () => void;
 }) {
-  const [selectedSize, setSelectedSize] = useState<string | undefined>();
+  const [selectedSize, setSelectedSize] = useState<string>("");
   const [isSizeErrorVisible, setIsSizeErrorVisible] = useState<boolean>(false);
+  const { addItem } = useBasket();
 
   const selectedProduct = {
-    id: product.data.id,
-    documentId: product.data.documentId,
-    name: product.data.name,
-    originalPrice: product.data.originalPrice,
-    salePrice: product.data.salePrice,
+    id: Math.ceil(Math.random() * 1000) + Date.now(),
+    product: product,
     color: selectedColor,
     size: selectedSize,
     image: product.getImagesByColor(selectedColor)?.[0],
@@ -102,7 +101,7 @@ export default function ProductDetails({
         <button
           onClick={() => {
             if (!selectedProduct.size) setIsSizeErrorVisible(true);
-            else console.log(selectedProduct);
+            else addItem(selectedProduct);
           }}
           className={"bg-green-700 py-5 text-sm text-white hover:bg-green-800"}
         >

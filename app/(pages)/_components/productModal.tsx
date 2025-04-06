@@ -12,6 +12,7 @@ import Accordion from "@/_components/accordion";
 import ColorSelector from "@/_components/colorSelector";
 import GallerySlider from "@/_components/gallerySlider";
 import SizeSelector from "@/_components/sizeSelector";
+import { BasketItem } from "@/_lib/definitions";
 import { ProductModel } from "@/_models/product.model";
 import styles from "@/_styles/gallerySlider.module.css";
 
@@ -19,25 +20,26 @@ export default function ProductModal({
   isOpen,
   onOpenChange,
   product,
+  primaryButtonLabel,
+  defaultColor = product?.getAvailableColors()[0].name,
+  defaultSize,
+  onSelectPrimaryButton,
 }: {
   isOpen: boolean;
   onOpenChange: (value: boolean) => void;
   product: ProductModel;
+  primaryButtonLabel: string;
+  defaultColor?: string;
+  defaultSize?: string;
+  onSelectPrimaryButton: (item: BasketItem) => void;
 }) {
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  const [selectedSize, setSelectedSize] = useState<string | undefined>();
+  const [selectedColor, setSelectedColor] = useState<string>(defaultColor);
+  const [selectedSize, setSelectedSize] = useState<string | undefined>(
+    defaultSize
+  );
   const [isSizeErrorVisible, setIsSizeErrorVisible] = useState<boolean>(false);
-  const defaultColor = product?.getAvailableColors()[0].name;
-  const selectedProduct = {
-    id: product?.data.id,
-    documentId: product?.data.documentId,
-    name: product?.data.name,
-    originalPrice: product?.data.originalPrice,
-    salePrice: product?.data.salePrice,
-    color: selectedColor,
-    size: selectedSize,
-    image: product?.getImagesByColor(selectedColor ?? defaultColor)?.[0],
-  };
+  console.log("product in product modal", product);
+
   return (
     <Dialog.Root
       modal
@@ -198,14 +200,23 @@ export default function ProductModal({
                   )}
                   <button
                     onClick={() => {
-                      if (!selectedProduct.size) setIsSizeErrorVisible(true);
-                      else console.log(selectedProduct);
+                      if (!selectedSize) setIsSizeErrorVisible(true);
+                      else {
+                        const basketItem = {
+                          id: Math.ceil(Math.random() * 1000) + Date.now(),
+                          product: product,
+                          color: selectedColor,
+                          size: selectedSize,
+                          image: product.getImagesByColor(selectedColor)?.[0],
+                        };
+                        onSelectPrimaryButton(basketItem);
+                      }
                     }}
                     className={
                       "mt-2 w-full bg-green-700 py-4 text-sm text-white hover:bg-green-800"
                     }
                   >
-                    اضافه به سبد خرید
+                    {primaryButtonLabel}
                   </button>
                 </div>
               </div>

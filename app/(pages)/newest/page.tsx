@@ -11,6 +11,7 @@ import ProductCard from "@/(pages)/_components/productCard";
 import ProductModal from "@/(pages)/_components/productModal";
 import Accordion from "@/_components/accordion";
 import BreadCrumb from "@/_components/breadcrumb";
+import { useBasket } from "@/_lib/context/basketContext";
 import { getCategories, getProducts } from "@/_lib/data";
 import { Category } from "@/_lib/definitions";
 import { Pagination as PaginationType } from "@/_lib/definitions";
@@ -46,6 +47,7 @@ export default function Page() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const pageNumber = Number(searchParams.get("page") ?? 1);
+  const { addItem } = useBasket();
 
   useEffect(() => {
     const getData = async () => {
@@ -171,9 +173,11 @@ export default function Page() {
       </div>
       {selectedProduct && (
         <ProductModal
+          primaryButtonLabel="اضافه به سبد خرید"
           isOpen={isProductModalOpen}
           product={selectedProduct}
           onOpenChange={(value) => setIsProductModalOpen(value)}
+          onSelectPrimaryButton={addItem}
         />
       )}
     </div>
