@@ -82,7 +82,6 @@ export default function Product({ params }: { params: { productId: string } }) {
           renderItem={(item, ctx: { isSwiping: boolean }) => {
             return (
               <Link
-                target="_blank"
                 href={`${nextServerUrl}/products/${item.data.documentId}`}
                 key={item.data.id}
                 className="flex cursor-pointer flex-col items-center outline-none"

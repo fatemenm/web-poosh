@@ -87,7 +87,6 @@ export default function Page() {
           renderItem={(item, ctx: { isSwiping: boolean }) => {
             return (
               <Link
-                target="_blank"
                 href={nextServerUrl + "/category/" + item.documentId}
                 key={item.id}
                 className="flex cursor-pointer flex-col items-center px-4 outline-none"
@@ -170,7 +169,6 @@ export default function Page() {
           renderItem={(item, ctx: { isSwiping: boolean }) => {
             return (
               <Link
-                target="_blank"
                 key={item.data.id}
                 href={`${nextServerUrl}/products/${item.data.documentId}`}
                 className="cursor-pointer px-4 outline-none"
