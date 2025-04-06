@@ -173,11 +173,23 @@ export default function Page() {
       </div>
       {selectedProduct && (
         <ProductModal
+          onRequestClose={() => {
+            setIsProductModalOpen(false);
+            setSelectedProduct(null);
+          }}
           primaryButtonLabel="اضافه به سبد خرید"
           isOpen={isProductModalOpen}
           product={selectedProduct}
           onOpenChange={(value) => setIsProductModalOpen(value)}
-          onSelectPrimaryButton={addItem}
+          onPrimaryAction={({ selectedColor, selectedSize }) => {
+            addItem({
+              id: Math.ceil(Math.random() * 1000) + Date.now(),
+              product: selectedProduct,
+              color: selectedColor,
+              size: selectedSize,
+              image: selectedProduct.getImagesByColor(selectedColor)?.[0],
+            });
+          }}
         />
       )}
     </div>

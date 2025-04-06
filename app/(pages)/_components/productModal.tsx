@@ -12,7 +12,6 @@ import Accordion from "@/_components/accordion";
 import ColorSelector from "@/_components/colorSelector";
 import GallerySlider from "@/_components/gallerySlider";
 import SizeSelector from "@/_components/sizeSelector";
-import { BasketItem } from "@/_lib/definitions";
 import { ProductModel } from "@/_models/product.model";
 import styles from "@/_styles/gallerySlider.module.css";
 
@@ -21,24 +20,28 @@ export default function ProductModal({
   onOpenChange,
   product,
   primaryButtonLabel,
-  defaultColor = product?.getAvailableColors()[0].name,
-  defaultSize,
-  onSelectPrimaryButton,
+  initialColor = product?.getAvailableColors()[0].name,
+  initialSize,
+  onPrimaryAction,
+  onRequestClose,
 }: {
   isOpen: boolean;
   onOpenChange: (value: boolean) => void;
   product: ProductModel;
   primaryButtonLabel: string;
-  defaultColor?: string;
-  defaultSize?: string;
-  onSelectPrimaryButton: (item: BasketItem) => void;
+  initialColor?: string;
+  initialSize?: string;
+  onPrimaryAction: (selected: {
+    selectedColor: string;
+    selectedSize: string;
+  }) => void;
+  onRequestClose: () => void;
 }) {
-  const [selectedColor, setSelectedColor] = useState<string>(defaultColor);
+  const [selectedColor, setSelectedColor] = useState<string>(initialColor);
   const [selectedSize, setSelectedSize] = useState<string | undefined>(
-    defaultSize
+    initialSize
   );
   const [isSizeErrorVisible, setIsSizeErrorVisible] = useState<boolean>(false);
-  console.log("product in product modal", product);
 
   return (
     <Dialog.Root
@@ -68,9 +71,7 @@ export default function ProductModal({
               <div className="mr-24 w-1/2">
                 <GallerySlider
                   dotsClassName={styles.slickDotsModal}
-                  images={product.getImagesByColor(
-                    selectedColor ?? defaultColor
-                  )}
+                  images={product.getImagesByColor(selectedColor)}
                   isExpandable={false}
                 />
               </div>
@@ -123,23 +124,21 @@ export default function ProductModal({
                         <div className="text-sm font-light">
                           رنگ انتخابی شما:
                           <span className="pr-1 font-normal">
-                            {selectedColor ?? defaultColor}
+                            {selectedColor}
                           </span>
                         </div>
                         <ColorSelector
-                          selectedColor={selectedColor ?? defaultColor}
+                          selectedColor={selectedColor}
                           colors={product.getAvailableColors()}
                           onSelect={(color: string) => {
                             setSelectedColor(color);
-                            setSelectedSize("");
+                            setSelectedSize(undefined);
                             setIsSizeErrorVisible(false);
                           }}
                         />
                       </div>
                       <SizeSelector
-                        sizes={product.getAvailableSizes(
-                          selectedColor ?? defaultColor
-                        )}
+                        sizes={product.getAvailableSizes(selectedColor)}
                         selectedSize={selectedSize}
                         onSelect={(size: string) => {
                           setSelectedSize(size);
@@ -200,16 +199,11 @@ export default function ProductModal({
                   )}
                   <button
                     onClick={() => {
-                      if (!selectedSize) setIsSizeErrorVisible(true);
-                      else {
-                        const basketItem = {
-                          id: Math.ceil(Math.random() * 1000) + Date.now(),
-                          product: product,
-                          color: selectedColor,
-                          size: selectedSize,
-                          image: product.getImagesByColor(selectedColor)?.[0],
-                        };
-                        onSelectPrimaryButton(basketItem);
+                      if (!selectedSize) {
+                        setIsSizeErrorVisible(true);
+                      } else {
+                        onPrimaryAction({ selectedColor, selectedSize });
+                        onRequestClose();
                       }
                     }}
                     className={

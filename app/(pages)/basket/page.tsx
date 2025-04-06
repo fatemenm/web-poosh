@@ -151,16 +151,27 @@ export default function Page() {
       </div>
       {selectedItem && (
         <ProductModal
+          onRequestClose={() => {
+            setIsProductModalOpen(false);
+            setSelectedItem(null);
+          }}
           isOpen={isProductModalOpen}
           product={selectedItem.product}
           onOpenChange={(value) => {
             setIsProductModalOpen(value);
-            setSelectedItem(null);
           }}
           primaryButtonLabel="ویرایش سبد خرید"
-          defaultColor={selectedItem.color}
-          defaultSize={selectedItem.size}
-          onSelectPrimaryButton={editItem}
+          initialColor={selectedItem.color}
+          initialSize={selectedItem.size}
+          onPrimaryAction={({ selectedColor, selectedSize }) => {
+            editItem({
+              id: selectedItem.id,
+              product: selectedItem.product,
+              color: selectedColor,
+              size: selectedSize,
+              image: selectedItem.product.getImagesByColor(selectedColor)?.[0],
+            });
+          }}
         />
       )}
     </div>

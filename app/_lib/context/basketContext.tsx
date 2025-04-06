@@ -98,9 +98,12 @@ export function BasketProvider({ children }: { children: ReactNode }) {
   };
 
   const editItem = (item: BasketItem) => {
-    // 1. find item input inside items array by Id
-    // 2. replace the
-    console.log("edit item function");
+    const basketItems = mapStorageToBasketItems();
+    if (!basketItems.find((i) => i.id === item.id)) return;
+    const newItems = basketItems.map((i) => (i.id === item.id ? item : i));
+    setItems(newItems);
+    const storageItems = mapBasketItemToStorage(newItems);
+    localStorage.setItem("basketItems", JSON.stringify(storageItems));
   };
 
   return (
