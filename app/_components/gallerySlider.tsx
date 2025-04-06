@@ -37,16 +37,18 @@ export default function GallerySlider({
   const { width: imgThumbnailWidth, height: imgThumbnailHeight } =
     images[0].formats.thumbnail;
   const baseSetting = {
-    customPaging: function (i: number) {
-      return (
+    customPaging: (i: number) => {
+      return images[i] ? (
         <a>
           <Image
-            src={apiBaseUrl + images[i].formats.thumbnail.url}
+            src={apiBaseUrl + images[i]?.formats.thumbnail.url}
             alt="thumbnail image"
             width={imgThumbnailWidth}
             height={imgThumbnailHeight}
           />
         </a>
+      ) : (
+        <></>
       );
     },
     dots: true,
