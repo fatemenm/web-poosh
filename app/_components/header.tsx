@@ -62,7 +62,7 @@ export default function Header({
   const [isRightNavExpanded, setIsRightNavExpanded] = useState<boolean>(false);
   const [leftNavbarItem, setLeftNavbarItem] = useState<string>();
   const [isSearchBarOpen, setIsSearchBarOpen] = useState<boolean>(false);
-  const [hoveredBasketItem, setHoveredBasketItem] = useState<number | null>(
+  const [hoveredBasketItemId, setHoveredBasketItemId] = useState<number | null>(
     null
   );
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -162,6 +162,11 @@ export default function Header({
                 </NavigationMenu.Content>
               </NavigationMenu.Item>
               <NavigationMenu.Item value="basket">
+                {items.length > 0 && (
+                  <div className="absolute -top-5 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 p-1 text-sm text-white">
+                    {items.length.toLocaleString("fa-ir")}
+                  </div>
+                )}
                 <NavigationMenu.Trigger className="h-full px-4">
                   <FontAwesomeIcon
                     icon={faBagShopping}
@@ -205,10 +210,10 @@ export default function Header({
                                 return (
                                   <div
                                     onMouseEnter={() =>
-                                      setHoveredBasketItem(item.id)
+                                      setHoveredBasketItemId(item.id)
                                     }
                                     onMouseLeave={() =>
-                                      setHoveredBasketItem(null)
+                                      setHoveredBasketItemId(null)
                                     }
                                     key={item.id}
                                     className="flex flex-col gap-2 text-xs"
@@ -221,7 +226,7 @@ export default function Header({
                                         alt={item.image.alternativeText}
                                       />
                                     </div>
-                                    {item.id === hoveredBasketItem ? (
+                                    {item.id === hoveredBasketItemId ? (
                                       <button
                                         onClick={() => removeItem(item)}
                                         className="w-full border border-stone-700 bg-white py-1 text-center text-stone-800 hover:bg-stone-700 hover:text-white"
