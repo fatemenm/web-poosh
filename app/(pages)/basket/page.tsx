@@ -110,7 +110,7 @@ export default function Page() {
             <div className="flex items-center">
               <button className="flex grow flex-row justify-center gap-8 border bg-white px-4 py-3 text-sm text-stone-800 hover:bg-stone-800 hover:text-white">
                 <span> خرید جعبه هدیه ست</span>
-                <span> ۲۶۰۰۰۰ تومان</span>
+                <span> ۲۶۰,۰۰۰ تومان</span>
               </button>
               <Link href="#" className="px-10 text-sm font-light underline">
                 درباره جعبه هدیه ست
@@ -120,7 +120,18 @@ export default function Page() {
           <div className="flex flex-col gap-4 bg-stone-100 p-8 text-sm">
             <div className="flex items-center justify-between">
               <span>جمع سفارش</span>
-              <span>۲۶۰۰۰۰ تومان</span>
+              <span className="flex gap-1">
+                {(() => {
+                  let totalPrice = 0;
+                  items.forEach((item) => {
+                    totalPrice += item.product.data.salePrice
+                      ? item.product.data.salePrice
+                      : item.product.data.originalPrice;
+                  });
+                  return totalPrice.toLocaleString("fa-ir");
+                })()}
+                <span>تومان</span>
+              </span>
             </div>
             <hr />
             <div className="flex flex-col gap-4">
