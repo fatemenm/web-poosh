@@ -47,7 +47,7 @@ export default function Page() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const pageNumber = Number(searchParams.get("page") ?? 1);
-  const { addItem } = useBasket();
+  const { addItem, openBasketPopUp, closeBasketPopUp } = useBasket();
 
   useEffect(() => {
     const getData = async () => {
@@ -189,6 +189,8 @@ export default function Page() {
               size: selectedSize,
               image: selectedProduct.getImagesByColor(selectedColor)?.[0],
             });
+            openBasketPopUp();
+            closeBasketPopUp();
           }}
         />
       )}

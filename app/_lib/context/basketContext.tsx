@@ -14,9 +14,12 @@ import { BasketItem, Image, Product } from "../definitions";
 
 type basketContextType = {
   items: BasketItem[];
+  isBasketPopUpOpen: boolean;
   addItem: (item: BasketItem) => void;
   removeItem: (item: BasketItem) => void;
   editItem: (item: BasketItem) => void;
+  openBasketPopUp: () => void;
+  closeBasketPopUp: () => void;
 };
 
 type StorageBasketItems = {
@@ -31,15 +34,17 @@ const basketContext = createContext<basketContextType | null>(null);
 
 export function BasketProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<BasketItem[]>([]);
+  // TODO: rewrite it with registering a function to change the state of the pop-up in the header
+  const [isBasketPopUpOpen, setIsBasketPopUpOpen] = useState<boolean>(false);
 
-  function mapStorageToBasketItems() {
-    // 1.1 get data from local storage and parse it
+  useEffect(() => {
+    setItems(mapStorageToBasketItems());
+  }, []);
+
+  const mapStorageToBasketItems = () => {
     const data = JSON.parse(localStorage.getItem("basketItems") ?? "{}");
-    // 1.2 return empty array if data is empty
     if (Object.keys(data).length === 0) return [];
-    // 2. transform data from object to array
     const storageBasketItems = Object.values(data) as StorageBasketItems[];
-    // 3. transform storageBasketItems to basketItems
     const items = storageBasketItems.map((item) => {
       return {
         id: item.id,
@@ -49,11 +54,10 @@ export function BasketProvider({ children }: { children: ReactNode }) {
         product: new ProductModel(item.product),
       };
     });
-    // console.log("items map storage to basketItems", items);
     return items;
-  }
+  };
 
-  function mapBasketItemToStorage(items: BasketItem[]) {
+  const mapBasketItemToStorage = (items: BasketItem[]) => {
     const newItems = items.map((item) => {
       return {
         id: item.id,
@@ -63,13 +67,8 @@ export function BasketProvider({ children }: { children: ReactNode }) {
         product: item.product.data,
       };
     });
-    // console.log("items map basketItem to storage", newItems);
     return newItems;
-  }
-
-  useEffect(() => {
-    setItems(mapStorageToBasketItems());
-  }, []);
+  };
 
   const addItem = (item: BasketItem) => {
     const items = mapStorageToBasketItems();
@@ -106,8 +105,24 @@ export function BasketProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("basketItems", JSON.stringify(storageItems));
   };
 
+  const openBasketPopUp = () => setIsBasketPopUpOpen(true);
+
+  const closeBasketPopUp = async () => {
+    setTimeout(() => setIsBasketPopUpOpen(false), 3000);
+  };
+
   return (
-    <basketContext.Provider value={{ items, addItem, removeItem, editItem }}>
+    <basketContext.Provider
+      value={{
+        items,
+        isBasketPopUpOpen,
+        addItem,
+        removeItem,
+        editItem,
+        openBasketPopUp,
+        closeBasketPopUp,
+      }}
+    >
       {children}
     </basketContext.Provider>
   );

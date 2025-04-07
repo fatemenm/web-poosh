@@ -57,17 +57,21 @@ export default function Header({
   promoBanner: PromoBannerType | undefined;
   navbarItems: NavbarItem[] | undefined;
 }) {
-  const [hoveredNavbarItem, setHoveredNavbarItem] =
+  const [hoveredRightNavbarItem, setHoveredRightNavbarItem] =
     useState<NavbarItem | null>();
-  const [isRightNavExpanded, setIsRightNavExpanded] = useState<boolean>(false);
-  const [leftNavbarItem, setLeftNavbarItem] = useState<string>();
+  const [hoveredLeftNavbarItem, setHoveredLeftNavbarItem] = useState<string>();
   const [isSearchBarOpen, setIsSearchBarOpen] = useState<boolean>(false);
   const [hoveredBasketItemId, setHoveredBasketItemId] = useState<number | null>(
     null
   );
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [products, setProducts] = useState<ProductModel[]>([]);
-  const { items, removeItem } = useBasket();
+  const { items, removeItem, isBasketPopUpOpen } = useBasket();
+
+  useEffect(() => {
+    if (isBasketPopUpOpen) setHoveredLeftNavbarItem("basket");
+    else setHoveredLeftNavbarItem("");
+  }, [isBasketPopUpOpen]);
 
   useEffect(() => {
     const getData = async () => {
@@ -105,17 +109,15 @@ export default function Header({
                   <Link
                     className={getClassNames(
                       item,
-                      hoveredNavbarItem?.id === item.id
+                      hoveredRightNavbarItem?.id === item.id
                     )}
                     key={item.id}
                     href={item.linkUrl}
                     onMouseEnter={() => {
-                      setHoveredNavbarItem(item);
-                      setIsRightNavExpanded(true);
+                      setHoveredRightNavbarItem(item);
                     }}
                     onMouseLeave={() => {
-                      setHoveredNavbarItem(null);
-                      setIsRightNavExpanded(false);
+                      if (!item?.isExpandable) setHoveredRightNavbarItem(null);
                     }}
                   >
                     {item.linkText}
@@ -137,8 +139,8 @@ export default function Header({
           <NavigationMenu.Root
             dir="rtl"
             className="relative flex items-stretch justify-end [&>div]:w-full"
-            value={leftNavbarItem}
-            onValueChange={(value) => setLeftNavbarItem(value)}
+            value={hoveredLeftNavbarItem}
+            onValueChange={(value) => setHoveredLeftNavbarItem(value)}
           >
             <NavigationMenu.List className="flex h-full w-full flex-row items-stretch justify-end">
               <NavigationMenu.Item value="user">
@@ -287,48 +289,46 @@ export default function Header({
           </NavigationMenu.Root>
         </div>
       </div>
-      {hoveredNavbarItem?.isExpandable && isRightNavExpanded && (
+      {hoveredRightNavbarItem?.isExpandable && (
         <div className="absolute top-28 z-20 w-screen">
           <div
             className="flex flex-row justify-center bg-stone-100 py-5"
             onMouseEnter={() => {
-              setHoveredNavbarItem(hoveredNavbarItem);
-              setIsRightNavExpanded(true);
+              setHoveredRightNavbarItem(hoveredRightNavbarItem);
             }}
             onMouseLeave={() => {
-              setHoveredNavbarItem(null);
-              setIsRightNavExpanded(false);
+              setHoveredRightNavbarItem(null);
             }}
           >
             <div className="flex w-2/3 flex-row justify-between px-6">
               <div className="flex flex-row gap-20">
-                {createSublinkGrid(hoveredNavbarItem?.subLinks?.items)?.map(
-                  (col, colNumber) => {
-                    return (
-                      <ul
-                        key={colNumber}
-                        className="flex flex-col gap-5 text-right text-sm font-normal text-stone-600"
-                      >
-                        {col.map((item, rowNumber) => {
-                          return (
-                            <li key={rowNumber}>
-                              <Link href={nextServerUrl + item.url}>
-                                {item.name}
-                              </Link>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    );
-                  }
-                )}
+                {createSublinkGrid(
+                  hoveredRightNavbarItem?.subLinks?.items
+                )?.map((col, colNumber) => {
+                  return (
+                    <ul
+                      key={colNumber}
+                      className="flex flex-col gap-5 text-right text-sm font-normal text-stone-600"
+                    >
+                      {col.map((item, rowNumber) => {
+                        return (
+                          <li key={rowNumber}>
+                            <Link href={nextServerUrl + item.url}>
+                              {item.name}
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  );
+                })}
               </div>
-              {hoveredNavbarItem.image ? (
+              {hoveredRightNavbarItem.image ? (
                 <Image
-                  src={apiBaseUrl + hoveredNavbarItem.image.url}
-                  alt={hoveredNavbarItem.image?.alternativeText}
-                  width={hoveredNavbarItem.image.width}
-                  height={hoveredNavbarItem.image.height}
+                  src={apiBaseUrl + hoveredRightNavbarItem.image.url}
+                  alt={hoveredRightNavbarItem.image?.alternativeText}
+                  width={hoveredRightNavbarItem.image.width}
+                  height={hoveredRightNavbarItem.image.height}
                   unoptimized
                 />
               ) : (
@@ -339,7 +339,8 @@ export default function Header({
           <div className="h-screen bg-stone-800 bg-opacity-50" />
         </div>
       )}
-      {(leftNavbarItem === "user" || leftNavbarItem === "basket") && (
+      {(hoveredLeftNavbarItem === "user" ||
+        hoveredLeftNavbarItem === "basket") && (
         <div className="absolute left-0 top-28 z-10 h-full w-screen bg-stone-800 bg-opacity-50" />
       )}
     </header>

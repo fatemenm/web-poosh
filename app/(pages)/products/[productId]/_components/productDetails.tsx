@@ -24,7 +24,7 @@ export default function ProductDetails({
 }) {
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [isSizeErrorVisible, setIsSizeErrorVisible] = useState<boolean>(false);
-  const { addItem } = useBasket();
+  const { addItem, openBasketPopUp, closeBasketPopUp } = useBasket();
 
   const selectedProduct = {
     id: Math.ceil(Math.random() * 1000) + Date.now(),
@@ -101,7 +101,11 @@ export default function ProductDetails({
         <button
           onClick={() => {
             if (!selectedProduct.size) setIsSizeErrorVisible(true);
-            else addItem(selectedProduct);
+            else {
+              addItem(selectedProduct);
+              openBasketPopUp();
+              closeBasketPopUp();
+            }
           }}
           className={"bg-green-700 py-5 text-sm text-white hover:bg-green-800"}
         >
