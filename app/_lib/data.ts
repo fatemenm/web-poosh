@@ -1,17 +1,19 @@
 import { apiBaseUrl } from "@config";
 import qs from "qs";
 
+// import { stringify } from "querystring";
 import { ProductModel } from "@/_models/product.model";
 
 import {
+  AuthResponseBody,
   Category,
   ClotheSetBanner,
   Color,
+  GetResponseBody,
   HeroBanner,
   NavbarItem,
   Product,
   PromoBanner,
-  responseBody,
 } from "./definitions";
 
 const urls = {
@@ -25,6 +27,8 @@ const urls = {
   getClotheSetBanners: apiBaseUrl + "/api/clothe-set-banners",
   getProductById: apiBaseUrl + "/api/products/:id",
   getProducts: apiBaseUrl + "/api/products",
+  signUp: apiBaseUrl + "/api/auth/local/register",
+  signIn: apiBaseUrl + "/api/auth/local",
 };
 
 type queryType = {
@@ -52,7 +56,7 @@ async function fetchData(data: {
     if (!response.ok) {
       throw new Error("Failed to fetch data");
     }
-    const body: responseBody = await response.json();
+    const body: GetResponseBody = await response.json();
     return body;
   } catch (error) {
     console.error(error);
@@ -60,8 +64,51 @@ async function fetchData(data: {
   }
 }
 
+export async function signUp(email: string, password: string) {
+  try {
+    const url = new URL(urls.signUp);
+    const response = await fetch(url.href, {
+      method: "POST",
+      body: JSON.stringify({ username: email, email, password }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) throw new Error("Failed to send data");
+    const body: AuthResponseBody = await response.json();
+    return body;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function signIn(email: string, password: string) {
+  try {
+    const url = new URL(urls.signIn);
+    const response = await fetch(url.href, {
+      method: "POST",
+      body: JSON.stringify({ identifier: email, password }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) throw new Error("Failed to send data");
+    const body: AuthResponseBody = await response.json();
+    return body;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function signOut() {}
+
+// const res = await signIn("kianoosh@test.com", "123456");
+// console.log("login res:", res);
+
 export async function getPromoBannerData() {
-  const body: responseBody = await fetchData({ baseUrl: urls.getBanners });
+  const body: GetResponseBody = await fetchData({ baseUrl: urls.getBanners });
   if (!Array.isArray(body.data)) {
     throw new Error("invalid data");
   }
@@ -81,7 +128,7 @@ export async function getPromoBannerData() {
 }
 
 export async function getNavbarItems() {
-  const body: responseBody = await fetchData({
+  const body: GetResponseBody = await fetchData({
     baseUrl: urls.getNavbarItems,
     query: {
       sort: ["index"],
@@ -95,7 +142,7 @@ export async function getNavbarItems() {
 }
 
 export async function getHeroBanners() {
-  const body: responseBody = await fetchData({
+  const body: GetResponseBody = await fetchData({
     baseUrl: urls.getHeroBanners,
     query: {
       populate: {
@@ -107,7 +154,7 @@ export async function getHeroBanners() {
 }
 
 export async function getCategories() {
-  const body: responseBody = await fetchData({
+  const body: GetResponseBody = await fetchData({
     baseUrl: urls.getCategories,
     query: {
       populate: {
@@ -127,7 +174,7 @@ export async function getCategories() {
 }
 
 export async function getCategoryById(documentId: string) {
-  const body: responseBody = await fetchData({
+  const body: GetResponseBody = await fetchData({
     baseUrl: urls.getCategoryById,
     query: {
       populate: {
@@ -149,7 +196,7 @@ export async function getCategoryById(documentId: string) {
 }
 
 export async function getClotheSetBanners() {
-  const body: responseBody = await fetchData({
+  const body: GetResponseBody = await fetchData({
     baseUrl: urls.getClotheSetBanners,
     query: {
       populate: {
@@ -162,7 +209,7 @@ export async function getClotheSetBanners() {
 }
 
 export async function getProductById(documentId: string) {
-  const body: responseBody = await fetchData({
+  const body: GetResponseBody = await fetchData({
     baseUrl: urls.getProductById,
     query: {
       populate: {
@@ -262,7 +309,7 @@ export async function getProducts(queryParams?: {
       withCount: true,
     },
   };
-  const body: responseBody = await fetchData({
+  const body: GetResponseBody = await fetchData({
     baseUrl: urls.getProducts,
     query: query,
   });
@@ -275,7 +322,7 @@ export async function getProducts(queryParams?: {
 }
 
 export async function getCategoryColors(categoryId: string) {
-  const body: responseBody = await fetchData({
+  const body: GetResponseBody = await fetchData({
     baseUrl: urls.getCategoryAvailableOptions,
     pathParams: { id: categoryId },
   });
@@ -287,7 +334,7 @@ export async function getCategoryColors(categoryId: string) {
 }
 
 export async function getCategorySizes(categoryId: string) {
-  const body: responseBody = await fetchData({
+  const body: GetResponseBody = await fetchData({
     baseUrl: urls.getCategoryAvailableOptions,
     pathParams: { id: categoryId },
   });

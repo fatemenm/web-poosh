@@ -9,11 +9,40 @@ export type PromoBanner = {
   ctaUrl: string;
 };
 
-export type responseBody = {
+export type GetResponseBody = {
   data?: Record<string, unknown>[] | unknown;
   meta?: {
     pagination: Pagination;
   };
+};
+
+export type AuthResponseBody = {
+  jwt: string;
+  user: User;
+};
+
+export type Error = {
+  data: unknown;
+  error: {
+    status: number;
+    name: string;
+    message: string;
+    details: unknown;
+  };
+};
+
+export type User = {
+  id: number;
+  documentId: string;
+  username: string;
+  email: string;
+  provider: string;
+  confirmed: boolean;
+  blocked: boolean;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  locale: string | null;
 };
 
 export type NavbarItem = {
