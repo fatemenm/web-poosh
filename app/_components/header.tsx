@@ -13,6 +13,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import AuthModal from "@/(pages)/_components/authModal";
 import PromoBanner from "@/_components/promoBanner";
 import { useBasket } from "@/_lib/context/basketContext";
 import { getProducts } from "@/_lib/data";
@@ -64,6 +65,7 @@ export default function Header({
   const [hoveredBasketItemId, setHoveredBasketItemId] = useState<number | null>(
     null
   );
+  const [isAuthDialogOpen, setIsAuthDialogOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [products, setProducts] = useState<ProductModel[]>([]);
   const { items, removeItem, isBasketPopUpOpen } = useBasket();
@@ -152,11 +154,14 @@ export default function Header({
                 </NavigationMenu.Trigger>
                 <NavigationMenu.Content className="absolute left-0 top-12 z-20 w-[21vw] bg-white p-4">
                   <div className="flex flex-col gap-6">
-                    <button className="flex gap-6">
-                      <FontAwesomeIcon
-                        icon={faUserPlus}
-                        className="text-xl text-stone-600 hover:text-stone-800"
-                      />
+                    <button
+                      className="flex gap-6 text-stone-500 hover:text-stone-800"
+                      onClick={() => {
+                        setHoveredLeftNavbarItem("");
+                        setIsAuthDialogOpen(true);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faUserPlus} className="text-xl" />
                       ثبت نام / ورود
                     </button>
                   </div>
@@ -343,6 +348,10 @@ export default function Header({
         hoveredLeftNavbarItem === "basket") && (
         <div className="absolute left-0 top-28 z-10 h-full w-screen bg-stone-800 bg-opacity-50" />
       )}
+      <AuthModal
+        isOpen={isAuthDialogOpen}
+        onOpenChange={(isOpen: boolean) => setIsAuthDialogOpen(isOpen)}
+      />
     </header>
   );
 }
