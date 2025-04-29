@@ -9,11 +9,12 @@ import {
   Category,
   ClotheSetBanner,
   Color,
-  GetResponseBody,
   HeroBanner,
   NavbarItem,
   Product,
   PromoBanner,
+  ResponseBody,
+  UserMeResponse,
 } from "./definitions";
 
 const urls = {
@@ -29,6 +30,7 @@ const urls = {
   getProducts: apiBaseUrl + "/api/products",
   signUp: apiBaseUrl + "/api/auth/local/register",
   signIn: apiBaseUrl + "/api/auth/local",
+  getProfile: apiBaseUrl + "/api/users/me",
 };
 
 type queryType = {
@@ -37,6 +39,23 @@ type queryType = {
   sort?: string[];
   fields?: string[];
 };
+
+async function fetchWithAuth(data: { baseUrl: string }) {
+  try {
+    const url = new URL(data.baseUrl);
+    const token = localStorage.getItem("accessToken");
+    const response = await fetch(url.href, {
+      headers: {
+        authorization: `bearer ${token}`,
+      },
+    });
+    const body: UserMeResponse = await response.json();
+    return body;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
 
 async function fetchData(data: {
   baseUrl: string;
@@ -56,12 +75,17 @@ async function fetchData(data: {
     if (!response.ok) {
       throw new Error("Failed to fetch data");
     }
-    const body: GetResponseBody = await response.json();
+    const body: ResponseBody = await response.json();
     return body;
   } catch (error) {
     console.error(error);
     throw error;
   }
+}
+
+export async function getProfile() {
+  const res = await fetchWithAuth({ baseUrl: urls.getProfile });
+  return res;
 }
 
 export async function signUp(email: string, password: string) {
@@ -74,11 +98,13 @@ export async function signUp(email: string, password: string) {
         "Content-Type": "application/json",
       },
     });
-    if (!response.ok) throw new Error("Failed to send data");
+    if (!response.ok) {
+      const res: ResponseBody = await response.json();
+      if (res.error?.status === 400) throw new Error("ایمیل قبلا ثبت شده است.");
+    }
     const body: AuthResponseBody = await response.json();
     return body;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 }
@@ -93,22 +119,22 @@ export async function signIn(email: string, password: string) {
         "Content-Type": "application/json",
       },
     });
-    if (!response.ok) throw new Error("Failed to send data");
+    if (!response.ok) {
+      const res: ResponseBody = await response.json();
+      if (res.error?.status === 400)
+        throw new Error("ایمیل یا رمز عبور نامعتبر است.");
+    }
     const body: AuthResponseBody = await response.json();
     return body;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 }
 
 export async function signOut() {}
 
-// const res = await signIn("kianoosh@test.com", "123456");
-// console.log("login res:", res);
-
 export async function getPromoBannerData() {
-  const body: GetResponseBody = await fetchData({ baseUrl: urls.getBanners });
+  const body: ResponseBody = await fetchData({ baseUrl: urls.getBanners });
   if (!Array.isArray(body.data)) {
     throw new Error("invalid data");
   }
@@ -128,7 +154,7 @@ export async function getPromoBannerData() {
 }
 
 export async function getNavbarItems() {
-  const body: GetResponseBody = await fetchData({
+  const body: ResponseBody = await fetchData({
     baseUrl: urls.getNavbarItems,
     query: {
       sort: ["index"],
@@ -142,7 +168,7 @@ export async function getNavbarItems() {
 }
 
 export async function getHeroBanners() {
-  const body: GetResponseBody = await fetchData({
+  const body: ResponseBody = await fetchData({
     baseUrl: urls.getHeroBanners,
     query: {
       populate: {
@@ -154,7 +180,7 @@ export async function getHeroBanners() {
 }
 
 export async function getCategories() {
-  const body: GetResponseBody = await fetchData({
+  const body: ResponseBody = await fetchData({
     baseUrl: urls.getCategories,
     query: {
       populate: {
@@ -174,7 +200,7 @@ export async function getCategories() {
 }
 
 export async function getCategoryById(documentId: string) {
-  const body: GetResponseBody = await fetchData({
+  const body: ResponseBody = await fetchData({
     baseUrl: urls.getCategoryById,
     query: {
       populate: {
@@ -196,7 +222,7 @@ export async function getCategoryById(documentId: string) {
 }
 
 export async function getClotheSetBanners() {
-  const body: GetResponseBody = await fetchData({
+  const body: ResponseBody = await fetchData({
     baseUrl: urls.getClotheSetBanners,
     query: {
       populate: {
@@ -209,7 +235,7 @@ export async function getClotheSetBanners() {
 }
 
 export async function getProductById(documentId: string) {
-  const body: GetResponseBody = await fetchData({
+  const body: ResponseBody = await fetchData({
     baseUrl: urls.getProductById,
     query: {
       populate: {
@@ -309,7 +335,7 @@ export async function getProducts(queryParams?: {
       withCount: true,
     },
   };
-  const body: GetResponseBody = await fetchData({
+  const body: ResponseBody = await fetchData({
     baseUrl: urls.getProducts,
     query: query,
   });
@@ -322,7 +348,7 @@ export async function getProducts(queryParams?: {
 }
 
 export async function getCategoryColors(categoryId: string) {
-  const body: GetResponseBody = await fetchData({
+  const body: ResponseBody = await fetchData({
     baseUrl: urls.getCategoryAvailableOptions,
     pathParams: { id: categoryId },
   });
@@ -334,7 +360,7 @@ export async function getCategoryColors(categoryId: string) {
 }
 
 export async function getCategorySizes(categoryId: string) {
-  const body: GetResponseBody = await fetchData({
+  const body: ResponseBody = await fetchData({
     baseUrl: urls.getCategoryAvailableOptions,
     pathParams: { id: categoryId },
   });

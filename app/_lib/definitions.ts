@@ -9,11 +9,12 @@ export type PromoBanner = {
   ctaUrl: string;
 };
 
-export type GetResponseBody = {
+export type ResponseBody = {
   data?: Record<string, unknown>[] | unknown;
   meta?: {
     pagination: Pagination;
   };
+  error?: Error;
 };
 
 export type AuthResponseBody = {
@@ -22,14 +23,13 @@ export type AuthResponseBody = {
 };
 
 export type Error = {
-  data: unknown;
-  error: {
-    status: number;
-    name: string;
-    message: string;
-    details: unknown;
-  };
+  status: number;
+  name: string;
+  message: string;
+  details: unknown;
 };
+
+export type UserMeResponse = User;
 
 export type User = {
   id: number;
@@ -43,6 +43,8 @@ export type User = {
   updatedAt: string;
   publishedAt: string;
   locale: string | null;
+  firstName: string | null;
+  lastName: string | null;
 };
 
 export type NavbarItem = {
