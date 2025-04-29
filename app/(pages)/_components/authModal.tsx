@@ -5,12 +5,19 @@ import * as Form from "@radix-ui/react-form";
 import * as Tabs from "@radix-ui/react-tabs";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-type Inputs = {
+import { signIn, signUp } from "@/_lib/data";
+import { Error as ErrorType } from "@/_lib/definitions";
+
+type signInTypes = {
   email: string;
   password: string;
+};
+
+type signUpTypes = signInTypes & {
+  isTermsAccepted: boolean;
 };
 
 export default function AuthModal({
@@ -20,15 +27,47 @@ export default function AuthModal({
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
-  const [activeTab, setActiveTab] = useState<string>("ثبت نام");
+  const [activeTab, setActiveTab] = useState<string>("sign-up");
   const {
-    register,
-    handleSubmit,
-    // watch,
-    formState: { errors },
-  } = useForm<Inputs>();
+    register: registerSignIn,
+    handleSubmit: handleSubmitSignIn,
+    setError: setErrorSignIn,
+    formState: { errors: errorsSignIn },
+    reset: resetSignIn,
+    clearErrors: clearErrorsSignIn,
+  } = useForm<signInTypes>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const {
+    register: registerSignUp,
+    handleSubmit: handleSubmitSignUp,
+    setError: setErrorSignUp,
+    formState: { errors: errorsSignUp },
+    reset: resetSignUp,
+    clearErrors: clearErrorsSignUp,
+  } = useForm<signUpTypes>();
+
+  const onSignIn: SubmitHandler<signInTypes> = async (data) => {
+    try {
+      const res = await signIn(data.email, data.password);
+      localStorage.setItem("accessToken", res.jwt);
+      console.log("signed in successfully:", res);
+    } catch (error) {
+      const e = error as ErrorType;
+      setErrorSignIn("root", { message: e.message });
+    }
+  };
+  const onSignUp: SubmitHandler<signUpTypes> = async (data) => {
+    try {
+      const res = await signUp(data.email, data.password);
+      if (res.user) {
+        console.log("signed up successfully", res);
+        onSignIn(data);
+      }
+    } catch (error) {
+      const e = error as ErrorType;
+      setErrorSignUp("root", { message: e.message });
+    }
+  };
   const emailRules = {
     required: "لطفا ایمیل خود را وارد کنید",
     pattern: {
@@ -43,6 +82,19 @@ export default function AuthModal({
       message: "رمز عبور باید دارای حداقل ۶ کاراکتر باشد",
     },
   };
+
+  const checkboxRule = {
+    required: "لطفاً شرایط و قوانین را بپذیرید.",
+  };
+
+  useEffect(() => {
+    if (activeTab === "sign-in") resetSignIn();
+    else resetSignUp();
+    if (!isOpen) {
+      resetSignIn();
+      resetSignUp();
+    }
+  }, [activeTab, isOpen]);
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
@@ -65,27 +117,27 @@ export default function AuthModal({
             onValueChange={setActiveTab}
             dir="rtl"
             className="my-10 flex flex-col px-6"
-            defaultValue="ثبت نام"
+            defaultValue="sign-up"
           >
             <Tabs.List
               aria-label="مدیریت اکانت"
               className="mb-8 flex justify-stretch border-b border-b-stone-300"
             >
               <Tabs.Trigger
-                value="ورود"
+                value="sign-in"
                 className="flex basis-1/2 justify-center border-b-2 border-b-transparent bg-white p-2 data-[state=active]:border-b-stone-700"
               >
                 ورود
               </Tabs.Trigger>
               <Tabs.Trigger
-                value="ثبت نام"
+                value="sign-up"
                 className="flex basis-1/2 justify-center border-b-2 border-b-transparent bg-white p-2 data-[state=active]:border-b-stone-700"
               >
                 ثبت نام
               </Tabs.Trigger>
             </Tabs.List>
             <Tabs.Content
-              value="ثبت نام"
+              value="sign-up"
               className="flex flex-col gap-6 bg-white"
             >
               <p className="text-sm">
@@ -99,31 +151,39 @@ export default function AuthModal({
                 </button>{" "}
                 شوید
               </p>
-              <Form.Root className="flex flex-col gap-6 px-6">
+              <Form.Root
+                className="flex flex-col gap-6 px-6"
+                onSubmit={handleSubmitSignUp(onSignUp)}
+              >
+                {/* root */}
+                <Form.Field name="root">
+                  <Form.Control asChild>
+                    <div />
+                  </Form.Control>
+                  {errorsSignUp.root && (
+                    <Form.Message className="text-sm text-stone-500">
+                      {errorsSignUp.root.message}
+                    </Form.Message>
+                  )}
+                </Form.Field>
                 {/* email */}
                 <Form.Field name="email" className="flex flex-col gap-2">
                   <div className="flex items-baseline justify-between">
                     <Form.Label className="text-sm text-stone-700">
                       ایمیل
                     </Form.Label>
-                    <Form.Message
-                      className="text-[13px] opacity-80"
-                      match="valueMissing"
-                    >
-                      لطفا ایمیل خود را وارد کنید
-                    </Form.Message>
-                    <Form.Message
-                      className="text-[13px] opacity-80"
-                      match="typeMismatch"
-                    >
-                      لطفا آدرس ایمیل معتبر وارد کنید
-                    </Form.Message>
+                    {errorsSignUp.email && (
+                      <Form.Message className="text-sm text-stone-500">
+                        {errorsSignUp.email.message}
+                      </Form.Message>
+                    )}
                   </div>
                   <Form.Control asChild>
                     <input
+                      {...registerSignUp("email", emailRules)}
                       className="w-full border border-stone-500 px-2 py-3 focus:border-stone-900 focus:outline-none"
                       type="email"
-                      required
+                      onClick={() => clearErrorsSignUp("root")}
                     />
                   </Form.Control>
                 </Form.Field>
@@ -133,29 +193,44 @@ export default function AuthModal({
                     <Form.Label className="text-sm text-stone-700">
                       رمز عبور
                     </Form.Label>
-                    <Form.Message
-                      className="text-[13px] opacity-80"
-                      match="valueMissing"
-                    >
-                      لطفا رمز عبور خود را وارد کنید
-                    </Form.Message>
+                    {errorsSignUp.password && (
+                      <Form.Message className="text-sm text-stone-500">
+                        {errorsSignUp.password.message}
+                      </Form.Message>
+                    )}
                   </div>
                   <Form.Control asChild>
                     <input
+                      {...registerSignUp("password", passwordRules)}
                       className="w-full border border-stone-500 px-2 py-3 focus:border-stone-900 focus:outline-none"
                       type="password"
-                      required
+                      onClick={() => clearErrorsSignUp("root")}
                     />
                   </Form.Control>
                 </Form.Field>
                 {/* terms checkbox */}
-                <Form.Field name="terms" className="flex gap-2">
-                  <Form.Control asChild>
-                    <input type="checkbox" required />
-                  </Form.Control>
-                  <Form.Label className="border-b border-b-stone-600 text-sm text-stone-700">
-                    <Link href="/">قوانین و مقررات را مطالعه و پذیرفته ام</Link>
-                  </Form.Label>
+                <Form.Field
+                  name="isTermsAccepted"
+                  className="flex flex-col gap-2"
+                >
+                  <div className="flex gap-2">
+                    <Form.Control asChild>
+                      <input
+                        {...registerSignUp("isTermsAccepted", checkboxRule)}
+                        type="checkbox"
+                      />
+                    </Form.Control>
+                    <Form.Label className="border-b border-b-stone-600 text-sm text-stone-700">
+                      <Link href="#">
+                        قوانین و مقررات را مطالعه و پذیرفته ام
+                      </Link>
+                    </Form.Label>
+                  </div>
+                  {errorsSignUp.isTermsAccepted && (
+                    <Form.Message className="text-sm text-stone-500">
+                      {errorsSignUp.isTermsAccepted.message}
+                    </Form.Message>
+                  )}
                 </Form.Field>
                 <hr />
                 <Form.Submit asChild>
@@ -165,12 +240,15 @@ export default function AuthModal({
                 </Form.Submit>
               </Form.Root>
             </Tabs.Content>
-            <Tabs.Content value="ورود" className="flex flex-col gap-6 bg-white">
+            <Tabs.Content
+              value="sign-in"
+              className="flex flex-col gap-6 bg-white"
+            >
               <p className="text-sm">
                 اگر قبلا در وب‌پوش ثبت ‌نام کرده‌اید وارد شوید در غیر این صورت{" "}
                 <button
                   className="text-blue-500"
-                  onClick={() => setActiveTab("ثبت نام")}
+                  onClick={() => setActiveTab("sign-up")}
                 >
                   ثبت‌ نام
                 </button>{" "}
@@ -179,26 +257,37 @@ export default function AuthModal({
               <Form.Root
                 noValidate
                 className="flex flex-col gap-6 px-6"
-                onSubmit={handleSubmit(onSubmit)}
+                onSubmit={handleSubmitSignIn(onSignIn)}
               >
+                {/* root */}
+                <Form.Field name="root">
+                  <Form.Control asChild>
+                    <div />
+                  </Form.Control>
+                  {errorsSignIn.root && (
+                    <Form.Message className="text-sm text-stone-500">
+                      {errorsSignIn.root.message}
+                    </Form.Message>
+                  )}
+                </Form.Field>
                 {/* email */}
                 <Form.Field name="email" className="flex flex-col gap-2">
                   <div className="flex items-baseline justify-between">
                     <Form.Label className="text-sm text-stone-700">
                       ایمیل
                     </Form.Label>
-                    {errors.email && (
-                      <Form.Message className="text-[13px] opacity-80">
-                        {errors.email.message}
+                    {errorsSignIn.email && (
+                      <Form.Message className="text-sm text-stone-500">
+                        {errorsSignIn.email.message}
                       </Form.Message>
                     )}
                   </div>
                   <Form.Control asChild>
                     <input
-                      {...register("email", emailRules)}
+                      {...registerSignIn("email", emailRules)}
                       className="w-full border border-stone-500 px-2 py-3 focus:border-stone-900 focus:outline-none"
                       type="email"
-                      required
+                      onClick={() => clearErrorsSignIn("root")}
                     />
                   </Form.Control>
                 </Form.Field>
@@ -208,18 +297,18 @@ export default function AuthModal({
                     <Form.Label className="text-sm text-stone-700">
                       رمز عبور
                     </Form.Label>
-                    {errors.password && (
-                      <Form.Message className="text-[13px] opacity-80">
-                        {errors.password.message}
+                    {errorsSignIn.password && (
+                      <Form.Message className="text-sm text-stone-500">
+                        {errorsSignIn.password.message}
                       </Form.Message>
                     )}
                   </div>
-                  <Form.Control asChild {...register("password")}>
+                  <Form.Control asChild>
                     <input
-                      {...register("password", passwordRules)}
+                      {...registerSignIn("password", passwordRules)}
                       className="w-full border border-stone-500 px-2 py-3 focus:border-stone-900 focus:outline-none"
                       type="password"
-                      required
+                      onClick={() => clearErrorsSignIn("root")}
                     />
                   </Form.Control>
                   <Link href="" className="text-sm text-blue-500">
