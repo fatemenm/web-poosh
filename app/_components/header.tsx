@@ -2,7 +2,11 @@
 
 import { apiBaseUrl, nextServerUrl } from "@config";
 import {
+  faArrowRightFromBracket,
   faBagShopping,
+  faClose,
+  faDoorClosed,
+  faRuler,
   faUser,
   faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
@@ -11,10 +15,12 @@ import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import AuthModal from "@/(pages)/_components/authModal";
 import PromoBanner from "@/_components/promoBanner";
+import { useAuth } from "@/_lib/context/authContext";
 import { useBasket } from "@/_lib/context/basketContext";
 import { getProducts } from "@/_lib/data";
 import {
@@ -69,6 +75,8 @@ export default function Header({
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [products, setProducts] = useState<ProductModel[]>([]);
   const { items, removeItem, isBasketPopUpOpen } = useBasket();
+  const { user, handleSignOut } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     if (isBasketPopUpOpen) setHoveredLeftNavbarItem("basket");
@@ -147,23 +155,63 @@ export default function Header({
             <NavigationMenu.List className="flex h-full w-full flex-row items-stretch justify-end">
               <NavigationMenu.Item value="user">
                 <NavigationMenu.Trigger className="h-full px-4">
-                  <FontAwesomeIcon
-                    icon={faUser}
-                    className="text-xl text-stone-600 hover:text-stone-800"
-                  />
+                  <div className="flex gap-3">
+                    {user && <span>{user.username}</span>}
+                    <FontAwesomeIcon
+                      icon={faUser}
+                      className="text-xl text-stone-600 hover:text-stone-800"
+                    />
+                  </div>
                 </NavigationMenu.Trigger>
-                <NavigationMenu.Content className="absolute left-0 top-12 z-20 w-[21vw] bg-white p-4">
-                  <div className="flex flex-col gap-6">
-                    <button
-                      className="flex gap-6 text-stone-500 hover:text-stone-800"
-                      onClick={() => {
-                        setHoveredLeftNavbarItem("");
-                        setIsAuthDialogOpen(true);
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faUserPlus} className="text-xl" />
-                      ثبت نام / ورود
-                    </button>
+                <NavigationMenu.Content className="absolute left-0 top-12 z-20 w-[18vw] bg-white p-4">
+                  <div>
+                    {user ? (
+                      <div className="flex flex-col gap-6">
+                        <Link
+                          href="/profile"
+                          className="flex gap-2 text-stone-600 hover:text-stone-700"
+                        >
+                          <FontAwesomeIcon icon={faUser} className="text-xl" />
+                          پروفایل
+                        </Link>
+                        <Link
+                          href="/profile"
+                          className="flex gap-2 text-stone-600 hover:text-stone-700"
+                        >
+                          <FontAwesomeIcon icon={faRuler} className="text-xl" />
+                          سایز‌های من
+                        </Link>
+                        <button
+                          onClick={() => {
+                            router.push("/", {
+                              scroll: false,
+                            });
+                            handleSignOut();
+                          }}
+                          className="flex gap-2 text-stone-600 hover:text-stone-700"
+                        >
+                          <FontAwesomeIcon
+                            icon={faArrowRightFromBracket}
+                            className="text-xl"
+                          />
+                          خروج از حساب کاربری
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        className="flex gap-2 text-stone-600 hover:text-stone-700"
+                        onClick={() => {
+                          setHoveredLeftNavbarItem("");
+                          setIsAuthDialogOpen(true);
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          icon={faUserPlus}
+                          className="text-xl"
+                        />
+                        ثبت نام / ورود
+                      </button>
+                    )}
                   </div>
                   <NavigationMenu.Link />
                 </NavigationMenu.Content>
