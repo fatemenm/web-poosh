@@ -5,6 +5,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import BreadCrumb from "@/_components/breadcrumb";
+import { useBreadcrumb } from "@/_lib/context/breadcrumbContext";
 import { getProducts } from "@/_lib/data";
 import { Pagination as PaginationType } from "@/_lib/definitions";
 import { ProductModel } from "@/_models/product.model";
@@ -19,6 +20,17 @@ import {
 
 import ProductCard from "../_components/productCard";
 
+const breadcrumbItems = [
+  {
+    label: "وب پوش",
+    href: "/",
+  },
+  {
+    label: "نتایج جستجو",
+    href: ".",
+  },
+];
+
 export default function Page() {
   const [products, setProducts] = useState<ProductModel[]>([]);
   const [pagination, setPagination] = useState<PaginationType>();
@@ -27,6 +39,10 @@ export default function Page() {
   const pageNumber = Number(searchParams.get("page") ?? 1);
   // FIXME: handle type search query
   const searchQuery = searchParams.get("search") ?? "";
+  const { setItems } = useBreadcrumb();
+  useEffect(() => {
+    setItems(breadcrumbItems);
+  }, [setItems]);
 
   useEffect(() => {
     const getData = async () => {
@@ -43,16 +59,6 @@ export default function Page() {
     getData();
   }, [searchParams]);
 
-  const breadcrumbItems = [
-    {
-      label: "وب پوش",
-      href: "/",
-    },
-    {
-      label: "نتایج جستجو",
-      href: ".",
-    },
-  ];
   function updatePageNumber(pageNum: number) {
     const params = new URLSearchParams(searchParams);
     params.set("page", pageNum.toString());
@@ -60,7 +66,7 @@ export default function Page() {
   }
   return (
     <div className="mx-auto flex w-10/12 flex-col gap-16">
-      <BreadCrumb items={breadcrumbItems} />
+      <BreadCrumb />
       <div className="mb-16 flex w-full flex-col gap-8">
         {/* products grid */}
         <div className="flex w-full flex-col gap-3">

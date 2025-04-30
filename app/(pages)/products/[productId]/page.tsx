@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 
 import BasicSlider from "@/_components/basicSlider";
 import BreadCrumb from "@/_components/breadcrumb";
+import { useBreadcrumb } from "@/_lib/context/breadcrumbContext";
 import { getProductById, getProducts } from "@/_lib/data";
 import { ProductModel } from "@/_models/product.model";
 
@@ -31,7 +32,26 @@ export default function Product({ params }: { params: { productId: string } }) {
   const defaultColor = product?.getAvailableColors()[0].name;
   const [isSizeGuideModalOpen, setIsSizeGuideModalOpen] =
     useState<boolean>(false);
-  const router = useRouter();
+  const { setItems } = useBreadcrumb();
+
+  useEffect(() => {
+    if (!product) return;
+    const breadcrumbItems = [
+      {
+        label: "وب پوش",
+        href: "/",
+      },
+      {
+        label: product.data.category.name,
+        href: "/category/" + product?.data.category.documentId,
+      },
+      {
+        label: product?.data.name,
+        href: ".",
+      },
+    ];
+    setItems(breadcrumbItems);
+  }, [setItems, product]);
 
   useEffect(() => {
     const getData = async () => {
@@ -45,24 +65,10 @@ export default function Product({ params }: { params: { productId: string } }) {
 
   if (!product || !relatedProducts || !defaultColor)
     return <div>product is not available</div>;
-  const breadcrumbItems = [
-    {
-      label: "وب پوش",
-      href: "/",
-    },
-    {
-      label: product.data.category.name,
-      href: nextServerUrl + "/category/" + product.data.category.documentId,
-    },
-    {
-      label: product.data.name,
-      href: ".",
-    },
-  ];
 
   return (
     <div className="mx-auto flex w-10/12 flex-col gap-16">
-      <BreadCrumb items={breadcrumbItems} />
+      <BreadCrumb />
       <ProductDetails
         onClickSizeGuideLink={() => setIsSizeGuideModalOpen(true)}
         product={product}

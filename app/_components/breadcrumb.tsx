@@ -2,12 +2,15 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 
-type BreadCrumbItem = {
+import { useBreadcrumb } from "@/_lib/context/breadcrumbContext";
+
+export type BreadCrumbItem = {
   label: string;
   href: string;
 };
 
-export default function BreadCrumb({ items }: { items: BreadCrumbItem[] }) {
+export default function BreadCrumb() {
+  const { items } = useBreadcrumb();
   const trailItems = [...items];
   const lastItem = trailItems.pop();
   return (

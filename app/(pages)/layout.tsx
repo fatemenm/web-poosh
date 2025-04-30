@@ -9,6 +9,7 @@ import Footer from "@/_components/footer";
 import Header from "@/_components/header";
 import { AuthProvider } from "@/_lib/context/authContext";
 import { BasketProvider } from "@/_lib/context/basketContext";
+import { BreadcrumbProvider } from "@/_lib/context/breadcrumbContext";
 import { getNavbarItems, getPromoBannerData } from "@/_lib/data";
 import { NavbarItem, PromoBanner } from "@/_lib/definitions";
 import "@/globals.css";
@@ -49,7 +50,9 @@ export default function RootLayout({
         <AuthProvider>
           <BasketProvider>
             <Header promoBanner={banner} navbarItems={navbarItems} />
-            <main className="shrink-0 grow">{children}</main>
+            <BreadcrumbProvider>
+              <main className="shrink-0 grow">{children}</main>
+            </BreadcrumbProvider>
             <Footer />
           </BasketProvider>
         </AuthProvider>

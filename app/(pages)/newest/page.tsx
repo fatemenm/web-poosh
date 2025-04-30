@@ -12,6 +12,7 @@ import ProductModal from "@/(pages)/_components/productModal";
 import Accordion from "@/_components/accordion";
 import BreadCrumb from "@/_components/breadcrumb";
 import { useBasket } from "@/_lib/context/basketContext";
+import { useBreadcrumb } from "@/_lib/context/breadcrumbContext";
 import { getCategories, getProducts } from "@/_lib/data";
 import { Category } from "@/_lib/definitions";
 import { Pagination as PaginationType } from "@/_lib/definitions";
@@ -48,6 +49,10 @@ export default function Page() {
   const pathname = usePathname();
   const pageNumber = Number(searchParams.get("page") ?? 1);
   const { addItem, openBasketPopUp, closeBasketPopUp } = useBasket();
+  const { setItems } = useBreadcrumb();
+  useEffect(() => {
+    setItems(breadcrumbItems);
+  }, [setItems]);
 
   useEffect(() => {
     const getData = async () => {
@@ -74,7 +79,7 @@ export default function Page() {
 
   return (
     <div className="mx-auto flex w-10/12 flex-col gap-16">
-      <BreadCrumb items={breadcrumbItems} />
+      <BreadCrumb />
       <div className="flex flex-row gap-20 pb-10">
         {/* right navbar */}
         <div className="w-72">

@@ -13,14 +13,7 @@ import { useRouter } from "next/navigation";
 
 import BreadCrumb from "@/_components/breadcrumb";
 import { useAuth } from "@/_lib/context/authContext";
-
-const breadCrumbItems = [
-  {
-    label: "وب پوش",
-    href: "/",
-  },
-  { label: "پروفایل", href: "/profile" },
-];
+import { useBreadcrumb } from "@/_lib/context/breadcrumbContext";
 
 export default function Layout({
   children,
@@ -33,7 +26,7 @@ export default function Layout({
 
   return (
     <div className="mx-auto mb-10 flex w-10/12 flex-col gap-10">
-      <BreadCrumb items={breadCrumbItems} />
+      <BreadCrumb />
       <div className="flex">
         {/* profile navbar */}
         <div className="flex w-1/6 flex-col gap-8 bg-stone-50 py-10">

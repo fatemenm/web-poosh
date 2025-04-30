@@ -9,35 +9,40 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import BreadCrumb from "@/_components/breadcrumb";
 import { useBasket } from "@/_lib/context/basketContext";
+import { useBreadcrumb } from "@/_lib/context/breadcrumbContext";
 import { BasketItem } from "@/_lib/definitions";
 
 import setBox from "@public/set-box.jpg";
 
 import ProductModal from "../_components/productModal";
 
+const breadcrumbItems = [
+  {
+    label: "وب پوش",
+    href: "/",
+  },
+  {
+    label: "سبد خرید",
+    href: "",
+  },
+];
+
 export default function Page() {
   const { items, removeItem, editItem } = useBasket();
   const [selectedItem, setSelectedItem] = useState<BasketItem | null>(null);
   const [isProductModalOpen, setIsProductModalOpen] = useState<boolean>(false);
-
-  const breadcrumbItems = [
-    {
-      label: "وب پوش",
-      href: "/",
-    },
-    {
-      label: "سبد خرید",
-      href: "",
-    },
-  ];
+  const { setItems } = useBreadcrumb();
+  useEffect(() => {
+    setItems(breadcrumbItems);
+  }, [setItems]);
 
   return (
     <div className="mx-auto flex w-10/12 flex-col">
-      <BreadCrumb items={breadcrumbItems} />
+      <BreadCrumb />
       <div className="mx-auto my-16 flex w-9/12 justify-center gap-32">
         <div className="flex basis-1/2 flex-col gap-8">
           <div>
