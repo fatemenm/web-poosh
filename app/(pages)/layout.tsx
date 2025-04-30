@@ -7,35 +7,17 @@ import { createContext, useEffect, useState } from "react";
 
 import Footer from "@/_components/footer";
 import Header from "@/_components/header";
+import { AuthProvider } from "@/_lib/context/authContext";
 import { BasketProvider } from "@/_lib/context/basketContext";
 import { getNavbarItems, getPromoBannerData } from "@/_lib/data";
-import { Image, NavbarItem, PromoBanner } from "@/_lib/definitions";
+import { NavbarItem, PromoBanner } from "@/_lib/definitions";
 import "@/globals.css";
-
-type ProductType = {
-  id: number;
-  documentId: string;
-  name: string;
-  originalPrice: number;
-  salePrice: number;
-  color: string;
-  size: string;
-  image: Image;
-};
-
-type basketContextType = {
-  items: ProductType[];
-  addItem: (item: ProductType) => void;
-  removeItem: (item: ProductType) => void;
-};
 
 const vazirmatn = Vazirmatn({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-vazirmatn",
 });
-
-export const basketContext = createContext<basketContextType | null>(null);
 
 export default function RootLayout({
   children,
@@ -64,11 +46,13 @@ export default function RootLayout({
         <link rel="icon" href="/icon.ico" sizes="any" />
       </Head>
       <body className="flex min-h-screen flex-col">
-        <BasketProvider>
-          <Header promoBanner={banner} navbarItems={navbarItems} />
-          <main className="shrink-0 grow">{children}</main>
-          <Footer />
-        </BasketProvider>
+        <AuthProvider>
+          <BasketProvider>
+            <Header promoBanner={banner} navbarItems={navbarItems} />
+            <main className="shrink-0 grow">{children}</main>
+            <Footer />
+          </BasketProvider>
+        </AuthProvider>
       </body>
     </html>
   );

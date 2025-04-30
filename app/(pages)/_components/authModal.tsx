@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-import { signIn, signUp } from "@/_lib/data";
+import { useAuth } from "@/_lib/context/authContext";
 import { Error as ErrorType } from "@/_lib/definitions";
 
 type signInTypes = {
@@ -20,6 +20,24 @@ type signUpTypes = signInTypes & {
   isTermsAccepted: boolean;
 };
 
+const emailRules = {
+  required: "لطفا ایمیل خود را وارد کنید",
+  pattern: {
+    value: /^\S+@\S+$/,
+    message: "لطفا آدرس ایمیل معتبر وارد کنید",
+  },
+};
+const passwordRules = {
+  required: "لطفا رمز عبور خود را وارد کنید",
+  minLength: {
+    value: 6,
+    message: "رمز عبور باید دارای حداقل ۶ کاراکتر باشد",
+  },
+};
+const checkboxRule = {
+  required: "لطفاً شرایط و قوانین را بپذیرید.",
+};
+
 export default function AuthModal({
   isOpen,
   onOpenChange,
@@ -28,6 +46,8 @@ export default function AuthModal({
   onOpenChange: (open: boolean) => void;
 }) {
   const [activeTab, setActiveTab] = useState<string>("sign-up");
+  const { handleSignIn, handleSignUp } = useAuth();
+
   const {
     register: registerSignIn,
     handleSubmit: handleSubmitSignIn,
@@ -48,9 +68,8 @@ export default function AuthModal({
 
   const onSignIn: SubmitHandler<signInTypes> = async (data) => {
     try {
-      const res = await signIn(data.email, data.password);
-      localStorage.setItem("accessToken", res.jwt);
-      console.log("signed in successfully:", res);
+      await handleSignIn(data.email, data.password);
+      onOpenChange(false);
     } catch (error) {
       const e = error as ErrorType;
       setErrorSignIn("root", { message: e.message });
@@ -58,35 +77,13 @@ export default function AuthModal({
   };
   const onSignUp: SubmitHandler<signUpTypes> = async (data) => {
     try {
-      const res = await signUp(data.email, data.password);
-      if (res.user) {
-        console.log("signed up successfully", res);
-        onSignIn(data);
-      }
+      await handleSignUp(data.email, data.password);
+      onOpenChange(false);
     } catch (error) {
       const e = error as ErrorType;
       setErrorSignUp("root", { message: e.message });
     }
   };
-  const emailRules = {
-    required: "لطفا ایمیل خود را وارد کنید",
-    pattern: {
-      value: /^\S+@\S+$/,
-      message: "لطفا آدرس ایمیل معتبر وارد کنید",
-    },
-  };
-  const passwordRules = {
-    required: "لطفا رمز عبور خود را وارد کنید",
-    minLength: {
-      value: 6,
-      message: "رمز عبور باید دارای حداقل ۶ کاراکتر باشد",
-    },
-  };
-
-  const checkboxRule = {
-    required: "لطفاً شرایط و قوانین را بپذیرید.",
-  };
-
   useEffect(() => {
     if (activeTab === "sign-in") resetSignIn();
     else resetSignUp();
