@@ -30,7 +30,7 @@ const urls = {
   getProducts: apiBaseUrl + "/api/products",
   signUp: apiBaseUrl + "/api/auth/local/register",
   signIn: apiBaseUrl + "/api/auth/local",
-  getProfile: apiBaseUrl + "/api/users/me",
+  getUser: apiBaseUrl + "/api/users/me",
 };
 
 type queryType = {
@@ -83,8 +83,8 @@ async function fetchData(data: {
   }
 }
 
-export async function getProfile() {
-  const res = await fetchWithAuth({ baseUrl: urls.getProfile });
+export async function getUser() {
+  const res = await fetchWithAuth({ baseUrl: urls.getUser });
   return res;
 }
 
