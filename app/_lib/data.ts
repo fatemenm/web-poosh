@@ -1,7 +1,6 @@
 import { apiBaseUrl } from "@config";
 import qs from "qs";
 
-// import { stringify } from "querystring";
 import { ProductModel } from "@/_models/product.model";
 
 import {
@@ -9,12 +8,14 @@ import {
   Category,
   ClotheSetBanner,
   Color,
+  Error as ErrorType,
   HeroBanner,
   NavbarItem,
   Product,
   PromoBanner,
   ResponseBody,
-  UserMeResponse,
+  User,
+  UserSize,
 } from "./definitions";
 
 const urls = {
@@ -31,6 +32,10 @@ const urls = {
   signUp: apiBaseUrl + "/api/auth/local/register",
   signIn: apiBaseUrl + "/api/auth/local",
   getUser: apiBaseUrl + "/api/users/me",
+  getUserSize: apiBaseUrl + "/api/user-sizes",
+  createUserSize: apiBaseUrl + "/api/user-sizes",
+  updateUserSize: apiBaseUrl + "/api/user-sizes/:id",
+  changePassword: apiBaseUrl + "/api/auth/change-password",
 };
 
 type queryType = {
@@ -40,17 +45,43 @@ type queryType = {
   fields?: string[];
 };
 
-async function fetchWithAuth(data: { baseUrl: string }) {
+async function requestWithAuth({
+  baseUrl,
+  id,
+  method,
+  body,
+  headers,
+  query,
+}: {
+  baseUrl: string;
+  id?: string | number;
+  method: "PUT" | "POST" | "GET";
+  body?: any;
+  headers?: HeadersInit;
+  query?: queryType;
+}) {
   try {
-    const url = new URL(data.baseUrl);
+    const url = new URL(id ? baseUrl.replace(":id", id.toString()) : baseUrl);
+    url.search = qs.stringify(query);
     const token = localStorage.getItem("accessToken");
     const response = await fetch(url.href, {
+      method,
       headers: {
         authorization: `bearer ${token}`,
+        "Content-Type": "application/json",
+        ...headers,
       },
+      body: body ? JSON.stringify(body) : undefined,
     });
-    const body: UserMeResponse = await response.json();
-    return body;
+    const data = await response.json();
+    if (!response.ok) {
+      const error = new Error(data.error.message || "Request failed");
+      (error as any).status = data.error.status;
+      (error as any).name = data.error.name || "RequestError";
+      (error as any).body = data.error.details;
+      throw error;
+    }
+    return data;
   } catch (error) {
     console.error(error);
     throw error;
@@ -83,9 +114,99 @@ async function fetchData(data: {
   }
 }
 
+export async function changePassword(
+  currentPassword: string,
+  newPassword: string,
+  passwordConfirmation: string
+) {
+  try {
+    const res: AuthResponseBody = await requestWithAuth({
+      baseUrl: urls.changePassword,
+      method: "POST",
+      body: {
+        currentPassword,
+        password: newPassword,
+        passwordConfirmation,
+      },
+    });
+    return res;
+  } catch (error: any) {
+    if (error.name === "ValidationError") {
+      const translations: Record<string, string> = {
+        "The provided current password is invalid": "رمز عبور فعلی اشتباه است",
+        "Passwords do not match": "رمز عبور و تکرار آن یکسان نیستند",
+        "Your new password must be different than your current":
+          "رمز عبور جدید باید با رمز عبور فعلی متفاوت باشد",
+      };
+      const translated = translations[error.message] || "خطایی رخ داده است";
+      throw new Error(translated);
+    }
+    throw new Error("خطایی در ارتباط با سرور رخ داده است");
+  }
+}
+
+export async function createUserSize(userSize: UserSize) {
+  const res: ResponseBody = await requestWithAuth({
+    baseUrl: urls.createUserSize,
+    method: "POST",
+    body: {
+      data: {
+        weight: userSize.weight,
+        height: userSize.height,
+        shoulderWidth: userSize.shoulderWidth,
+        chestWidth: userSize.chestWidth,
+        waistWidth: userSize.waistWidth,
+        pantsLength: userSize.pantsLength,
+        thighWidth: userSize.thighWidth,
+        hemWidth: userSize.hemWidth,
+        footSize: userSize.footSize,
+      },
+    },
+  });
+  return res.data as UserSize;
+}
+
+export async function updateUserSize(userSize: UserSize) {
+  const res: ResponseBody = await requestWithAuth({
+    baseUrl: urls.updateUserSize,
+    method: "PUT",
+    id: userSize.documentId,
+    body: {
+      data: {
+        weight: userSize.weight,
+        height: userSize.height,
+        shoulderWidth: userSize.shoulderWidth,
+        chestWidth: userSize.chestWidth,
+        waistWidth: userSize.waistWidth,
+        pantsLength: userSize.pantsLength,
+        thighWidth: userSize.thighWidth,
+        hemWidth: userSize.hemWidth,
+        footSize: userSize.footSize,
+      },
+    },
+  });
+
+  return res.data as UserSize;
+}
+
+export async function getUserSize() {
+  const res: ResponseBody = await requestWithAuth({
+    baseUrl: urls.getUserSize,
+    method: "GET",
+    query: {
+      sort: ["id:desc"],
+    },
+  });
+  const userSizes = res.data as UserSize[];
+  return userSizes[0];
+}
+
 export async function getUser() {
-  const res = await fetchWithAuth({ baseUrl: urls.getUser });
-  return res;
+  const user: User = await requestWithAuth({
+    baseUrl: urls.getUser,
+    method: "GET",
+  });
+  return user;
 }
 
 export async function signUp(email: string, password: string) {
@@ -130,8 +251,6 @@ export async function signIn(email: string, password: string) {
     throw error;
   }
 }
-
-export async function signOut() {}
 
 export async function getPromoBannerData() {
   const body: ResponseBody = await fetchData({ baseUrl: urls.getBanners });
