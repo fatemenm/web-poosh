@@ -1,9 +1,10 @@
 "use client";
 
 import "@fortawesome/fontawesome-svg-core/styles.css";
+import * as Toast from "@radix-ui/react-toast";
 import { Vazirmatn } from "next/font/google";
 import Head from "next/head";
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import Footer from "@/_components/footer";
 import Header from "@/_components/header";
@@ -49,11 +50,13 @@ export default function RootLayout({
       <body className="flex min-h-screen flex-col">
         <AuthProvider>
           <BasketProvider>
-            <Header promoBanner={banner} navbarItems={navbarItems} />
-            <BreadcrumbProvider>
-              <main className="shrink-0 grow">{children}</main>
-            </BreadcrumbProvider>
-            <Footer />
+            <Toast.Provider swipeDirection="right">
+              <Header promoBanner={banner} navbarItems={navbarItems} />
+              <BreadcrumbProvider>
+                <main className="shrink-0 grow">{children}</main>
+              </BreadcrumbProvider>
+              <Footer />
+            </Toast.Provider>
           </BasketProvider>
         </AuthProvider>
       </body>
