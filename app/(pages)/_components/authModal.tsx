@@ -11,12 +11,12 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useAuth } from "@/_lib/context/authContext";
 import { Error as ErrorType } from "@/_lib/definitions";
 
-type signInTypes = {
+type SignInTypes = {
   email: string;
   password: string;
 };
 
-type signUpTypes = signInTypes & {
+type SignUpTypes = SignInTypes & {
   isTermsAccepted: boolean;
 };
 
@@ -45,7 +45,7 @@ export default function AuthModal({
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
-  const [activeTab, setActiveTab] = useState<string>("sign-up");
+  const [activeTab, setActiveTab] = useState<string>("sign-in");
   const { handleSignIn, handleSignUp } = useAuth();
 
   const {
@@ -55,7 +55,7 @@ export default function AuthModal({
     formState: { errors: errorsSignIn },
     reset: resetSignIn,
     clearErrors: clearErrorsSignIn,
-  } = useForm<signInTypes>();
+  } = useForm<SignInTypes>();
 
   const {
     register: registerSignUp,
@@ -64,20 +64,22 @@ export default function AuthModal({
     formState: { errors: errorsSignUp },
     reset: resetSignUp,
     clearErrors: clearErrorsSignUp,
-  } = useForm<signUpTypes>();
+  } = useForm<SignUpTypes>();
 
-  const onSignIn: SubmitHandler<signInTypes> = async (data) => {
+  const onSignIn: SubmitHandler<SignInTypes> = async (data) => {
     try {
       await handleSignIn(data.email, data.password);
+      //Q: why is this needed?
       onOpenChange(false);
     } catch (error) {
       const e = error as ErrorType;
       setErrorSignIn("root", { message: e.message });
     }
   };
-  const onSignUp: SubmitHandler<signUpTypes> = async (data) => {
+  const onSignUp: SubmitHandler<SignUpTypes> = async (data) => {
     try {
       await handleSignUp(data.email, data.password);
+      //Q: why is this needed?
       onOpenChange(false);
     } catch (error) {
       const e = error as ErrorType;
@@ -308,9 +310,9 @@ export default function AuthModal({
                       onClick={() => clearErrorsSignIn("root")}
                     />
                   </Form.Control>
-                  <Link href="" className="text-sm text-blue-500">
+                  {/* <Link href="" className="text-sm text-blue-500">
                     رمز عبور خود را فراموش کرده ام
-                  </Link>
+                  </Link> */}
                 </Form.Field>
                 <hr />
                 <Form.Submit asChild>
