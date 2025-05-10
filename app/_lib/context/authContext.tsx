@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 
-import { getUser, signIn, signUp } from "../data";
+import { changePassword, getUser, signIn, signUp } from "../data";
 import { User } from "../definitions";
 
 export type authContextType = {
@@ -15,6 +15,11 @@ export type authContextType = {
   handleSignIn: (email: string, password: string) => void;
   handleSignUp: (email: string, password: string) => void;
   handleSignOut: () => void;
+  handleChangePassword: (
+    currentPassword: string,
+    newPassword: string,
+    passwordConfirmation: string
+  ) => void;
 };
 
 const authContext = createContext<authContextType | null>(null);
@@ -32,8 +37,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         } catch (error) {
           setUser(null);
         }
+        setLoading(false);
       }
-      setLoading(false);
     };
     fetchUser();
   }, []);
@@ -61,9 +66,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("accessToken", "");
     setUser(null);
   };
+
+  const handleChangePassword = async (
+    currentPassword: string,
+    newPassword: string,
+    passwordConfirmation: string
+  ) => {
+    try {
+      const res = await changePassword(
+        currentPassword,
+        newPassword,
+        passwordConfirmation
+      );
+      console.log(
+        "current, new, confirm:",
+        currentPassword,
+        newPassword,
+        passwordConfirmation
+      );
+      localStorage.setItem("accessToken", res.jwt);
+      setUser(res.user);
+    } catch (error) {
+      console.log("error in the auth context:", error);
+      throw error;
+    }
+  };
+
   return (
     <authContext.Provider
-      value={{ user, loading, handleSignIn, handleSignUp, handleSignOut }}
+      value={{
+        user,
+        loading,
+        handleSignIn,
+        handleSignUp,
+        handleSignOut,
+        handleChangePassword,
+      }}
     >
       {children}
     </authContext.Provider>
