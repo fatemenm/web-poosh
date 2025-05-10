@@ -79,10 +79,22 @@ const config: Config = {
             height: "0px",
           },
         },
+        hide: {
+          from: { opacity: "1" },
+          to: { opacity: "0" },
+        },
+        slideIn: {
+          from: {
+            transform: "translateX(calc(100% + var(--viewport-padding)))",
+          },
+          to: { transform: "translateX(0)" },
+        },
       },
       animation: {
         slideDown: "slideDown 500ms cubic-bezier(0.87, 0, 0.13, 1)",
         slideUp: "slideUp 500ms cubic-bezier(0.87, 0, 0.13, 1)",
+        hide: "hide 100ms ease-in",
+        slideIn: "slideIn 150ms cubic-bezier(0.16, 1, 0.3, 1)",
       },
       borderRadius: {
         lg: "var(--radius)",
