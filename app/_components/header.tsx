@@ -166,17 +166,17 @@ export default function Header({
                 <NavigationMenu.Content className="absolute left-0 top-12 z-20 w-[18vw] bg-white p-4">
                   <div>
                     {user ? (
-                      <div className="flex flex-col gap-6">
+                      <div className="flex flex-col">
                         <Link
                           href="/profile"
-                          className="flex gap-2 text-stone-600 hover:text-stone-700"
+                          className="flex gap-2 py-3 text-stone-600 hover:text-stone-800"
                         >
                           <FontAwesomeIcon icon={faUser} className="text-xl" />
                           پروفایل
                         </Link>
                         <Link
-                          href="/profile"
-                          className="flex gap-2 text-stone-600 hover:text-stone-700"
+                          href="/profile/sizes"
+                          className="flex gap-2 py-3 text-stone-600 hover:text-stone-800"
                         >
                           <FontAwesomeIcon icon={faRuler} className="text-xl" />
                           سایز‌های من
@@ -188,7 +188,7 @@ export default function Header({
                             });
                             handleSignOut();
                           }}
-                          className="flex gap-2 text-stone-600 hover:text-stone-700"
+                          className="flex gap-2 py-3 text-stone-600 hover:text-stone-800"
                         >
                           <FontAwesomeIcon
                             icon={faArrowRightFromBracket}
