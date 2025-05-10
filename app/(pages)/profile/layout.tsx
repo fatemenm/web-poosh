@@ -10,10 +10,10 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 import BreadCrumb from "@/_components/breadcrumb";
 import { useAuth } from "@/_lib/context/authContext";
-import { useBreadcrumb } from "@/_lib/context/breadcrumbContext";
 
 export default function Layout({
   children,
@@ -22,14 +22,17 @@ export default function Layout({
 }>) {
   const { user, loading, handleSignOut } = useAuth();
   const router = useRouter();
-  if (loading) return <div>در حال بارگذاری...</div>;
+  useEffect(() => {
+    if (!user && !loading) router.replace("/");
+  }, [user, loading]);
+  if (loading || !user) return <div>در حال بارگذاری...</div>;
 
   return (
-    <div className="mx-auto mb-10 flex w-10/12 flex-col gap-10">
+    <div className="mx-auto flex h-screen w-10/12 flex-col gap-10">
       <BreadCrumb />
-      <div className="flex">
+      <div className="mb-10 flex items-start">
         {/* profile navbar */}
-        <div className="flex w-1/6 flex-col gap-8 bg-stone-50 py-10">
+        <div className="flex w-1/6 flex-col gap-8 bg-stone-100 py-10">
           <div className="flex flex-col items-center gap-2">
             <FontAwesomeIcon
               className="text-8xl text-stone-400"
@@ -76,8 +79,8 @@ export default function Layout({
             </button>
           </div>
         </div>
-        {/* profile details */}
-        <div className="grow bg-rose-50 px-20">{children}</div>
+        {/* profile content */}
+        <div className="mb-10 grow px-20">{children}</div>
       </div>
     </div>
   );
