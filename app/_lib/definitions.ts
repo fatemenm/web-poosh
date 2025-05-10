@@ -29,8 +29,6 @@ export type Error = {
   details: unknown;
 };
 
-export type UserMeResponse = User;
-
 export type User = {
   id: number;
   documentId: string;
@@ -43,8 +41,19 @@ export type User = {
   updatedAt: string;
   publishedAt: string;
   locale: string | null;
-  firstName: string | null;
-  lastName: string | null;
+};
+
+export type UserSize = {
+  documentId?: string;
+  weight: number;
+  height: number;
+  shoulderWidth?: number;
+  chestWidth?: number;
+  waistWidth?: number;
+  pantsLength?: number;
+  thighWidth?: number;
+  hemWidth?: number;
+  footSize?: number;
 };
 
 export type NavbarItem = {
