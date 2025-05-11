@@ -51,9 +51,10 @@ export default function Page() {
       <div className="flex flex-row">
         {data.heroBanners?.map((banner, id) => {
           return (
-            <div
+            <Link
+              href={banner.linkUrl}
               key={id}
-              className="flex cursor-pointer flex-col items-center gap-4"
+              className="flex flex-col items-center gap-4"
             >
               <Image
                 src={apiBaseUrl + banner.image.url}
@@ -67,14 +68,11 @@ export default function Page() {
                 <span className="font-english text-sm font-normal tracking-[.2em] text-stone-700">
                   {banner.texts.secondary}
                 </span>
-                <Link
-                  className="border-b border-stone-900 pb-2"
-                  href={banner.linkUrl}
-                >
+                <span className="border-b border-stone-900 pb-2">
                   {banner.linkText}
-                </Link>
+                </span>
               </div>
-            </div>
+            </Link>
           );
         })}
       </div>
@@ -114,9 +112,6 @@ export default function Page() {
         <div className="mt-16 flex w-full flex-col gap-3 px-12">
           <div className="flex flex-row items-center justify-between text-stone-800">
             <span className="text-lg"> ست‌‌‌‌‌‌‌های جدید</span>
-            <Link href="/sets" className="text-xs">
-              مشاهده همه
-            </Link>
           </div>
           <hr className="mb-4 h-px w-full bg-stone-400" />
         </div>
@@ -149,7 +144,7 @@ export default function Page() {
       <div className="mt-16 flex w-full flex-col gap-3 px-12">
         <div className="flex flex-row items-center justify-between text-stone-800">
           <span className="text-lg">محصولات جدید</span>
-          <Link href="/" className="text-xs">
+          <Link href="/newest" className="text-xs">
             مشاهده همه
           </Link>
         </div>
