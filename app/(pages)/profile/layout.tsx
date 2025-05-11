@@ -23,10 +23,10 @@ export default function Layout({
   const { user, loading, handleSignOut } = useAuth();
   const router = useRouter();
   useEffect(() => {
-    if (!user && !loading) router.replace("/");
+    if (!user && !loading) router.replace("/login");
   }, [user, loading]);
-  if (loading || !user) return <div>در حال بارگذاری...</div>;
-
+  if (loading) return <div>در حال بارگذاری...</div>;
+  if (!loading && !user) return;
   return (
     <div className="mx-auto flex h-screen w-10/12 flex-col gap-10">
       <BreadCrumb />
