@@ -4,8 +4,6 @@ import { apiBaseUrl, nextServerUrl } from "@config";
 import {
   faArrowRightFromBracket,
   faBagShopping,
-  faClose,
-  faDoorClosed,
   faRuler,
   faUser,
   faUserPlus,
@@ -78,6 +76,7 @@ export default function Header({
   const { user, handleSignOut } = useAuth();
   const router = useRouter();
 
+  let closeTimeOut: ReturnType<typeof setTimeout>;
   useEffect(() => {
     if (isBasketPopUpOpen) setHoveredLeftNavbarItem("basket");
     else setHoveredLeftNavbarItem("");
@@ -124,10 +123,15 @@ export default function Header({
                     key={item.id}
                     href={item.linkUrl}
                     onMouseEnter={() => {
+                      clearTimeout(closeTimeOut);
                       setHoveredRightNavbarItem(item);
                     }}
                     onMouseLeave={() => {
-                      if (!item?.isExpandable) setHoveredRightNavbarItem(null);
+                      if (item.isExpandable)
+                        closeTimeOut = setTimeout(() => {
+                          setHoveredRightNavbarItem(null);
+                        }, 100);
+                      else setHoveredRightNavbarItem(null);
                     }}
                   >
                     {item.linkText}
@@ -347,6 +351,7 @@ export default function Header({
           <div
             className="flex flex-row justify-center bg-stone-100 py-5"
             onMouseEnter={() => {
+              clearTimeout(closeTimeOut);
               setHoveredRightNavbarItem(hoveredRightNavbarItem);
             }}
             onMouseLeave={() => {
