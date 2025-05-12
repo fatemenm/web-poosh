@@ -97,13 +97,13 @@ export default function Header({
     return () => setProducts([]);
   }, [searchQuery, isSearchBarOpen]);
   return (
-    <header className="flex shrink-0 flex-col items-center">
+    <>
       {promoBanner ? (
         <PromoBanner data={promoBanner} />
       ) : (
         <div className="box-border flex min-h-10 w-full flex-row justify-start bg-stone-800 p-2 text-sm font-light text-white"></div>
       )}
-      <div className="flex w-10/12 flex-row justify-between py-2">
+      <header className="sticky top-0 z-10 flex w-full flex-row justify-between bg-white px-36 py-2">
         {/* right navbar */}
         <div className="flex flex-row gap-10">
           <div className="h-14 w-28 pt-1">
@@ -141,6 +141,11 @@ export default function Header({
             </nav>
           )}
         </div>
+        {(hoveredLeftNavbarItem === "user" ||
+          hoveredLeftNavbarItem === "basket" ||
+          hoveredRightNavbarItem) && (
+          <div className="absolute left-0 top-[71px] h-screen w-screen bg-stone-800 bg-opacity-50" />
+        )}
         {/* left navbar */}
         <div className="flex w-1/4 items-center justify-end">
           <SearchBar
@@ -220,9 +225,9 @@ export default function Header({
                   <NavigationMenu.Link />
                 </NavigationMenu.Content>
               </NavigationMenu.Item>
-              <NavigationMenu.Item value="basket">
+              <NavigationMenu.Item value="basket" className="pt-1">
                 {items.length > 0 && (
-                  <div className="absolute -top-5 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 p-1 text-sm text-white">
+                  <div className="absolute -top-4 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 p-1 text-sm text-white">
                     {items.length.toLocaleString("fa-ir")}
                   </div>
                 )}
@@ -345,66 +350,62 @@ export default function Header({
             </NavigationMenu.List>
           </NavigationMenu.Root>
         </div>
-      </div>
-      {hoveredRightNavbarItem?.isExpandable && (
-        <div className="absolute top-28 z-20 w-screen">
-          <div
-            className="flex flex-row justify-center bg-stone-100 py-5"
-            onMouseEnter={() => {
-              clearTimeout(closeTimeOut);
-              setHoveredRightNavbarItem(hoveredRightNavbarItem);
-            }}
-            onMouseLeave={() => {
-              setHoveredRightNavbarItem(null);
-            }}
-          >
-            <div className="flex w-2/3 flex-row justify-between px-6">
-              <div className="flex flex-row gap-20">
-                {createSublinkGrid(
-                  hoveredRightNavbarItem?.subLinks?.items
-                )?.map((col, colNumber) => {
-                  return (
-                    <ul
-                      key={colNumber}
-                      className="flex flex-col gap-5 text-right text-sm font-normal text-stone-600"
-                    >
-                      {col.map((item, rowNumber) => {
-                        return (
-                          <li key={rowNumber}>
-                            <Link href={nextServerUrl + item.url}>
-                              {item.name}
-                            </Link>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  );
-                })}
+        {hoveredRightNavbarItem?.isExpandable && (
+          <div className="absolute left-0 top-[71px] z-10 w-screen">
+            <div
+              className="flex flex-row justify-center bg-stone-100 py-5"
+              onMouseEnter={() => {
+                clearTimeout(closeTimeOut);
+                setHoveredRightNavbarItem(hoveredRightNavbarItem);
+              }}
+              onMouseLeave={() => {
+                setHoveredRightNavbarItem(null);
+              }}
+            >
+              <div className="flex w-2/3 flex-row justify-between px-6">
+                <div className="flex flex-row gap-20">
+                  {createSublinkGrid(
+                    hoveredRightNavbarItem?.subLinks?.items
+                  )?.map((col, colNumber) => {
+                    return (
+                      <ul
+                        key={colNumber}
+                        className="flex flex-col gap-5 text-right text-sm font-normal text-stone-600"
+                      >
+                        {col.map((item, rowNumber) => {
+                          return (
+                            <li key={rowNumber}>
+                              <Link href={nextServerUrl + item.url}>
+                                {item.name}
+                              </Link>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    );
+                  })}
+                </div>
+                {hoveredRightNavbarItem.image ? (
+                  <Image
+                    src={apiBaseUrl + hoveredRightNavbarItem.image.url}
+                    alt={hoveredRightNavbarItem.image?.alternativeText}
+                    width={hoveredRightNavbarItem.image.width}
+                    height={hoveredRightNavbarItem.image.height}
+                    unoptimized
+                  />
+                ) : (
+                  <div></div>
+                )}
               </div>
-              {hoveredRightNavbarItem.image ? (
-                <Image
-                  src={apiBaseUrl + hoveredRightNavbarItem.image.url}
-                  alt={hoveredRightNavbarItem.image?.alternativeText}
-                  width={hoveredRightNavbarItem.image.width}
-                  height={hoveredRightNavbarItem.image.height}
-                  unoptimized
-                />
-              ) : (
-                <div></div>
-              )}
             </div>
           </div>
-          <div className="h-screen bg-stone-800 bg-opacity-50" />
-        </div>
-      )}
-      {(hoveredLeftNavbarItem === "user" ||
-        hoveredLeftNavbarItem === "basket") && (
-        <div className="absolute left-0 top-28 z-10 h-full w-screen bg-stone-800 bg-opacity-50" />
-      )}
+        )}
+      </header>
+
       <AuthModal
         isOpen={isAuthDialogOpen}
         onOpenChange={(isOpen: boolean) => setIsAuthDialogOpen(isOpen)}
       />
-    </header>
+    </>
   );
 }
