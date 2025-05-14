@@ -28,11 +28,11 @@ export default function Layout({
   if (loading) return <div>در حال بارگذاری...</div>;
   if (!loading && !user) return;
   return (
-    <div className="mx-auto flex h-screen w-10/12 flex-col gap-10">
+    <div className="mx-auto flex w-10/12 flex-col gap-10">
       <BreadCrumb />
-      <div className="mb-10 flex items-start">
+      <div className="mb-10 flex items-stretch">
         {/* profile navbar */}
-        <div className="flex w-1/6 flex-col gap-8 bg-stone-100 py-10">
+        <div className="flex h-[540px] w-1/6 flex-col gap-8 bg-stone-100 py-10">
           <div className="flex flex-col items-center gap-2">
             <FontAwesomeIcon
               className="text-8xl text-stone-400"
@@ -80,7 +80,7 @@ export default function Layout({
           </div>
         </div>
         {/* profile content */}
-        <div className="mb-10 grow px-20">{children}</div>
+        <div className="grow px-20">{children}</div>
       </div>
     </div>
   );

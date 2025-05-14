@@ -20,9 +20,7 @@ export default function Page() {
   }, [setItems]);
   return (
     <div className="flex flex-col gap-10">
-      <p className="w-60 border-b-2 border-b-stone-700 pb-4 text-2xl">
-        پروفایل
-      </p>
+      <p className="w-60 border-b-2 border-b-stone-700 text-2xl">پروفایل</p>
       <div className="flex gap-64">
         <p className="flex flex-col gap-3">
           <span className="text-lg text-stone-700">نام کاربری</span>

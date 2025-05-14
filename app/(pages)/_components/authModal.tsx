@@ -15,8 +15,8 @@ export default function AuthModal({
   return (
     <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-stone-800 bg-opacity-50" />
-        <Dialog.Content className="fixed left-1/2 top-28 w-[500px] -translate-x-1/2 rounded-sm bg-white p-2">
+        <Dialog.Overlay className="fixed inset-0 z-20 bg-stone-800 bg-opacity-50" />
+        <Dialog.Content className="fixed left-1/2 top-28 z-20 w-[500px] -translate-x-1/2 rounded-sm bg-white p-2">
           <VisuallyHidden.Root asChild>
             <Dialog.Title> فرم ثبت نام و ورود کاریر </Dialog.Title>
           </VisuallyHidden.Root>

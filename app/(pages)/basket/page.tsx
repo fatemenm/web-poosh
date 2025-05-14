@@ -7,6 +7,7 @@ import {
   faTruckFast,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -77,12 +78,29 @@ export default function Page() {
                       </span>
                       <span className="text-sm">سایز: {item.size}</span>
                       <span className="text-sm">رنگ: {item.color}</span>
-                      <span className="text-sm font-medium text-stone-800">
-                        {item.product.data.originalPrice.toLocaleString(
-                          "fa-ir"
-                        )}{" "}
-                        تومان
-                      </span>
+                      <div className="flex gap-3">
+                        <span
+                          className={classNames(
+                            "text-sm font-medium text-stone-800",
+                            {
+                              "line-through": item.product.data.salePrice,
+                            }
+                          )}
+                        >
+                          {item.product.data.originalPrice.toLocaleString(
+                            "fa-ir"
+                          )}{" "}
+                          تومان
+                        </span>
+                        {item.product.data.salePrice > 0 && (
+                          <span className="text-sm font-medium text-red-600">
+                            {item.product.data.salePrice.toLocaleString(
+                              "fa-ir"
+                            )}{" "}
+                            تومان
+                          </span>
+                        )}
+                      </div>
                       <div className="flex gap-2">
                         <button
                           onClick={() => {
@@ -108,59 +126,62 @@ export default function Page() {
           </div>
         </div>
         <div className="flex basis-1/2 flex-col gap-20">
-          <div className="flex flex-col gap-4">
-            <div>
-              <Image src={setBox} alt="set-box" />
-            </div>
-            <div className="flex items-center">
-              <button className="flex grow flex-row justify-center gap-8 border bg-white px-4 py-3 text-sm text-stone-800 hover:bg-stone-800 hover:text-white">
-                <span> خرید جعبه هدیه ست</span>
-                <span> ۲۶۰,۰۰۰ تومان</span>
-              </button>
-              <Link href="#" className="px-10 text-sm font-light underline">
-                درباره جعبه هدیه ست
-              </Link>
-            </div>
-          </div>
-          <div className="flex flex-col gap-4 bg-stone-100 p-8 text-sm">
-            <div className="flex items-center justify-between">
-              <span>جمع سفارش</span>
-              <span className="flex gap-1">
-                {(() => {
-                  let totalPrice = 0;
-                  items.forEach((item) => {
-                    totalPrice += item.product.data.salePrice
-                      ? item.product.data.salePrice
-                      : item.product.data.originalPrice;
-                  });
-                  return totalPrice.toLocaleString("fa-ir");
-                })()}
-                <span>تومان</span>
-              </span>
-            </div>
-            <hr />
+          <div className="flex flex-col gap-10 bg-stone-100 p-8 text-sm">
             <div className="flex flex-col gap-4">
-              <span className="flex items-center gap-2">
-                <FontAwesomeIcon
-                  className="text-sm text-stone-700"
-                  icon={faClock}
-                />
-                یادآوری
-              </span>
-              <span className="flex items-center gap-2">
-                <FontAwesomeIcon
-                  className="text-sm text-stone-700"
-                  icon={faPhoneFlip}
-                />
-                خدمات مشتریان 05 50 00 91 - 021
-              </span>
-              <span className="flex items-center gap-2">
-                <FontAwesomeIcon
-                  className="text-sm text-stone-700"
-                  icon={faTruckFast}
-                />
-                روش ارسال
-              </span>
+              <div className="flex items-center justify-between">
+                <span>جمع سفارش</span>
+                <span className="flex gap-1">
+                  {(() => {
+                    let totalPrice = 0;
+                    items.forEach((item) => {
+                      totalPrice += item.product.data.originalPrice;
+                    });
+                    return totalPrice.toLocaleString("fa-ir");
+                  })()}
+                  <span>تومان</span>
+                </span>
+              </div>
+              <div className="flex items-center justify-between text-green-600">
+                <span>سود شما از این خرید</span>
+                <span className="flex gap-1">
+                  {(() => {
+                    let totalDiscount = 0;
+                    items.forEach((item) => {
+                      totalDiscount += item.product.data.salePrice
+                        ? item.product.data.originalPrice -
+                          item.product.data.salePrice
+                        : 0;
+                    });
+                    return totalDiscount.toLocaleString("fa-ir");
+                  })()}
+                  <span>تومان</span>
+                </span>
+              </div>
+              <hr className="border-t-2 border-stone-200" />
+              <div className="flex items-center justify-between">
+                <span>جمع کل پس از تخفیف</span>
+                <span className="flex gap-1">
+                  {(() => {
+                    let totalPrice = 0;
+                    items.forEach((item) => {
+                      totalPrice += item.product.data.salePrice
+                        ? item.product.data.salePrice
+                        : item.product.data.originalPrice;
+                    });
+                    return totalPrice.toLocaleString("fa-ir");
+                  })()}
+                  <span>تومان</span>
+                </span>
+              </div>
+            </div>
+            <hr className="border-t-2 border-stone-300" />
+            <div className="flex items-center gap-3">
+              <FontAwesomeIcon
+                className="text-sm text-stone-700"
+                icon={faPhoneFlip}
+              />
+              <span>خدمات مشتریان</span>
+              05 50 00 91 - 021
             </div>
           </div>
         </div>

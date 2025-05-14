@@ -33,17 +33,6 @@ import logo from "@public/logo.png";
 import SearchBar from "./searchBar";
 
 // TODO: should these functions be here? outside of the component.
-function getClassNames(item: NavbarItem, isHovered: boolean) {
-  const baseClasses =
-    "flex items-center text-stone-700 font-medium border-b-2 px-5";
-  let situationalClasses = "";
-  if (isHovered && item.isExpandable)
-    situationalClasses = "cursor-pointer border-b-transparent";
-  else if (isHovered && !item.isExpandable)
-    situationalClasses = "cursor-pointer border-gray-900";
-  else situationalClasses = "border-b-transparent";
-  return baseClasses + " " + situationalClasses;
-}
 
 function createSublinkGrid(items: NavigationLink[] | undefined) {
   if (!items) return null;
@@ -114,36 +103,47 @@ export default function Header({
           {navbarItems && (
             <nav className="flex flex-row justify-between text-sm">
               {navbarItems.map((item) => {
-                return (
-                  <Link
-                    className={getClassNames(
-                      item,
-                      hoveredRightNavbarItem?.id === item.id
-                    )}
-                    key={item.id}
-                    href={item.linkUrl}
-                    onMouseEnter={() => {
-                      clearTimeout(closeTimeOut);
-                      setHoveredRightNavbarItem(item);
-                    }}
-                    onMouseLeave={() => {
-                      if (item.isExpandable)
+                if (item.isExpandable) {
+                  return (
+                    <button
+                      className="flex items-center border-b-2 border-b-transparent px-5 font-medium text-stone-700 hover:cursor-pointer"
+                      key={item.id}
+                      onMouseEnter={() => {
+                        clearTimeout(closeTimeOut);
+                        setHoveredRightNavbarItem(item);
+                      }}
+                      onMouseLeave={() => {
                         closeTimeOut = setTimeout(() => {
                           setHoveredRightNavbarItem(null);
                         }, 100);
-                      else setHoveredRightNavbarItem(null);
-                    }}
-                  >
-                    {item.linkText}
-                  </Link>
-                );
+                      }}
+                    >
+                      {item.linkText}
+                    </button>
+                  );
+                } else {
+                  return (
+                    <Link
+                      className="flex items-center border-b-2 border-b-transparent px-5 font-medium text-stone-700 hover:cursor-pointer hover:border-gray-900"
+                      key={item.id}
+                      href={item.linkUrl}
+                      onMouseEnter={() => {
+                        clearTimeout(closeTimeOut);
+                        setHoveredRightNavbarItem(item);
+                      }}
+                      onMouseLeave={() => setHoveredRightNavbarItem(null)}
+                    >
+                      {item.linkText}
+                    </Link>
+                  );
+                }
               })}
             </nav>
           )}
         </div>
         {(hoveredLeftNavbarItem === "user" ||
           hoveredLeftNavbarItem === "basket" ||
-          hoveredRightNavbarItem) && (
+          hoveredRightNavbarItem?.isExpandable) && (
           <div className="absolute left-0 top-[71px] h-screen w-screen bg-stone-800 bg-opacity-50" />
         )}
         {/* left navbar */}

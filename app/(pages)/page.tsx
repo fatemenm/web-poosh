@@ -108,19 +108,23 @@ export default function Page() {
         />
       )}
       {/* Daily Set Banners */}
-      <div className="flex flex-col gap-7">
+      <div className="flex w-full flex-col gap-7">
         <div className="mt-16 flex w-full flex-col gap-3 px-12">
           <div className="flex flex-row items-center justify-between text-stone-800">
-            <span className="text-lg"> ست‌‌‌‌‌‌‌های جدید</span>
+            <span className="text-lg">محصولات محبوب</span>
           </div>
           <hr className="mb-4 h-px w-full bg-stone-400" />
         </div>
-        <div className="flex flex-row gap-8">
+        <div className="flex flex-row justify-center gap-16">
           {data.clothingSetBanners?.map((banner) => {
             return (
-              <div key={banner.id} className="flex flex-col items-center gap-4">
+              <Link
+                href={banner.linkUrl}
+                key={banner.id}
+                className="flex w-1/3 flex-col items-center gap-4"
+              >
                 <Image
-                  className="cursor-pointer"
+                  className="h-auto w-full cursor-pointer object-contain"
                   src={apiBaseUrl + banner.image.url}
                   alt={banner.image.alternativeText}
                   width={banner.image.width}
@@ -128,14 +132,11 @@ export default function Page() {
                 />
                 <div className="flex flex-col items-center gap-3 text-base font-light text-stone-700">
                   <span className="text-lg">{banner.title}</span>
-                  <Link
-                    className="underline underline-offset-8"
-                    href={banner.linkUrl}
-                  >
+                  <span className="underline underline-offset-8">
                     {banner.linkText}
-                  </Link>
+                  </span>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
