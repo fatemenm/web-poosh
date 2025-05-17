@@ -87,11 +87,7 @@ export default function Header({
   }, [searchQuery, isSearchBarOpen]);
   return (
     <>
-      {promoBanner ? (
-        <PromoBanner data={promoBanner} />
-      ) : (
-        <div className="box-border flex min-h-10 w-full flex-row justify-start bg-stone-800 p-2 text-sm font-light text-white"></div>
-      )}
+      {promoBanner && <PromoBanner data={promoBanner} />}
       <header className="sticky top-0 z-10 flex w-full flex-row justify-between bg-white px-36 py-2">
         {/* right navbar */}
         <div className="flex flex-row gap-10">
@@ -141,6 +137,7 @@ export default function Header({
             </nav>
           )}
         </div>
+        {/* overlay */}
         {(hoveredLeftNavbarItem === "user" ||
           hoveredLeftNavbarItem === "basket" ||
           hoveredRightNavbarItem?.isExpandable) && (
@@ -350,6 +347,7 @@ export default function Header({
             </NavigationMenu.List>
           </NavigationMenu.Root>
         </div>
+        {/* right navbarItem menu */}
         {hoveredRightNavbarItem?.isExpandable && (
           <div className="absolute left-0 top-[71px] z-10 w-screen">
             <div
@@ -401,7 +399,7 @@ export default function Header({
           </div>
         )}
       </header>
-
+      {/* login modal */}
       <AuthModal
         isOpen={isAuthDialogOpen}
         onOpenChange={(isOpen: boolean) => setIsAuthDialogOpen(isOpen)}

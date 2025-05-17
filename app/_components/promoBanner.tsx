@@ -6,9 +6,9 @@ import type { PromoBanner } from "@/_lib/definitions";
 export default function PromoBanner({ data }: { data: PromoBanner }) {
   const { promoMessage, siteTagline, ctaUrl, ctaText } = data;
   return (
-    <div className="box-border flex max-h-10 min-h-10 w-full flex-row items-center justify-end bg-stone-800 p-2 text-sm font-light text-white">
-      <div className="flex basis-1/3 flex-row justify-center gap-4">
-        {promoMessage}
+    <div className="box-border flex w-full flex-col items-center bg-stone-800 py-4 text-sm font-light text-white md:flex-row md:justify-end md:px-2">
+      <div className="flex gap-4 md:basis-1/3 md:flex-row md:items-center md:justify-center md:gap-4">
+        <span>{promoMessage}</span>
         <Link
           href={ctaUrl.startsWith("/") ? nextServerUrl + ctaUrl : ctaUrl}
           className="underline"
@@ -16,7 +16,7 @@ export default function PromoBanner({ data }: { data: PromoBanner }) {
           {ctaText}
         </Link>
       </div>
-      <span className="basis-1/3 text-left">{siteTagline}</span>
+      <span className="hidden basis-1/3 text-left md:block">{siteTagline}</span>
     </div>
   );
 }
