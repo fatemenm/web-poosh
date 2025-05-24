@@ -88,10 +88,10 @@ export default function ProductCard({
                 ? buttonOptions?.onClick(product, true)
                 : undefined
             }
-            className="invisible absolute bottom-4 left-0 right-0 m-auto flex w-4/5 flex-row items-center justify-center gap-2 bg-stone-800 bg-opacity-70 px-4 py-3 text-sm text-white hover:bg-opacity-85 group-hover:visible"
+            className="invisible absolute bottom-4 left-0 right-0 m-auto flex w-4/5 flex-row items-center justify-center gap-2 bg-stone-800 bg-opacity-70 px-2 py-2 text-xs text-white hover:bg-opacity-85 group-hover:visible sm:px-4 sm:py-3 sm:text-sm"
           >
             مشاهده سریع
-            <FontAwesomeIcon icon={faSearch} className="text-sm" />
+            <FontAwesomeIcon icon={faSearch} className="text-xs sm:text-sm" />
           </button>
         )}
       </div>
@@ -99,11 +99,11 @@ export default function ProductCard({
       <div className="flex flex-col gap-3">
         <Link
           href={`${nextServerUrl}/products/${product.data.documentId}`}
-          className="text-sm font-medium text-stone-600"
+          className="text-xs font-medium text-stone-600 sm:text-sm"
         >
           {product.data.name}
         </Link>
-        <div className="flex flex-row items-center gap-2 text-[13px] text-stone-600">
+        <div className="flex flex-col gap-2 text-xs text-stone-600 sm:flex-row sm:items-center sm:text-sm">
           <span
             className={classNames(product.data.salePrice && "line-through")}
           >

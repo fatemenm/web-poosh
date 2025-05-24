@@ -61,7 +61,7 @@ export default function Page() {
       const { products, pagination } = await getProducts({
         pagination: {
           page: pageNumber,
-          pageSize: 1,
+          pageSize: 3,
         },
       });
       setProducts(products);
@@ -78,15 +78,15 @@ export default function Page() {
   if (!categories || !products) return <div>data is not available</div>;
 
   return (
-    <div className="mx-auto flex w-10/12 flex-col gap-16">
+    <div className="mx-auto flex flex-col gap-8 px-4 lg:w-11/12 lg:gap-16 lg:px-0 xl:w-10/12">
       <BreadCrumb />
       <div className="flex flex-row gap-20 pb-10">
         {/* right navbar */}
-        <div className="w-72">
+        <div className="hidden lg:block lg:w-72">
           <Accordion
             defaultOpenItem="item-0"
             triggerButtonText={["لباس"]}
-            triggerButtonClass="text-sm"
+            triggerButtonClass="text-sm px-3"
             items={[
               categories.map((item) => (
                 <div
@@ -104,10 +104,12 @@ export default function Page() {
         <div className="mb-16 flex w-full flex-col gap-8">
           {/* products grid */}
           <div className="flex w-full flex-col gap-3">
-            <span className="text-lg text-stone-800">جدیدترین ها</span>
+            <span className="text-sm text-stone-800 sm:text-base lg:text-lg">
+              جدیدترین ها
+            </span>
             <hr className="h-px w-full bg-stone-400" />
           </div>
-          <div className="grid grid-cols-4 gap-x-8 gap-y-14">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:gap-x-8 lg:gap-y-14 xl:grid-cols-4">
             {products.map((item, index) => (
               <div key={index}>
                 <ProductCard
@@ -133,7 +135,7 @@ export default function Page() {
           </div>
           {pagination?.pageCount && (
             <Pagination className="mr-0 w-fit">
-              <PaginationContent>
+              <PaginationContent className="flex-wrap">
                 <PaginationItem>
                   <PaginationPrevious
                     className={classNames("rounded-none", {

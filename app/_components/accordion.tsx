@@ -31,7 +31,7 @@ export default function Accordion({
             <RadixAccordion.Header>
               <RadixAccordion.Trigger
                 className={classNames(
-                  "flex w-full items-center justify-between bg-white px-3 py-2 font-light text-stone-700 hover:bg-gray-50",
+                  "flex w-full items-center justify-between bg-white py-2 font-light text-stone-700 hover:bg-gray-50",
                   triggerButtonClass
                 )}
               >
