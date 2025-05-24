@@ -1,23 +1,16 @@
 "use client";
 
 import { apiBaseUrl } from "@config";
-import {
-  faClock,
-  faPhoneFlip,
-  faTruckFast,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPhoneFlip } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import BreadCrumb from "@/_components/breadcrumb";
 import { useBasket } from "@/_lib/context/basketContext";
 import { useBreadcrumb } from "@/_lib/context/breadcrumbContext";
 import { BasketItem } from "@/_lib/definitions";
-
-import setBox from "@public/set-box.jpg";
 
 import ProductModal from "../_components/productModal";
 
@@ -42,17 +35,17 @@ export default function Page() {
   }, [setItems]);
 
   return (
-    <div className="mx-auto flex w-10/12 flex-col">
+    <div className="mx-auto flex flex-col gap-8 px-4 lg:w-11/12 xl:w-10/12">
       <BreadCrumb />
-      <div className="mx-auto my-16 flex w-9/12 justify-center gap-32">
-        <div className="flex basis-1/2 flex-col gap-8">
+      <div className="mb-8 flex w-full flex-col gap-8 lg:mt-4 lg:flex-row lg:gap-16 xl:mx-0 xl:justify-center">
+        <div className="flex flex-col lg:w-1/2 lg:gap-8">
           <div>
-            <h2 className="mb-4 text-2xl font-light text-stone-800">
+            <h2 className="mb-4 text-base font-light text-stone-800 lg:text-2xl">
               سبد خرید شما
             </h2>
             <hr />
           </div>
-          <div>
+          <div className="xs:mx-auto xs:w-10/12 sm:flex sm:w-2/3 sm:flex-col sm:items-center md:w-3/5 lg:mx-0 lg:w-full lg:items-start">
             {!items.length ? (
               <p className="text-stone-700">
                 محصولی در سبد خرید شما موجود نیست!
@@ -62,9 +55,9 @@ export default function Page() {
                 return (
                   <div
                     key={item.id}
-                    className="flex gap-4 border-b border-b-stone-200 pt-6"
+                    className="flex flex-row gap-4 border-b border-b-stone-200 pt-6 lg:w-full"
                   >
-                    <div className="w-40">
+                    <div className="w-1/2 lg:w-40">
                       <Image
                         width={item.image.width}
                         height={item.image.height}
@@ -72,20 +65,17 @@ export default function Page() {
                         alt={item.image.alternativeText}
                       />
                     </div>
-                    <div className="mb-4 flex flex-col justify-between">
-                      <span className="text-sm font-medium text-stone-900">
+                    <div className="xs:text-sm mb-4 flex w-1/2 flex-col justify-between gap-2 text-xs lg:w-auto">
+                      <span className="font-medium text-stone-900">
                         {item.product.data.name}
                       </span>
-                      <span className="text-sm">سایز: {item.size}</span>
-                      <span className="text-sm">رنگ: {item.color}</span>
-                      <div className="flex gap-3">
+                      <span className="">سایز: {item.size}</span>
+                      <span className="">رنگ: {item.color}</span>
+                      <div className="flex flex-col gap-2 lg:flex-row lg:gap-3">
                         <span
-                          className={classNames(
-                            "text-sm font-medium text-stone-800",
-                            {
-                              "line-through": item.product.data.salePrice,
-                            }
-                          )}
+                          className={classNames("font-medium text-stone-800", {
+                            "line-through": item.product.data.salePrice,
+                          })}
                         >
                           {item.product.data.originalPrice.toLocaleString(
                             "fa-ir"
@@ -93,7 +83,7 @@ export default function Page() {
                           تومان
                         </span>
                         {item.product.data.salePrice > 0 && (
-                          <span className="text-sm font-medium text-red-600">
+                          <span className="font-medium text-red-600">
                             {item.product.data.salePrice.toLocaleString(
                               "fa-ir"
                             )}{" "}
@@ -101,19 +91,19 @@ export default function Page() {
                           </span>
                         )}
                       </div>
-                      <div className="flex gap-2">
+                      <div className="flex flex-col gap-2 lg:flex-row">
                         <button
                           onClick={() => {
                             setSelectedItem(item);
                             setIsProductModalOpen(true);
                           }}
-                          className="border border-stone-400 bg-white px-16 py-1 text-sm text-stone-800 hover:bg-stone-800 hover:text-white"
+                          className="border border-stone-400 bg-white py-1 text-stone-800 hover:bg-stone-800 hover:text-white lg:px-16"
                         >
                           ویرایش
                         </button>
                         <button
                           onClick={() => removeItem(item)}
-                          className="border border-stone-400 bg-white px-16 py-1 text-sm text-stone-800 hover:bg-stone-800 hover:text-white"
+                          className="border border-stone-400 bg-white py-1 text-stone-800 hover:bg-stone-800 hover:text-white lg:px-16"
                         >
                           حذف
                         </button>
@@ -125,8 +115,8 @@ export default function Page() {
             )}
           </div>
         </div>
-        <div className="flex basis-1/2 flex-col gap-20">
-          <div className="flex flex-col gap-10 bg-stone-100 p-8 text-sm">
+        <div className="xs:text-sm xs:mx-auto xs:w-10/12 flex flex-col gap-20 text-xs sm:w-2/3 md:w-3/5 lg:mx-0 lg:w-1/2 xl:w-1/3">
+          <div className="flex flex-col gap-10 bg-stone-100 p-8">
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <span>جمع سفارش</span>
