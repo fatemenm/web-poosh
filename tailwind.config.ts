@@ -10,6 +10,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        xs: "480px",
+      },
       fontFamily: {
         persian: ["var(--font-vazirmatn)"],
         english: ["var(--font-roboto)"],
