@@ -89,12 +89,13 @@ export default function AuthTabs({
     if (activeTab === "sign-in") resetSignIn();
     else resetSignUp();
   }, [activeTab]);
+  console.log("active tab:", activeTab);
   return (
     <Tabs.Root
       value={activeTab}
       onValueChange={setActiveTab}
       dir="rtl"
-      className="my-10 flex flex-col px-6"
+      className="xs:my-10 my-6 flex flex-col px-6"
       defaultValue="sign-up"
     >
       <Tabs.List
@@ -114,20 +115,20 @@ export default function AuthTabs({
           ثبت نام
         </Tabs.Trigger>
       </Tabs.List>
-      <Tabs.Content value="sign-up" className="flex flex-col gap-6 bg-white">
-        <p className="text-sm">
+      <Tabs.Content value="sign-up" className="xs:gap-6 flex flex-col bg-white">
+        <p className="text-xs md:text-sm">
           اگر کاربر جدید هستید برای ثبت نام آدرس ایمیل و رمز عبور خود را مشخص
           کنید. در غیر این صورت{" "}
           <button
             className="text-blue-500"
-            onClick={() => setActiveTab("ورود")}
+            onClick={() => setActiveTab("sign-in")}
           >
             وارد
           </button>{" "}
           شوید
         </p>
         <Form.Root
-          className="flex flex-col gap-6 px-6"
+          className="xs:gap-6 xs:px-6 flex flex-col gap-3 px-0"
           onSubmit={handleSubmitSignUp(onSignUp)}
         >
           {/* root */}
@@ -136,7 +137,7 @@ export default function AuthTabs({
               <div />
             </Form.Control>
             {errorsSignUp.root && (
-              <Form.Message className="text-sm text-stone-500">
+              <Form.Message className="text-xs text-stone-500 md:text-sm">
                 {errorsSignUp.root.message}
               </Form.Message>
             )}
@@ -144,9 +145,11 @@ export default function AuthTabs({
           {/* email */}
           <Form.Field name="email" className="flex flex-col gap-2">
             <div className="flex items-baseline justify-between">
-              <Form.Label className="text-sm text-stone-700">ایمیل</Form.Label>
+              <Form.Label className="text-xs text-stone-700 md:text-sm">
+                ایمیل
+              </Form.Label>
               {errorsSignUp.email && (
-                <Form.Message className="text-sm text-stone-500">
+                <Form.Message className="text-xs text-stone-500 md:text-sm">
                   {errorsSignUp.email.message}
                 </Form.Message>
               )}
@@ -163,11 +166,11 @@ export default function AuthTabs({
           {/* password */}
           <Form.Field name="password" className="flex flex-col gap-2">
             <div className="flex items-baseline justify-between">
-              <Form.Label className="text-sm text-stone-700">
+              <Form.Label className="text-xs text-stone-700 md:text-sm">
                 رمز عبور
               </Form.Label>
               {errorsSignUp.password && (
-                <Form.Message className="text-sm text-stone-500">
+                <Form.Message className="text-xs text-stone-500 md:text-sm">
                   {errorsSignUp.password.message}
                 </Form.Message>
               )}
@@ -190,26 +193,26 @@ export default function AuthTabs({
                   type="checkbox"
                 />
               </Form.Control>
-              <Form.Label className="border-b border-b-stone-600 text-sm text-stone-700">
+              <Form.Label className="border-b border-b-stone-600 text-xs text-stone-700 md:text-sm">
                 <Link href="#">قوانین و مقررات را مطالعه و پذیرفته ام</Link>
               </Form.Label>
             </div>
             {errorsSignUp.isTermsAccepted && (
-              <Form.Message className="text-sm text-stone-500">
+              <Form.Message className="text-xs text-stone-500 md:text-sm">
                 {errorsSignUp.isTermsAccepted.message}
               </Form.Message>
             )}
           </Form.Field>
           <hr />
           <Form.Submit asChild>
-            <button className="mt-2 w-full bg-stone-800 px-2 py-4 text-center text-sm text-white">
+            <button className="mt-2 w-full bg-stone-800 px-2 py-4 text-center text-xs text-white md:text-sm">
               ثبت نام
             </button>
           </Form.Submit>
         </Form.Root>
       </Tabs.Content>
-      <Tabs.Content value="sign-in" className="flex flex-col gap-6 bg-white">
-        <p className="text-sm">
+      <Tabs.Content value="sign-in" className="xs:gap-6 flex flex-col bg-white">
+        <p className="text-xs md:text-sm">
           اگر قبلا در وب‌پوش ثبت ‌نام کرده‌اید وارد شوید در غیر این صورت{" "}
           <button
             className="text-blue-500"
@@ -221,7 +224,7 @@ export default function AuthTabs({
         </p>
         <Form.Root
           noValidate
-          className="flex flex-col gap-6 px-6"
+          className="xs:gap-6 xs:px-6 flex flex-col gap-3 px-0"
           onSubmit={handleSubmitSignIn(onSignIn)}
         >
           {/* root */}
@@ -230,7 +233,7 @@ export default function AuthTabs({
               <div />
             </Form.Control>
             {errorsSignIn.root && (
-              <Form.Message className="text-sm text-stone-500">
+              <Form.Message className="text-xs text-stone-500 md:text-sm">
                 {errorsSignIn.root.message}
               </Form.Message>
             )}
@@ -238,9 +241,11 @@ export default function AuthTabs({
           {/* email */}
           <Form.Field name="email" className="flex flex-col gap-2">
             <div className="flex items-baseline justify-between">
-              <Form.Label className="text-sm text-stone-700">ایمیل</Form.Label>
+              <Form.Label className="text-xs text-stone-700 md:text-sm">
+                ایمیل
+              </Form.Label>
               {errorsSignIn.email && (
-                <Form.Message className="text-sm text-stone-500">
+                <Form.Message className="text-xs text-stone-500 md:text-sm">
                   {errorsSignIn.email.message}
                 </Form.Message>
               )}
@@ -257,11 +262,11 @@ export default function AuthTabs({
           {/* password */}
           <Form.Field name="password" className="flex flex-col gap-2">
             <div className="flex items-baseline justify-between">
-              <Form.Label className="text-sm text-stone-700">
+              <Form.Label className="text-xs text-stone-700 md:text-sm">
                 رمز عبور
               </Form.Label>
               {errorsSignIn.password && (
-                <Form.Message className="text-sm text-stone-500">
+                <Form.Message className="text-xs text-stone-500 md:text-sm">
                   {errorsSignIn.password.message}
                 </Form.Message>
               )}
@@ -274,7 +279,7 @@ export default function AuthTabs({
                 onClick={() => clearErrorsSignIn("root")}
               />
             </Form.Control>
-            {/* <Link href="" className="text-sm text-blue-500">
+            {/* <Link href="" className="text-xs md:text-sm text-blue-500">
                 رمز عبور خود را فراموش کرده ام
               </Link> */}
           </Form.Field>
@@ -282,7 +287,7 @@ export default function AuthTabs({
           <Form.Submit asChild>
             <button
               type="submit"
-              className="mt-2 w-full bg-stone-800 px-2 py-4 text-center text-sm text-white"
+              className="mt-2 w-full bg-stone-800 px-2 py-4 text-center text-xs text-white md:text-sm"
             >
               ورود
             </button>
