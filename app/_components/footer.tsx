@@ -15,7 +15,7 @@ import logo from "@public/logo-footer.svg";
 const homeExclusiveContent = (
   <div className="flex flex-col gap-10 text-right">
     <div className="flex flex-col gap-2">
-      <h1 className="text-3xl text-stone-800">
+      <h1 className="text-lg text-stone-800 lg:text-3xl">
         فروشگاه اینترنتی پوشاک و لباس مردانه وب پوش
       </h1>
       <p className="text-xs font-light leading-5 text-stone-800" dir="rtl">
@@ -43,7 +43,9 @@ const homeExclusiveContent = (
       </p>
     </div>
     <div className="flex flex-col gap-2">
-      <h1 className="text-3xl text-stone-800">خرید اقساطی لباس مردانه</h1>
+      <h1 className="text-lg text-stone-800 lg:text-3xl">
+        خرید اقساطی لباس مردانه
+      </h1>
       <p className="text-xs font-light leading-5 text-stone-800" dir="rtl">
         از این پس امکان خرید قسطی لباس از فروشگاه اینترنتی وبپوش فراهم شده است.
         مشتریان عزیز می‌توانند با استفاده از اعتبار اسنپ پی خود ماهانه در چهار
@@ -58,21 +60,19 @@ const homeExclusiveContent = (
 export default function Footer() {
   const isHomePage = usePathname() === "/" || false;
   return (
-    <footer className="flex w-full shrink-0 flex-col items-center border-t bg-stone-100">
-      <div className="flex w-10/12 flex-col items-center justify-between gap-8 pb-4">
+    <footer className="flex w-full shrink-0 flex-col items-center border-t bg-stone-100 px-4 lg:px-0">
+      <div className="flex flex-col items-center justify-between gap-8 pb-4 lg:w-11/12 xl:w-10/12">
         <div className="flex flex-col">
           {/* container logo and sections */}
-          <div className="flex flex-row items-start justify-between gap-24 py-12">
-            <div className="basis-2/12">
+          <div className="flex flex-col items-center lg:flex-row lg:items-start lg:justify-between lg:gap-10 lg:py-12">
+            <div className="xs:w-4/12 w-7/12 md:w-3/12 lg:w-2/12">
               <Image src={logo} alt="logo" />
             </div>
-            {/* container sections */}
-            <div className="flex basis-10/12 flex-row justify-between">
-              {/* container links */}
-              <div className="flex flex-col gap-6 text-stone-700">
+            <div className="sm:max-lg:grid sm:max-lg:w-full sm:max-lg:grid-cols-3 sm:max-lg:grid-rows-1 lg:flex lg:shrink lg:grow lg:basis-1/3 lg:flex-row lg:items-start lg:justify-between xl:grow-0">
+              <div className="mb-10 flex flex-col items-center gap-2 text-stone-700 lg:mb-0 lg:items-start lg:gap-6">
                 <span className="text-md font-medium">درباره وب‌ پوش</span>
                 <nav>
-                  <ul className="flex flex-col gap-2 text-sm font-light">
+                  <ul className="flex flex-col items-center gap-2 text-sm font-light lg:items-start">
                     <li>
                       <Link href="">درباره ما</Link>
                     </li>
@@ -82,10 +82,10 @@ export default function Footer() {
                   </ul>
                 </nav>
               </div>
-              <div className="flex flex-col gap-6 text-stone-700">
+              <div className="mb-10 flex flex-col items-center gap-2 text-stone-700 lg:mb-0 lg:items-start lg:gap-6">
                 <span className="text-md font-medium">خدمات مشتریان</span>
                 <nav>
-                  <ul className="flex flex-col gap-2 text-sm font-light">
+                  <ul className="flex flex-col items-center gap-2 text-sm font-light lg:items-start">
                     <li>
                       <Link href="">پشتیبانی: ۹۱۰۰۵۰۰۵ - ۰۲۱</Link>
                     </li>
@@ -105,10 +105,10 @@ export default function Footer() {
                   </ul>
                 </nav>
               </div>
-              <div className="flex flex-col gap-6 text-stone-700">
+              <div className="mb-10 flex flex-col items-center gap-2 text-stone-700 lg:mb-0 lg:items-start lg:gap-6">
                 <span className="text-md font-medium">راهنمای خرید</span>
                 <nav>
-                  <ul className="flex flex-col gap-2 text-sm font-light">
+                  <ul className="flex flex-col items-center gap-2 text-sm font-light lg:items-start">
                     <li>
                       <Link href="">راهنمای انتخاب سایز</Link>
                     </li>
@@ -121,64 +121,53 @@ export default function Footer() {
                   </ul>
                 </nav>
               </div>
-              <div className="flex basis-2/5 flex-col gap-4 text-stone-700">
-                <span className="text-md font-medium">
-                  ثبت ایمیل در خبرنامه
-                </span>
-                <div className="flex w-full flex-col gap-10 text-sm font-light">
-                  <div className="flex flex-col gap-3">
-                    <div className="flex flex-row">
-                      <button className="basis-1/3 bg-stone-900 px-8 py-3 text-stone-50">
-                        ثبت
-                      </button>
-                      <input
-                        type="email"
-                        className="basis-2/3 border border-stone-400 px-4 text-right outline-none"
-                        placeholder="آدرس ایمیل شما"
-                      />
-                    </div>
-                    <span className="font-normal text-stone-800">
-                      از جدید ترین محصولات و تخفیف ها باخبر شوید
-                    </span>
+            </div>
+            <div className="mb-10 flex flex-col items-center gap-4 text-stone-700 sm:max-lg:mt-6 sm:max-lg:w-1/2 lg:mb-0 lg:w-4/12 lg:items-start">
+              <span className="text-md font-medium">ثبت ایمیل در خبرنامه</span>
+              <div className="flex w-full flex-col gap-4 text-sm font-light lg:gap-3">
+                <div className="flex flex-col items-center gap-3 lg:items-start">
+                  <div className="flex w-full flex-row">
+                    <button className="basis-1/3 bg-stone-900 px-8 py-3 text-stone-50">
+                      ثبت
+                    </button>
+                    <input
+                      type="email"
+                      className="basis-2/3 border border-stone-400 px-4 text-right outline-none"
+                      placeholder="آدرس ایمیل شما"
+                    />
                   </div>
-                  <div className="flex flex-col gap-3">
-                    <span className="font-normal text-stone-800">
-                      ما را در شبکه‌های اجتماعی دنبال کنید
-                    </span>
-                    <div className="flex flex-row gap-4 pr-2">
-                      <button>
-                        <FontAwesomeIcon
-                          icon={faFacebook}
-                          className="text-xl"
-                        />
-                      </button>
-                      <button>
-                        <FontAwesomeIcon
-                          icon={faTelegram}
-                          className="text-xl"
-                        />
-                      </button>
-                      <button>
-                        <FontAwesomeIcon
-                          icon={faInstagram}
-                          className="text-xl"
-                        />
-                      </button>
-                    </div>
+                  <span className="font-normal text-stone-800">
+                    از جدید ترین محصولات و تخفیف ها باخبر شوید
+                  </span>
+                </div>
+                <div className="flex flex-col items-center gap-3 lg:items-start">
+                  <span className="font-normal text-stone-800">
+                    ما را در شبکه‌های اجتماعی دنبال کنید
+                  </span>
+                  <div className="flex flex-row gap-4 pr-2">
+                    <button>
+                      <FontAwesomeIcon icon={faFacebook} className="text-xl" />
+                    </button>
+                    <button>
+                      <FontAwesomeIcon icon={faTelegram} className="text-xl" />
+                    </button>
+                    <button>
+                      <FontAwesomeIcon icon={faInstagram} className="text-xl" />
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <hr className="mb-4 h-px w-full bg-stone-400" />
-          <nav className="flex flex-row items-center gap-2 text-sm font-light text-stone-700">
+          <nav className="mb-4 flex flex-row flex-wrap items-center justify-center gap-2 text-xs font-light text-stone-700 lg:mb-0 lg:flex-nowrap lg:justify-start lg:text-sm">
             <Link href="/">وبلاگ</Link>|<Link href="/">همکاری با ما</Link>|
             <Link href="/">پیراهن</Link>|<Link href="/">یقه اسکی</Link>|
             <Link href="/">دورس مردانه</Link>|<Link href="/">شلوار جین</Link>
           </nav>
         </div>
         {isHomePage && homeExclusiveContent}
-        <div className="flex w-full flex-row items-center justify-between text-stone-700">
+        <div className="flex w-full flex-col items-center justify-between gap-2 text-stone-700 lg:flex-row lg:gap-0">
           <small className="text-xs font-light">
             کلیه حقوق مادی و معنوی این سایت متعلق به فروشگاه وب‌پوش می‌باشد
           </small>

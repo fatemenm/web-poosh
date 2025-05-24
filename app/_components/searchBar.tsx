@@ -20,19 +20,21 @@ export default function SearchBar({
   onChangeOpen,
   onChangeSearchQuery,
   items,
+  variant = "header",
 }: {
   isOpen: boolean;
   searchQuery: string;
   onChangeOpen: (isOpen: boolean) => void;
   onChangeSearchQuery: (value: string) => void;
   items: ProductModel[];
+  variant?: "header" | "menu";
 }) {
   const inputRef = useRef(null);
   return (
     <div className="relative flex items-center justify-end pl-4">
       {/* search button */}
       <button
-        className={`absolute left-4 top-2 w-fit ${isOpen ? "right-4 top-2 cursor-default text-stone-500" : "text-stone-600 hover:text-stone-800"}`}
+        className={`absolute left-4 top-2 w-fit ${isOpen || variant === "menu" ? "right-4 top-2 cursor-default text-stone-500" : "text-stone-600 hover:text-stone-800"}`}
         onMouseDown={(e) => e.preventDefault()}
         onClick={
           isOpen
@@ -60,7 +62,7 @@ export default function SearchBar({
         onChange={(e) => onChangeSearchQuery(e.target.value)}
         type="search"
         placeholder="جستجو..."
-        className={`rounded-sm bg-white py-2 placeholder:text-sm placeholder:text-stone-500 ${isOpen ? "block w-full border border-stone-300 pl-9 pr-11 focus:outline-none" : "w-0 p-0"}`}
+        className={`rounded-sm bg-white py-2 placeholder:text-sm placeholder:text-stone-500 ${isOpen || variant === "menu" ? "block w-full border border-stone-300 pl-9 pr-11 focus:outline-none" : "w-0 p-0"}`}
       />
       {/* close button */}
       {isOpen && (

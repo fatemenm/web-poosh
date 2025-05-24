@@ -26,7 +26,10 @@ function LeftArrow(props: CustomArrowProps) {
             : "text-stone-800"
         }
       >
-        <FontAwesomeIcon icon={faChevronLeft} className="text-2xl" />
+        <FontAwesomeIcon
+          icon={faChevronLeft}
+          className="text-base sm:text-lg lg:text-xl"
+        />
       </button>
     </div>
   );
@@ -46,7 +49,10 @@ function RightArrow(props: CustomArrowProps) {
             : "text-stone-800"
         }
       >
-        <FontAwesomeIcon icon={faChevronRight} className="text-2xl" />
+        <FontAwesomeIcon
+          icon={faChevronRight}
+          className="text-base sm:text-lg lg:text-xl"
+        />
       </button>
     </div>
   );
@@ -72,6 +78,30 @@ export default function BasicSlider<T>({
         nextArrow: <RightArrow />,
         prevArrow: <LeftArrow />,
         initialSlide: Math.floor(items.length / 2),
+        responsive: [
+          {
+            breakpoint: 2560,
+            settings: {
+              slidesToShow: 5,
+              slidesToScroll: 1,
+              infinite: true,
+            },
+          },
+          {
+            breakpoint: 768,
+            settings: {
+              slidesToShow: 4,
+              slidesToScroll: 1,
+            },
+          },
+          {
+            breakpoint: 640,
+            settings: {
+              slidesToShow: 2,
+              slidesToScroll: 1,
+            },
+          },
+        ],
         ...setting,
       }}
     />

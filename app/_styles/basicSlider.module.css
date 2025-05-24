@@ -3,3 +3,12 @@
   content: "";
   display: none;
 }
+.slickPrev {
+  left: 0px !important;
+  z-index: 1;
+}
+.slickNext {
+  right: 0px !important;
+  z-index: 1;
+  text-align: right;
+}

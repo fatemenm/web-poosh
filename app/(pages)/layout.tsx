@@ -53,7 +53,9 @@ export default function RootLayout({
             <Toast.Provider swipeDirection="right">
               <Header promoBanner={banner} navbarItems={navbarItems} />
               <BreadcrumbProvider>
-                <main className="flex-1">{children}</main>
+                <main className="flex flex-1 flex-col items-center">
+                  {children}
+                </main>
               </BreadcrumbProvider>
               <Footer />
             </Toast.Provider>
