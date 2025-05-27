@@ -117,7 +117,7 @@ export default function Page() {
           </div>
           <hr className="w-full bg-stone-400 lg:mb-4" />
         </div>
-        <div className="flex flex-col gap-10 md:flex-row md:justify-center md:gap-3 lg:gap-16">
+        <div className="xs:w-auto xs:flex-row xs:gap-3 mx-auto flex w-2/3 flex-col gap-10 md:justify-center lg:mx-0 lg:gap-16">
           {data.clothingSetBanners?.map((banner) => {
             return (
               <Link
@@ -133,7 +133,7 @@ export default function Page() {
                   height={banner.image.height}
                 />
                 <div className="flex flex-col items-center gap-3 text-xs font-light text-stone-700 lg:text-base">
-                  <span className="text-sm lg:text-base xl:text-lg">
+                  <span className="xs:text-xs text-center text-sm md:text-sm lg:text-base xl:text-lg">
                     {banner.title}
                   </span>
                   <span className="underline underline-offset-8">
@@ -187,7 +187,7 @@ export default function Page() {
                   className="mt-4 flex flex-col items-center gap-2 text-center text-xs text-stone-600 lg:text-sm"
                 >
                   <span className="font-medium">{item.data.name}</span>
-                  <div className="flex flex-col items-center gap-3 xl:flex-row">
+                  <div className="flex flex-col items-center gap-3">
                     <span
                       className={classNames(
                         item.data.salePrice && "line-through"
