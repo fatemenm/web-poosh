@@ -123,19 +123,23 @@ export default function Page() {
 
   return (
     <div className="flex flex-col gap-10">
-      <p className="w-60 border-b-2 border-b-stone-700 pb-4 text-2xl">
+      <p className="border-b-2 border-b-stone-700 pb-4 md:max-w-60 md:text-2xl">
         سایز های من
       </p>
       <Form.Root className="flex flex-col gap-10 px-6" onSubmit={handleSubmit}>
-        <div className="grid grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
           {Object.entries(userSize).map(([key, value]) => {
             type LabelKey = keyof typeof labels;
             const isLabelKey = (key: string): key is LabelKey => key in labels;
             if (!isLabelKey(key)) return null;
             return (
-              <Form.Field key={key} name={key} className="flex flex-col gap-2">
+              <Form.Field
+                key={key}
+                name={key}
+                className="flex flex-col gap-2 md:mx-auto md:w-2/3 lg:w-full"
+              >
                 <div className="flex items-baseline justify-between">
-                  <Form.Label className="text-sm text-stone-700">
+                  <Form.Label className="whitespace-nowrap text-sm text-stone-700">
                     {labels[key]}
                   </Form.Label>
                   {errors[key as "weight" | "height"] && (
@@ -162,7 +166,7 @@ export default function Page() {
             );
           })}
         </div>
-        <Form.Submit asChild className="w-24 self-end">
+        <Form.Submit asChild className="w-full self-end md:w-24">
           <button className="bg-stone-800 px-2 py-4 text-center text-sm text-white">
             ذخیره
           </button>
@@ -173,7 +177,7 @@ export default function Page() {
         dir="rtl"
         open={isToastOpen}
         onOpenChange={setIsToastOpen}
-        className="data-[state=closed]:animate-hide data-[state=open]:animate-slideIn flex items-center justify-between gap-1 rounded-md border bg-green-100 p-4"
+        className="flex items-center justify-between gap-1 rounded-md border bg-green-100 p-4 data-[state=closed]:animate-hide data-[state=open]:animate-slideIn"
       >
         <Toast.Description className="">{toastMessage}</Toast.Description>
         <Toast.Close asChild className="text-stone-500 hover:text-stone-600">

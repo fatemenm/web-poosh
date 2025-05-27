@@ -114,12 +114,12 @@ export default function Page() {
     return () => clearTimeout(timerRef.current);
   }, []);
   return (
-    <div className="flex flex-col gap-10">
-      <p className="w-60 border-b-2 border-b-stone-700 pb-4 text-2xl">
+    <div className="flex flex-col gap-4 md:gap-10">
+      <p className="border-b-2 border-b-stone-700 pb-4 md:max-w-60 md:text-2xl">
         تغییر رمز عبور
       </p>
       <Form.Root
-        className="flex w-1/3 flex-col gap-8 self-center"
+        className="flex w-full flex-col gap-8 self-center px-4 md:w-2/3 md:px-0 xl:w-1/3"
         onSubmit={handleSubmit(onChangePassword)}
       >
         <div className="flex flex-col gap-6">
@@ -133,7 +133,10 @@ export default function Page() {
               </Form.Message>
             )}
           </Form.Field>
-          <Form.Field name="currentPassword" className="flex flex-col gap-2">
+          <Form.Field
+            name="currentPassword"
+            className="flex flex-col gap-2 md:w-auto"
+          >
             <div className="flex items-baseline justify-between">
               <Form.Label className="text-sm text-stone-700">
                 رمز عبور فعلی
@@ -208,7 +211,7 @@ export default function Page() {
         dir="rtl"
         open={isToastOpen}
         onOpenChange={setIsToastOpen}
-        className="data-[state=closed]:animate-hide data-[state=open]:animate-slideIn flex items-center justify-between gap-1 rounded-md border bg-green-100 p-4"
+        className="flex items-center justify-between gap-1 rounded-md border bg-green-100 p-4 data-[state=closed]:animate-hide data-[state=open]:animate-slideIn"
       >
         <Toast.Description className="">
           رمز عبور با موفقیت تغییر یافت

@@ -104,13 +104,13 @@ export default function AuthTabs({
       >
         <Tabs.Trigger
           value="sign-in"
-          className="flex basis-1/2 justify-center border-b-2 border-b-transparent bg-white p-2 data-[state=active]:border-b-stone-700"
+          className="flex basis-1/2 justify-center border-b-2 border-b-transparent bg-white p-2 text-sm data-[state=active]:border-b-stone-700 sm:text-base"
         >
           ورود
         </Tabs.Trigger>
         <Tabs.Trigger
           value="sign-up"
-          className="flex basis-1/2 justify-center border-b-2 border-b-transparent bg-white p-2 data-[state=active]:border-b-stone-700"
+          className="flex basis-1/2 justify-center border-b-2 border-b-transparent bg-white p-2 text-sm data-[state=active]:border-b-stone-700 sm:text-base"
         >
           ثبت نام
         </Tabs.Trigger>
