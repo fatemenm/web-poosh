@@ -78,7 +78,7 @@ export default function Page() {
   if (!categories || !products) return <div>data is not available</div>;
 
   return (
-    <div className="mx-auto flex flex-col gap-8 px-4 lg:w-11/12 lg:gap-16 lg:px-0 xl:w-10/12">
+    <div className="mx-auto flex w-full flex-col gap-8 px-4 lg:w-11/12 lg:gap-16 lg:px-0 xl:w-10/12">
       <BreadCrumb />
       <div className="flex flex-row gap-20 pb-10">
         {/* right navbar */}
@@ -109,7 +109,7 @@ export default function Page() {
             </span>
             <hr className="h-px w-full bg-stone-400" />
           </div>
-          <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:gap-x-8 lg:gap-y-14 xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-4 md:grid-cols-3 lg:gap-x-8 lg:gap-y-14 xl:grid-cols-4">
             {products.map((item, index) => (
               <div key={index}>
                 <ProductCard
