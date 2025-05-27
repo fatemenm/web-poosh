@@ -101,13 +101,13 @@ export default function Page({ params }: { params: { categoryId: string } }) {
   if (!category || !products || !sizes || !colors)
     return <div> data is not available.</div>;
   return (
-    <div className="mx-auto mb-10 flex w-10/12 flex-col gap-8 border-t pt-8">
+    <div className="mx-auto mb-10 flex w-full flex-col gap-8 border-t px-4 pt-4 lg:w-11/12 lg:gap-16 xl:w-10/12">
       <div className="flex flex-col items-center gap-4">
         <h4 className="text-lg font-normal">{category.name}</h4>
         {category.preSetFilters.length ? (
           <div className="flex w-full flex-col">
             <BasicSlider
-              containerClass="px-6"
+              containerClass=""
               setting={sliderSetting}
               items={category.preSetFilters.map((item) => item.image)}
               renderItem={(img, { isSwiping }) => (
@@ -136,7 +136,7 @@ export default function Page({ params }: { params: { categoryId: string } }) {
       </div>
       <div className="flex flex-col gap-3">
         <div>
-          <div className="flex flex-row items-center justify-between px-2">
+          <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row gap-6">
               <button
                 className="flex flex-row items-center gap-1 text-stone-600 hover:text-stone-800"
@@ -163,7 +163,7 @@ export default function Page({ params }: { params: { categoryId: string } }) {
             <div className="flex flex-row items-center gap-2">
               {/* change grid columns */}
               <button
-                className="text-stone-600 hover:text-stone-800"
+                className="hidden text-stone-600 hover:text-stone-800 lg:inline"
                 onClick={() => setGridColumns((prev) => (prev === 5 ? 7 : 5))}
               >
                 <FontAwesomeIcon icon={faBorderAll} className="text-lg" />
@@ -258,10 +258,13 @@ export default function Page({ params }: { params: { categoryId: string } }) {
           </div>
         </div>
         <div
-          className={classNames("grid gap-y-14", {
-            "grid-cols-5 gap-x-8": gridColumns === 5,
-            "grid-cols-7 gap-x-2": gridColumns === 7,
-          })}
+          className={classNames(
+            "grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:gap-y-14",
+            {
+              "lg:grid-cols-5 lg:gap-x-6": gridColumns === 5,
+              "lg:grid-cols-7 lg:gap-x-2": gridColumns === 7,
+            }
+          )}
         >
           {[...products]
             .sort((a, b) => a.data.id - b.data.id)
