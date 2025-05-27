@@ -14,9 +14,10 @@ import * as Dialog from "@radix-ui/react-dialog";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
+import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import AuthModal from "@/(pages)/_components/authModal";
@@ -50,12 +51,14 @@ export default function Header({
   const [hoveredBasketItemId, setHoveredBasketItemId] = useState<number | null>(
     null
   );
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isAuthDialogOpen, setIsAuthDialogOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [products, setProducts] = useState<ProductModel[]>([]);
   const { items, removeItem, isBasketPopUpOpen } = useBasket();
   const { user, handleSignOut } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   let closeTimeOut: ReturnType<typeof setTimeout>;
   useEffect(() => {
@@ -69,7 +72,7 @@ export default function Header({
         search: { name: searchQuery },
         pagination: {
           page: 1,
-          pageSize: 5,
+          pageSize: 3,
         },
       });
       setProducts(res.products);
@@ -91,11 +94,11 @@ export default function Header({
   return (
     <>
       {promoBanner && <PromoBanner data={promoBanner} />}
-      <header className="sticky top-0 z-10 flex w-full flex-row items-center justify-center bg-white px-4 py-2 lg:px-0">
-        <div className="flex w-full items-center justify-between bg-white lg:w-11/12 xl:w-10/12">
+      <header className="sticky top-0 z-10 flex w-full flex-row items-center justify-center bg-white px-4 lg:px-0">
+        <div className="flex w-full items-center justify-between bg-white py-2 lg:w-11/12 xl:w-10/12">
           {/* Mobile - hamburger menu */}
-          <div className="md:hidden">
-            <Dialog.Root>
+          <div className="lg:hidden">
+            <Dialog.Root open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <Dialog.Trigger>
                 <FontAwesomeIcon
                   icon={faBars}
@@ -103,8 +106,8 @@ export default function Header({
                 />
               </Dialog.Trigger>
               <Dialog.Portal>
-                <Dialog.Overlay className="fixed inset-0 z-10 bg-stone-800 bg-opacity-50 md:hidden" />
-                <Dialog.Content className="fixed top-0 z-20 h-screen w-2/3 bg-white sm:w-1/2 md:hidden">
+                <Dialog.Overlay className="fixed inset-0 z-10 bg-stone-800 bg-opacity-50 lg:hidden" />
+                <Dialog.Content className="fixed top-0 z-20 h-screen w-2/3 bg-white sm:w-1/2 lg:hidden">
                   <ScrollArea.Root
                     className="h-screen w-full overflow-hidden"
                     dir="rtl"
@@ -121,30 +124,55 @@ export default function Header({
                       </VisuallyHidden.Root>
                       <div className="flex flex-col items-center gap-4">
                         <div className="w-32">
-                          <Link href="/">
-                            <Image src={logo} alt="logo" />
-                          </Link>
+                          <Dialog.Close asChild>
+                            <Link href="/">
+                              <Image src={logo} alt="logo" />
+                            </Link>
+                          </Dialog.Close>
                         </div>
                         <hr className="w-full border-t-stone-200" />
-
-                        <button
-                          className="flex w-full gap-3 px-4"
-                          onClick={() => {
-                            setHoveredLeftNavbarItem("");
-                            setIsAuthDialogOpen(true);
-                          }}
-                        >
-                          <FontAwesomeIcon
-                            icon={faUser}
-                            className="text-l text-stone-600 hover:text-stone-800"
+                        <Dialog.Close asChild>
+                          {user ? (
+                            <Link
+                              href="/profile"
+                              className="flex w-full flex-row gap-3 px-4"
+                            >
+                              <FontAwesomeIcon
+                                icon={faUser}
+                                className="text-lg text-stone-600 hover:text-stone-800"
+                              />
+                              <span>{user.username}</span>
+                            </Link>
+                          ) : (
+                            <button
+                              className="flex w-full gap-3 px-4"
+                              onClick={() => {
+                                setHoveredLeftNavbarItem("");
+                                setIsAuthDialogOpen(true);
+                              }}
+                            >
+                              <FontAwesomeIcon
+                                icon={faUser}
+                                className="text-lg text-stone-600 hover:text-stone-800"
+                              />
+                              <span className="text-sm"> ورود | ثبت نام </span>
+                            </button>
+                          )}
+                        </Dialog.Close>
+                        <div className="w-full px-4">
+                          <SearchBar
+                            OnChangeMenuOpen={(value: boolean) =>
+                              setIsMenuOpen(value)
+                            }
+                            variant="menu"
+                            isOpen={isSearchBarOpen}
+                            searchQuery={searchQuery}
+                            onChangeOpen={setIsSearchBarOpen}
+                            onChangeSearchQuery={setSearchQuery}
+                            items={products}
                           />
-                          <span className="text-sm">
-                            {user ? user.username : "ورود | ثبت نام"}
-                          </span>
-                        </button>
-
+                        </div>
                         <hr className="w-full border-t-stone-200" />
-
                         {navbarItems && (
                           <nav className="flex w-full flex-col gap-2 px-4 text-sm">
                             {navbarItems.map((item) => {
@@ -155,40 +183,42 @@ export default function Header({
                                       triggerButtonText={[item.linkText]}
                                       triggerButtonClass="text-stone-700 hover:bg-transparent font-normal px-0 "
                                       items={[
-                                        item.subLinks?.items.map(
-                                          (item, index) => (
-                                            <div
-                                              key={index}
-                                              className="py-2 pr-3 text-sm font-light text-stone-700"
-                                            >
+                                        item.subLinks?.items.map((item) => (
+                                          <div
+                                            key={item.url}
+                                            className="py-2 pr-3 text-sm font-light text-stone-700"
+                                          >
+                                            <Dialog.Close asChild>
                                               <Link
+                                                className="block w-full"
                                                 href={nextServerUrl + item.url}
                                               >
                                                 {item.name}
                                               </Link>
-                                            </div>
-                                          )
-                                        ),
+                                            </Dialog.Close>
+                                          </div>
+                                        )),
                                       ]}
                                     />
                                   </div>
                                 );
                               else
                                 return (
-                                  <Link
-                                    className="flex items-center py-2 text-stone-700 hover:cursor-pointer"
-                                    key={item.id}
-                                    href={item.linkUrl}
-                                    onMouseEnter={() => {
-                                      clearTimeout(closeTimeOut);
-                                      setHoveredRightNavbarItem(item);
-                                    }}
-                                    onMouseLeave={() =>
-                                      setHoveredRightNavbarItem(null)
-                                    }
-                                  >
-                                    {item.linkText}
-                                  </Link>
+                                  <Dialog.Close asChild key={item.id}>
+                                    <Link
+                                      className="flex items-center py-2 text-stone-700 hover:cursor-pointer"
+                                      href={item.linkUrl}
+                                      onMouseEnter={() => {
+                                        clearTimeout(closeTimeOut);
+                                        setHoveredRightNavbarItem(item);
+                                      }}
+                                      onMouseLeave={() =>
+                                        setHoveredRightNavbarItem(null)
+                                      }
+                                    >
+                                      {item.linkText}
+                                    </Link>
+                                  </Dialog.Close>
                                 );
                             })}
                           </nav>
@@ -207,7 +237,7 @@ export default function Header({
             </Dialog.Root>
           </div>
           {/* Common - Logo && Desktop - right navbar */}
-          <div className="md:flex md:gap-4 lg:gap-6">
+          <div className="lg:flex lg:gap-6">
             {/* Logo */}
             <div className="w-24 pt-1 sm:h-auto sm:w-24 lg:w-28 xl:w-32">
               <Link href="/">
@@ -216,7 +246,7 @@ export default function Header({
             </div>
             {/* Desktop - right navbar */}
             {navbarItems && (
-              <nav className="hidden sm:text-xs md:flex md:flex-row md:justify-between lg:text-sm">
+              <nav className="hidden sm:text-xs lg:flex lg:flex-row lg:justify-between lg:text-sm">
                 {navbarItems.map((item) => {
                   if (item.isExpandable) {
                     return (
@@ -260,13 +290,13 @@ export default function Header({
           {(hoveredLeftNavbarItem === "user" ||
             hoveredLeftNavbarItem === "basket" ||
             hoveredRightNavbarItem?.isExpandable) && (
-            <div className="absolute left-0 top-[71px] h-screen w-screen bg-stone-800 bg-opacity-50" />
+            <div className="absolute left-0 top-16 hidden h-screen w-screen bg-stone-800 bg-opacity-50 lg:block" />
           )}
           {/* Desktop - right navbarItem menu */}
           {hoveredRightNavbarItem?.isExpandable && (
-            <div className="absolute left-0 top-[71px] z-10 w-screen">
+            <div className="absolute left-0 top-16 z-10 hidden w-screen flex-row justify-center bg-stone-100 lg:flex">
               <div
-                className="flex flex-row justify-center bg-stone-100 py-5"
+                className="flex flex-row justify-between p-5 lg:w-11/12 xl:w-10/12 2xl:w-9/12"
                 onMouseEnter={() => {
                   clearTimeout(closeTimeOut);
                   setHoveredRightNavbarItem(hoveredRightNavbarItem);
@@ -275,30 +305,40 @@ export default function Header({
                   setHoveredRightNavbarItem(null);
                 }}
               >
-                <div className="flex w-2/3 flex-row justify-between px-6">
-                  <div className="flex flex-row gap-20">
-                    {createSublinkGrid(
-                      hoveredRightNavbarItem?.subLinks?.items
-                    )?.map((col, colNumber) => {
-                      return (
-                        <ul
-                          key={colNumber}
-                          className="flex flex-col gap-5 text-right text-sm font-normal text-stone-600"
-                        >
-                          {col.map((item, rowNumber) => {
-                            return (
-                              <li key={rowNumber}>
-                                <Link href={nextServerUrl + item.url}>
-                                  {item.name}
-                                </Link>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      );
-                    })}
-                  </div>
-                  {hoveredRightNavbarItem.image ? (
+                {/* sublinks */}
+                <div className="flex flex-row justify-between gap-14 xl:gap-20 2xl:gap-32">
+                  {createSublinkGrid(
+                    hoveredRightNavbarItem?.subLinks?.items
+                  )?.map((col, colNumber) => {
+                    return (
+                      <ul
+                        key={col[0]?.url || colNumber}
+                        className="flex flex-col gap-5 text-right text-sm font-normal text-stone-600"
+                      >
+                        {col.map((item) => {
+                          return (
+                            <li className="whitespace-nowrap" key={item.url}>
+                              <Link
+                                onClick={() =>
+                                  setTimeout(
+                                    () => setHoveredRightNavbarItem(null),
+                                    1000
+                                  )
+                                }
+                                href={nextServerUrl + item.url}
+                              >
+                                {item.name}
+                              </Link>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    );
+                  })}
+                </div>
+                {/* image */}
+                {hoveredRightNavbarItem.image && (
+                  <div className="w-3/12 2xl:w-auto">
                     <Image
                       src={apiBaseUrl + hoveredRightNavbarItem.image.url}
                       alt={hoveredRightNavbarItem.image?.alternativeText}
@@ -306,16 +346,15 @@ export default function Header({
                       height={hoveredRightNavbarItem.image.height}
                       unoptimized
                     />
-                  ) : (
-                    <div></div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
           )}
           {/* Desktop - left navbar */}
-          <div className="hidden w-1/4 grow items-center justify-end md:flex">
+          <div className="hidden w-1/4 grow items-center justify-end lg:flex lg:gap-4">
             <SearchBar
+              variant="header"
               isOpen={isSearchBarOpen}
               searchQuery={searchQuery}
               onChangeOpen={setIsSearchBarOpen}
@@ -328,46 +367,56 @@ export default function Header({
               value={hoveredLeftNavbarItem}
               onValueChange={(value) => setHoveredLeftNavbarItem(value)}
             >
-              <NavigationMenu.List className="flex h-full w-full flex-row items-stretch justify-end">
+              <NavigationMenu.List className="flex h-full w-full flex-row items-stretch justify-end text-sm 2xl:text-base">
                 <NavigationMenu.Item value="user">
-                  <NavigationMenu.Trigger className="h-full px-4">
-                    <div className="flex gap-3">
+                  <NavigationMenu.Trigger className="h-full">
+                    <div className="flex gap-2">
                       {user && <span>{user.username}</span>}
                       <FontAwesomeIcon
                         icon={faUser}
-                        className="text-xl text-stone-600 hover:text-stone-800"
+                        className={classNames(
+                          "text-lg text-stone-600 hover:text-stone-800 xl:text-xl",
+                          {
+                            "px-0 pl-2": user,
+                            "px-4": !user,
+                          }
+                        )}
                       />
                     </div>
                   </NavigationMenu.Trigger>
-                  <NavigationMenu.Content className="absolute left-0 top-12 z-20 w-[18vw] bg-white p-4">
+                  <NavigationMenu.Content className="absolute left-0 top-11 z-20 w-[18vw] rounded-sm border bg-white p-4">
                     <div>
                       {user ? (
                         <div className="flex flex-col">
                           <Link
+                            onClick={() => setHoveredLeftNavbarItem("")}
                             href="/profile"
                             className="flex gap-2 py-3 text-stone-600 hover:text-stone-800"
                           >
                             <FontAwesomeIcon
                               icon={faUser}
-                              className="text-xl"
+                              className="text-lg xl:text-xl"
                             />
                             پروفایل
                           </Link>
                           <Link
+                            onClick={() => setHoveredLeftNavbarItem("")}
                             href="/profile/sizes"
                             className="flex gap-2 py-3 text-stone-600 hover:text-stone-800"
                           >
                             <FontAwesomeIcon
                               icon={faRuler}
-                              className="text-xl"
+                              className="text-lg xl:text-xl"
                             />
                             سایز‌های من
                           </Link>
                           <button
                             onClick={() => {
-                              router.push("/", {
-                                scroll: false,
-                              });
+                              if (pathname.includes("profile"))
+                                router.push("/", {
+                                  scroll: false,
+                                });
+                              setHoveredLeftNavbarItem("");
                               handleSignOut();
                             }}
                             className="flex gap-2 py-3 text-stone-600 hover:text-stone-800"
@@ -407,17 +456,17 @@ export default function Header({
                   <NavigationMenu.Trigger className="h-full px-4">
                     <FontAwesomeIcon
                       icon={faBagShopping}
-                      className="text-xl text-stone-600 hover:text-stone-800"
+                      className="text-lg text-stone-600 hover:text-stone-800 xl:text-xl"
                     />
                   </NavigationMenu.Trigger>
-                  <NavigationMenu.Content className="absolute left-0 top-12 z-20 w-[21vw] bg-white">
+                  <NavigationMenu.Content className="absolute left-0 top-11 z-20 w-[21vw] rounded-sm border bg-white">
                     <div>
                       {items?.length ? (
                         <ScrollArea.Root
                           dir="rtl"
-                          className="h-[600px] w-full overflow-hidden"
+                          className="h-[380px] max-h-[600px] w-full overflow-hidden"
                         >
-                          <ScrollArea.Viewport className="size-full px-6 py-4">
+                          <ScrollArea.Viewport className="size-full px-3 py-4">
                             <div className="flex flex-col gap-10">
                               <div className="flex justify-between text-sm">
                                 <span className=" ">سبد خرید</span>
@@ -435,6 +484,7 @@ export default function Header({
                                 </span>
                               </div>
                               <Link
+                                onClick={() => setHoveredLeftNavbarItem("")}
                                 href={nextServerUrl + "/basket"}
                                 className={
                                   "w-full bg-green-700 py-2 text-center text-sm text-white hover:bg-green-800"
@@ -442,7 +492,7 @@ export default function Header({
                               >
                                 مشاهده سبد خرید
                               </Link>
-                              <div className="grid grid-cols-3 justify-center gap-x-6 gap-y-6">
+                              <div className="grid grid-cols-2 justify-center gap-x-3 gap-y-3 2xl:grid-cols-3 2xl:gap-x-6 2xl:gap-y-6">
                                 {items.map((item) => {
                                   return (
                                     <div
@@ -524,7 +574,7 @@ export default function Header({
             </NavigationMenu.Root>
           </div>
           {/* Mobile - Basket Link */}
-          <Link className="md:hidden" href={nextServerUrl + "/basket"}>
+          <Link className="lg:hidden" href={nextServerUrl + "/basket"}>
             <FontAwesomeIcon
               icon={faBagShopping}
               className="text-xl text-stone-600 hover:text-stone-800"
