@@ -50,7 +50,7 @@ export default function Page() {
         search: { name: searchQuery },
         pagination: {
           page: pageNumber,
-          pageSize: 1,
+          pageSize: 6,
         },
       });
       setProducts(res.products);
@@ -65,15 +65,18 @@ export default function Page() {
     return `${pathname}?${params.toString()}`;
   }
   return (
-    <div className="mx-auto flex w-10/12 flex-col gap-16">
+    <div className="mx-auto flex w-full flex-col gap-8 px-4 lg:w-11/12 lg:gap-16 lg:px-0 xl:w-10/12">
       <BreadCrumb />
       <div className="mb-16 flex w-full flex-col gap-8">
         {/* products grid */}
         <div className="flex w-full flex-col gap-3">
-          <span className="text-lg text-stone-800"> لیست محصولات </span>
+          <span className="text-lg text-stone-800 sm:text-base lg:text-lg">
+            {" "}
+            لیست محصولات{" "}
+          </span>
           <hr className="h-px w-full bg-stone-400" />
         </div>
-        <div className="grid grid-cols-5 gap-x-8 gap-y-14">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-8 lg:gap-y-14 xl:grid-cols-5">
           {products.map((item) => (
             <div key={item.data.id}>
               <ProductCard product={item} />
