@@ -35,7 +35,7 @@ export default function Page() {
   }, [setItems]);
 
   return (
-    <div className="mx-auto flex flex-col gap-8 px-4 lg:w-11/12 xl:w-10/12">
+    <div className="mx-auto flex w-full flex-col gap-8 px-4 lg:w-11/12 xl:w-10/12">
       <BreadCrumb />
       <div className="mb-8 flex w-full flex-col gap-8 lg:mt-4 lg:flex-row lg:gap-16 xl:mx-0 xl:justify-center">
         <div className="flex flex-col lg:w-1/2 lg:gap-8">
