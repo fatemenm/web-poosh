@@ -51,8 +51,8 @@ export default function SizeGuideModal({
       }}
     >
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 flex justify-center overflow-y-auto bg-black/50">
-          <Dialog.Content className="absolute my-6 flex w-full min-w-[300px] max-w-4xl flex-col border border-stone-500 bg-white p-0">
+        <Dialog.Overlay className="fixed inset-0 z-20 flex justify-center overflow-y-auto bg-black/50">
+          <Dialog.Content className="xs:w-9/12 absolute z-20 my-6 flex w-11/12 max-w-4xl flex-col border border-stone-500 bg-white p-0 sm:w-8/12 md:w-9/12 lg:min-w-[300px] xl:w-full">
             <VisuallyHidden.Root asChild>
               <Dialog.Title> راهنمای سایز</Dialog.Title>
             </VisuallyHidden.Root>
@@ -62,14 +62,14 @@ export default function SizeGuideModal({
                 کنید
               </Dialog.Description>
             </VisuallyHidden.Root>
-            <Dialog.Close className="absolute right-2 top-3 px-2 text-slate-500 hover:text-slate-600">
+            <Dialog.Close className="absolute right-2 top-3 px-2 text-slate-700 hover:text-slate-800">
               <FontAwesomeIcon icon={faClose} className="text-[16px]" />
             </Dialog.Close>
             {/* row 1 */}
-            <div className="flex flex-row border-b-[1px]">
-              <div className="flex w-1/2 flex-row items-center justify-center rounded-tr-md bg-stone-100">
+            <div className="flex flex-col-reverse border-b-[1px] md:flex-row">
+              <div className="flex w-full flex-row items-center justify-center rounded-tr-md md:w-1/2 md:bg-stone-100 md:px-6 md:py-3">
                 <div className="flex w-fit flex-col gap-2 rounded-md bg-white px-4 py-5 shadow-sm">
-                  <span className="text-xl font-normal text-stone-800">
+                  <span className="text-base font-normal text-stone-800 lg:text-xl">
                     {productName}
                   </span>
                   <hr />
@@ -78,35 +78,37 @@ export default function SizeGuideModal({
                   </span>
                 </div>
               </div>
-              <div className="w-1/4">
-                <Image
-                  src={apiBaseUrl + productImages[1].url}
-                  height={productImages[1].height}
-                  width={productImages[1].width}
-                  alt={productImages[1].alternativeText}
-                />
-              </div>
-              <div className="w-1/4">
-                <Image
-                  className="rounded-tl-md"
-                  src={apiBaseUrl + productImages[0].url}
-                  height={productImages[0].height}
-                  width={productImages[0].width}
-                  alt={productImages[0].alternativeText}
-                />
+              <div className="flex w-full flex-row-reverse md:w-1/2 md:flex-row">
+                <div className="w-1/2 md:w-1/2">
+                  <Image
+                    src={apiBaseUrl + productImages[1].url}
+                    height={productImages[1].height}
+                    width={productImages[1].width}
+                    alt={productImages[1].alternativeText}
+                  />
+                </div>
+                <div className="w-1/2 md:w-1/2">
+                  <Image
+                    className="rounded-tl-md"
+                    src={apiBaseUrl + productImages[0].url}
+                    height={productImages[0].height}
+                    width={productImages[0].width}
+                    alt={productImages[0].alternativeText}
+                  />
+                </div>
               </div>
             </div>
             {/* row 2 */}
             <div className="flex flex-col gap-6 rounded-b-md px-4 py-8">
-              <div className="flex flex-row justify-between border-b-[1px] hover:border-b-stone-500">
+              <div className="flex flex-row justify-between border-b-[1px] text-sm hover:border-b-stone-500 lg:text-base">
                 <button
-                  className={`w-full px-8 py-5 ${activeTab === "sizeTable" ? "border-b-[2px] border-b-stone-600" : "border-b-[2px] border-b-transparent"}`}
+                  className={`w-full py-0 pb-3 lg:px-8 lg:py-5 ${activeTab === "sizeTable" ? "border-b-[2px] border-b-stone-600" : "border-b-[2px] border-b-transparent"}`}
                   onClick={() => setActiveTab("sizeTable")}
                 >
                   جدول سایز
                 </button>
                 <button
-                  className={`w-full px-8 py-5 ${activeTab === "measurementMethod" ? "border-b-[2px] border-b-stone-600" : "border-b-[2px] border-b-transparent"}`}
+                  className={`w-full py-0 pb-3 lg:px-8 lg:py-5 ${activeTab === "measurementMethod" ? "border-b-[2px] border-b-stone-600" : "border-b-[2px] border-b-transparent"}`}
                   onClick={() => setActiveTab("measurementMethod")}
                 >
                   روش اندازه گیری
@@ -136,12 +138,12 @@ export default function SizeGuideModal({
                     </ul>
                   </div>
                   <hr />
-                  <table className="border-collapse border text-center">
+                  <table className="border-collapse border text-center text-xs md:text-sm">
                     <thead>
                       <tr>
                         {Object.keys(sizeTableInfo[0]).map((label, index) => (
                           <th
-                            className="border bg-stone-100 px-4 py-3 text-sm font-medium"
+                            className="border bg-stone-100 px-2 py-3 font-medium md:px-4"
                             scope="col"
                             key={index}
                           >
@@ -155,13 +157,13 @@ export default function SizeGuideModal({
                         const labels = Object.keys(sizeData);
                         return (
                           <tr key={index}>
-                            <th className="border bg-stone-50 px-4 py-3 text-sm font-medium">
+                            <th className="border bg-stone-50 px-2 py-3 font-medium md:px-4">
                               {sizeData[labels[0]]}
                             </th>
                             {labels.slice(1).map((label, index) => (
                               <td
                                 key={index}
-                                className="border px-4 py-2 text-sm"
+                                className="border px-2 py-2 md:px-4"
                               >
                                 {sizeData[label]}
                               </td>

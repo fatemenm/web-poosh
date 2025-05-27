@@ -13,11 +13,11 @@ export function ProductHeader({
   salePrice: number;
 }) {
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-3 sm:gap-6">
       {/* title */}
       <h1 className="text-2xl">{name}</h1>
       {/* price */}
-      <div className="flex flex-row items-center gap-3">
+      <div className="flex flex-row items-center gap-3 sm:text-sm xl:text-base">
         <span className={classNames(salePrice && "line-through")}>
           {originalPrice.toLocaleString("fa-IR")} تومان
         </span>
@@ -38,7 +38,7 @@ export function ProductHeader({
         ) : null}
       </div>
       {/* snap pay */}
-      <div className="flex flex-row items-center justify-start gap-4 rounded-sm bg-sky-100 p-2">
+      <div className="xs:w-fit flex flex-row items-center justify-start gap-4 rounded-sm bg-sky-100 p-2 sm:w-full">
         <Image
           src="/snappay.png"
           width="32"

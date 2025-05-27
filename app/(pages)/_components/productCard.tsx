@@ -103,7 +103,7 @@ export default function ProductCard({
         >
           {product.data.name}
         </Link>
-        <div className="flex flex-col gap-2 text-xs text-stone-600 sm:flex-row sm:items-center sm:text-sm">
+        <div className="flex flex-col gap-2 text-xs text-stone-600 sm:text-sm">
           <span
             className={classNames(product.data.salePrice && "line-through")}
           >

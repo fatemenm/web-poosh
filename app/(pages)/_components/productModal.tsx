@@ -53,8 +53,8 @@ export default function ProductModal({
       }}
     >
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 flex justify-center overflow-y-auto bg-black/50">
-          <Dialog.Content className="absolute my-6 flex w-full min-w-[300px] max-w-5xl flex-col overflow-hidden border border-stone-500 bg-white p-0">
+        <Dialog.Overlay className="fixed inset-0 z-20 flex justify-center overflow-y-auto bg-black/50">
+          <Dialog.Content className="xs:w-9/12 absolute z-20 my-6 flex w-11/12 max-w-5xl flex-col overflow-hidden border border-stone-500 bg-white p-0 sm:w-8/12 md:w-9/12 lg:min-w-[300px] xl:w-full">
             <VisuallyHidden.Root asChild>
               <Dialog.Title>مشاهده سریع محصول</Dialog.Title>
             </VisuallyHidden.Root>
@@ -63,12 +63,12 @@ export default function ProductModal({
                 نمایش جزییات محصول - شامل عکس ها - رنگ ها و سایزها
               </Dialog.Description>
             </VisuallyHidden.Root>
-            <Dialog.Close className="absolute right-2 top-3 px-2 text-slate-500 hover:text-slate-600">
+            <Dialog.Close className="absolute right-2 top-3 z-30 px-2 text-slate-700 hover:text-slate-800">
               <FontAwesomeIcon icon={faClose} className="text-[16px]" />
             </Dialog.Close>
-            <div className="flex flex-row">
+            <div className="flex flex-col md:flex-row">
               {/* gallery slider */}
-              <div className="mr-24 w-1/2">
+              <div className="w-full md:w-1/2 lg:mr-24">
                 <GallerySlider
                   dotsClassName={styles.slickDotsModal}
                   images={product.getImagesByColor(selectedColor)}
@@ -76,7 +76,7 @@ export default function ProductModal({
                 />
               </div>
               {/* product overview */}
-              <div className="flex w-1/2 flex-col justify-between">
+              <div className="flex w-full flex-col justify-between md:w-1/2">
                 <ScrollArea.Root
                   className="h-[510px] w-full overflow-hidden pt-6"
                   dir="rtl"
@@ -148,7 +148,7 @@ export default function ProductModal({
                       <hr />
                       <Accordion
                         triggerButtonText={["توضیحات"]}
-                        triggerButtonClass="font-medium text-base"
+                        triggerButtonClass="font-medium text-base px-2"
                         items={[
                           <div className="flex flex-col gap-10" key={0}>
                             <div className="flex flex-col gap-4 text-sm font-light text-stone-800">
@@ -178,7 +178,7 @@ export default function ProductModal({
                       <hr />
                       <Link
                         href={`${nextServerUrl}/products/${product.data.documentId}`}
-                        className="mb-6 border border-stone-700 px-8 py-4 text-center text-sm font-normal text-stone-900 hover:bg-stone-600 hover:text-white"
+                        className="mb-6 border border-stone-700 px-4 py-4 text-center text-sm font-normal text-stone-900 hover:bg-stone-600 hover:text-white xl:px-8"
                       >
                         مشاهده تمامی اطلاعات محصول
                       </Link>

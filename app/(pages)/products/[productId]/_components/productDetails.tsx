@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 import ColorSelector from "@/_components/colorSelector";
 import GallerySlider from "@/_components/gallerySlider";
@@ -35,23 +35,21 @@ export default function ProductDetails({
   };
 
   return (
-    <div className="flex flex-row justify-end gap-10">
-      <div className="block w-5/12">
-        {
-          <GallerySlider
-            images={product.getImagesByColor(selectedColor)}
-            isExpandable={true}
-          />
-        }
+    <div className="flex w-full flex-col gap-10 sm:flex-row lg:w-auto lg:gap-16 xl:justify-center">
+      <div className="sm:block sm:w-1/2 lg:mr-32 xl:w-5/12">
+        <GallerySlider
+          images={product.getImagesByColor(selectedColor)}
+          isExpandable={true}
+        />
       </div>
-      <div className="ml-32 flex w-3/12 flex-col gap-6 text-right">
+      <div className="flex flex-col gap-6 sm:w-1/2 sm:gap-6 sm:text-right md:w-1/3 xl:w-3/12">
         <ProductHeader
           name={product.data.name}
           originalPrice={product.data.originalPrice}
           salePrice={product.data.salePrice}
         />
         <hr />
-        <div className="flex flex-col gap-6 text-stone-800">
+        <div className="flex flex-col gap-3 text-stone-800 sm:gap-6">
           <div className="text-sm font-light">
             رنگ انتخابی شما:
             <span className="pr-1 font-normal">{selectedColor}</span>

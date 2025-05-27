@@ -4,7 +4,6 @@ import { apiBaseUrl, nextServerUrl } from "@config";
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import BasicSlider from "@/_components/basicSlider";
@@ -67,7 +66,7 @@ export default function Product({ params }: { params: { productId: string } }) {
     return <div>product is not available</div>;
 
   return (
-    <div className="mx-auto flex w-10/12 flex-col gap-16">
+    <div className="mx-auto flex w-full flex-col gap-8 px-4 sm:gap-8 lg:w-11/12 lg:gap-16 xl:w-10/12">
       <BreadCrumb />
       <ProductDetails
         onClickSizeGuideLink={() => setIsSizeGuideModalOpen(true)}
@@ -90,7 +89,7 @@ export default function Product({ params }: { params: { productId: string } }) {
               <Link
                 href={`${nextServerUrl}/products/${item.data.documentId}`}
                 key={item.data.id}
-                className="flex cursor-pointer flex-col items-center outline-none"
+                className="flex cursor-pointer flex-col items-center px-1 outline-none"
                 onClick={(e) => {
                   if (ctx.isSwiping) e.preventDefault();
                 }}
@@ -104,10 +103,10 @@ export default function Product({ params }: { params: { productId: string } }) {
                 />
                 <div
                   style={{ direction: "rtl" }}
-                  className="mt-4 flex flex-col items-center gap-2 text-center text-sm text-stone-600"
+                  className="xs:text-sm mt-4 flex flex-col items-center gap-2 text-center text-xs text-stone-600"
                 >
                   <span className="font-medium">{item.data.name}</span>
-                  <div className="flex flex-row items-center gap-3">
+                  <div className="flex flex-col items-center gap-3">
                     <span
                       className={classNames(
                         item.data.salePrice && "line-through"
