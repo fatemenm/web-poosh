@@ -75,12 +75,13 @@ export default function BasicSlider<T>({
       items={items}
       containerClass={containerClass}
       setting={{
+        slidesToShow: 3,
         nextArrow: <RightArrow />,
         prevArrow: <LeftArrow />,
         initialSlide: Math.floor(items.length / 2),
         responsive: [
           {
-            breakpoint: 2560,
+            breakpoint: 1536,
             settings: {
               slidesToShow: 5,
               slidesToScroll: 1,
@@ -88,7 +89,7 @@ export default function BasicSlider<T>({
             },
           },
           {
-            breakpoint: 768,
+            breakpoint: 1024,
             settings: {
               slidesToShow: 4,
               slidesToScroll: 1,
@@ -96,6 +97,13 @@ export default function BasicSlider<T>({
           },
           {
             breakpoint: 640,
+            settings: {
+              slidesToShow: 3,
+              slidesToScroll: 1,
+            },
+          },
+          {
+            breakpoint: 480,
             settings: {
               slidesToShow: 2,
               slidesToScroll: 1,

@@ -59,6 +59,7 @@ export default function GallerySlider({
     slidesToShow: 1,
     arrows: false,
     infinite: true,
+    adaptiveHeight: true,
     slidesToScroll: 1,
   };
 
@@ -69,7 +70,7 @@ export default function GallerySlider({
       onOpenChange={(open) => setViewMode(open ? "expanded" : "default")}
     >
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 flex justify-center overflow-y-auto bg-black/50">
+        <Dialog.Overlay className="fixed inset-0 z-20 flex justify-center overflow-y-auto bg-black/50">
           <Dialog.Content className="absolute flex w-full min-w-[300px] flex-col border border-stone-500 bg-white p-0">
             <VisuallyHidden.Root asChild>
               <Dialog.Title> نمایش گالری به صورت تمام صفحه</Dialog.Title>
@@ -131,7 +132,10 @@ export default function GallerySlider({
     <div>
       <Slider
         containerClass={containerClass}
-        setting={{ ...baseSetting, ...setting }}
+        setting={{
+          ...baseSetting,
+          ...setting,
+        }}
         items={images}
         renderItem={(img, ctx: { isSwiping: boolean }) => {
           return (
@@ -147,7 +151,9 @@ export default function GallerySlider({
               alt={img.alternativeText}
               quality={100}
               priority
-              className={classNames({ "cursor-zoomIn": isExpandable })}
+              className={classNames("h-auto w-full object-cover", {
+                "cursor-zoomIn": isExpandable,
+              })}
             />
           );
         }}
