@@ -6,15 +6,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import BasicSlider from "@/_components/basicSlider";
+import BasicSlider from "@/components/slider/basicSlider";
 import {
   getCategories,
   getClotheSetBanners,
   getHeroBanners,
   getProducts,
-} from "@/_lib/data";
-import { Category, ClotheSetBanner, HeroBanner } from "@/_lib/definitions";
-import { ProductModel } from "@/_models/product.model";
+} from "@/lib/data";
+import { Category, ClotheSetBanner, HeroBanner } from "@/lib/definitions";
+import { ProductModel } from "@/models/product.model";
 
 const sliderSetting = {
   infinite: true,
@@ -43,13 +43,13 @@ export default function Page() {
     };
     getData();
   }, []);
-  if (!data) return <div>data is not available</div>;
+  // if (!data) return <div>data is not available</div>;
 
   return (
     <div className="flex w-full flex-col items-center lg:w-11/12 xl:w-10/12">
       {/* Hero Banners */}
       <div className="flex flex-col gap-10 lg:flex-row lg:gap-[2vw] lg:px-0">
-        {data.heroBanners?.map((banner, id) => {
+        {data?.heroBanners?.map((banner, id) => {
           return (
             <Link
               href={banner.linkUrl}
@@ -79,11 +79,11 @@ export default function Page() {
         })}
       </div>
       {/* Category Slider */}
-      {data.categories && (
+      {data?.categories && (
         <BasicSlider<Category>
           containerClass="my-8 md:my-16 px-2  w-full lg:px-0 "
           setting={sliderSetting}
-          items={data.categories}
+          items={data?.categories}
           renderItem={(item, ctx: { isSwiping: boolean }) => {
             return (
               <Link
@@ -117,8 +117,8 @@ export default function Page() {
           </div>
           <hr className="w-full bg-stone-400 lg:mb-4" />
         </div>
-        <div className="xs:w-auto xs:flex-row xs:gap-3 mx-auto flex w-2/3 flex-col gap-10 md:justify-center lg:mx-0 lg:gap-16">
-          {data.clothingSetBanners?.map((banner) => {
+        <div className="mx-auto flex w-2/3 flex-col gap-10 xs:w-auto xs:flex-row xs:gap-3 md:justify-center lg:mx-0 lg:gap-16">
+          {data?.clothingSetBanners?.map((banner) => {
             return (
               <Link
                 href={banner.linkUrl}
@@ -133,7 +133,7 @@ export default function Page() {
                   height={banner.image.height}
                 />
                 <div className="flex flex-col items-center gap-3 text-xs font-light text-stone-700 lg:text-base">
-                  <span className="xs:text-xs text-center text-sm md:text-sm lg:text-base xl:text-lg">
+                  <span className="text-center text-sm xs:text-xs md:text-sm lg:text-base xl:text-lg">
                     {banner.title}
                   </span>
                   <span className="underline underline-offset-8">
@@ -155,7 +155,7 @@ export default function Page() {
         </div>
         <hr className="w-full bg-stone-400 lg:mb-4" />
       </div>
-      {data.products && (
+      {data?.products && (
         <BasicSlider<ProductModel>
           setting={{
             ...sliderSetting,
@@ -165,7 +165,7 @@ export default function Page() {
             cssEase: "linear",
           }}
           containerClass="mx-auto mb-8 mt-4 lg:mt-4 px-2 lg:px-0 "
-          items={data.products}
+          items={data?.products}
           renderItem={(item, ctx: { isSwiping: boolean }) => {
             return (
               <Link

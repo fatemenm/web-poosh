@@ -4,16 +4,19 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import * as Toast from "@radix-ui/react-toast";
 import { Vazirmatn } from "next/font/google";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
-import Footer from "@/_components/footer";
-import Header from "@/_components/header";
-import { AuthProvider } from "@/_lib/context/authContext";
-import { BasketProvider } from "@/_lib/context/basketContext";
-import { BreadcrumbProvider } from "@/_lib/context/breadcrumbContext";
-import { getNavbarItems, getPromoBannerData } from "@/_lib/data";
-import { NavbarItem, PromoBanner } from "@/_lib/definitions";
+import Footer from "@/components/layout/footer";
+import Header from "@/components/layout/header";
+import PromoBanner from "@/components/layout/promoBanner";
 import "@/globals.css";
+import { AuthProvider } from "@/lib/context/authContext";
+import { BasketProvider } from "@/lib/context/basketContext";
+import { BreadcrumbProvider } from "@/lib/context/breadcrumbContext";
+import { getNavbarItems, getPromoBannerData } from "@/lib/data";
+import { NavbarItem, PromoBanner as PromoBannerType } from "@/lib/definitions";
+
+import Loading from "./loading";
 
 const vazirmatn = Vazirmatn({
   subsets: ["latin"],
@@ -26,7 +29,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [banner, setBanner] = useState<PromoBanner>();
+  const [banner, setBanner] = useState<PromoBannerType>();
   const [navbarItems, setNavbarItems] = useState<NavbarItem[]>();
 
   useEffect(() => {
@@ -51,10 +54,17 @@ export default function RootLayout({
         <AuthProvider>
           <BasketProvider>
             <Toast.Provider swipeDirection="right">
-              <Header promoBanner={banner} navbarItems={navbarItems} />
+              {banner ? (
+                <PromoBanner data={banner} />
+              ) : (
+                <div className="box-border flex w-full justify-center bg-stone-800 py-4 text-xs font-light text-white sm:px-2 lg:text-sm">
+                  ... در حال بارگذاری
+                </div>
+              )}
+              <Header navbarItems={navbarItems} />
               <BreadcrumbProvider>
                 <main className="flex flex-1 flex-col items-center">
-                  {children}
+                  <Suspense fallback={<Loading />}>{children}</Suspense>
                 </main>
               </BreadcrumbProvider>
               <Footer />
