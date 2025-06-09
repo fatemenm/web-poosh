@@ -6,9 +6,9 @@ import * as Form from "@radix-ui/react-form";
 import * as Toast from "@radix-ui/react-toast";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 
-import { useBreadcrumb } from "@/_lib/context/breadcrumbContext";
-import { createUserSize, getUserSize, updateUserSize } from "@/_lib/data";
-import { UserSize } from "@/_lib/definitions";
+import { useBreadcrumb } from "@/lib/context/breadcrumbContext";
+import { createUserSize, getUserSize, updateUserSize } from "@/lib/data";
+import { UserSize } from "@/lib/definitions";
 
 const initialSizes = {
   height: 0,
@@ -22,6 +22,18 @@ const initialSizes = {
   footSize: 0,
 };
 
+const labels = {
+  height: "قد (cm)",
+  weight: "وزن (kg)",
+  shoulderWidth: "عرض شانه (cm)",
+  chestWidth: "عرض سینه (cm)",
+  waistWidth: "عرض کمر (cm)",
+  pantsLength: "طول شلوار (cm)",
+  thighWidth: "عرض ران (cm)",
+  hemWidth: "عرض دمپا (cm)",
+  footSize: "اندازه کف پا (cm)",
+};
+
 export default function Page() {
   const [userSize, setUserSize] = useState<UserSize>(initialSizes);
   const [errors, setErrors] = useState<{ height?: string; weight?: string }>(
@@ -32,30 +44,18 @@ export default function Page() {
   const [toastMessage, setToastMessage] = useState<string>("");
   const timerRef = useRef(0);
 
-  const breadCrumbItems = [
-    {
-      label: "وب پوش",
-      href: "/",
-    },
-    { label: "پروفایل", href: "/profile" },
-    {
-      label: "سایزهای من",
-      href: "/sizes",
-    },
-  ];
-  const labels = {
-    height: "قد (cm)",
-    weight: "وزن (kg)",
-    shoulderWidth: "عرض شانه (cm)",
-    chestWidth: "عرض سینه (cm)",
-    waistWidth: "عرض کمر (cm)",
-    pantsLength: "طول شلوار (cm)",
-    thighWidth: "عرض ران (cm)",
-    hemWidth: "عرض دمپا (cm)",
-    footSize: "اندازه کف پا (cm)",
-  };
-
   useEffect(() => {
+    const breadCrumbItems = [
+      {
+        label: "وب پوش",
+        href: "/",
+      },
+      { label: "پروفایل", href: "/profile" },
+      {
+        label: "سایزهای من",
+        href: "/sizes",
+      },
+    ];
     setItems(breadCrumbItems);
   }, [setItems]);
 

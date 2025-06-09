@@ -2,7 +2,7 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 
-import { useBreadcrumb } from "@/_lib/context/breadcrumbContext";
+import { useBreadcrumb } from "@/lib/context/breadcrumbContext";
 
 export type BreadCrumbItem = {
   label: string;
@@ -14,7 +14,7 @@ export default function BreadCrumb() {
   const trailItems = [...items];
   const lastItem = trailItems.pop();
   return (
-    <div className="xs:text-sm flex flex-row items-center gap-4 bg-stone-100 px-2 py-3 text-xs text-stone-700 sm:px-4 lg:px-10">
+    <div className="flex flex-row items-center gap-4 bg-stone-100 px-2 py-3 text-xs text-stone-700 xs:text-sm sm:px-4 lg:px-10">
       {trailItems.map((item, index) => (
         <Link href={item.href} key={index} className="flex flex-row gap-4">
           {item.label}

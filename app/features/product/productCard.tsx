@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-import { ProductModel } from "@/_models/product.model";
+import { ProductModel } from "@/models/product.model";
 
 export default function ProductCard({
   product,

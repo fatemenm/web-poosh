@@ -1,7 +1,7 @@
 import { nextServerUrl } from "@config";
 import Link from "next/link";
 
-import type { PromoBanner } from "@/_lib/definitions";
+import type { PromoBanner } from "@/lib/definitions";
 
 export default function PromoBanner({ data }: { data: PromoBanner }) {
   const { promoMessage, siteTagline, ctaUrl, ctaText } = data;

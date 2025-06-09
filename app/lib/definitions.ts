@@ -1,4 +1,4 @@
-import { ProductModel } from "@/_models/product.model";
+import { ProductModel } from "@/models/product.model";
 
 export type PromoBanner = {
   startDate: Date;

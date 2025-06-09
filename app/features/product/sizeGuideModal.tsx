@@ -8,7 +8,7 @@ import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import Image from "next/image";
 import { useState } from "react";
 
-import { Image as ImageType } from "@/_lib/definitions";
+import { Image as ImageType } from "@/lib/definitions";
 
 type dataType = {
   productImages: ImageType[];
@@ -52,7 +52,7 @@ export default function SizeGuideModal({
     >
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-20 flex justify-center overflow-y-auto bg-black/50">
-          <Dialog.Content className="xs:w-9/12 absolute z-20 my-6 flex w-11/12 max-w-4xl flex-col border border-stone-500 bg-white p-0 sm:w-8/12 md:w-9/12 lg:min-w-[300px] xl:w-full">
+          <Dialog.Content className="absolute z-20 my-6 flex w-11/12 max-w-4xl flex-col border border-stone-500 bg-white p-0 xs:w-9/12 sm:w-8/12 md:w-9/12 lg:min-w-[300px] xl:w-full">
             <VisuallyHidden.Root asChild>
               <Dialog.Title> راهنمای سایز</Dialog.Title>
             </VisuallyHidden.Root>

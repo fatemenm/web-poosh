@@ -3,11 +3,11 @@
 import Image from "next/image";
 import { useState } from "react";
 
-import ColorSelector from "@/_components/colorSelector";
-import GallerySlider from "@/_components/gallerySlider";
-import SizeSelector from "@/_components/sizeSelector";
-import { useBasket } from "@/_lib/context/basketContext";
-import { ProductModel } from "@/_models/product.model";
+import GallerySlider from "@/components/slider/gallerySlider";
+import ColorSelector from "@/components/ui/colorSelector";
+import SizeSelector from "@/components/ui/sizeSelector";
+import { useBasket } from "@/lib/context/basketContext";
+import { ProductModel } from "@/models/product.model";
 
 import { ProductHeader } from "./productHeader";
 

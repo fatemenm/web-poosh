@@ -4,11 +4,11 @@ import classNames from "classnames";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import BreadCrumb from "@/_components/breadcrumb";
-import { useBreadcrumb } from "@/_lib/context/breadcrumbContext";
-import { getProducts } from "@/_lib/data";
-import { Pagination as PaginationType } from "@/_lib/definitions";
-import { ProductModel } from "@/_models/product.model";
+import BreadCrumb from "@/components/layout/breadcrumb";
+import { useBreadcrumb } from "@/lib/context/breadcrumbContext";
+import { getProducts } from "@/lib/data";
+import { Pagination as PaginationType } from "@/lib/definitions";
+import { ProductModel } from "@/models/product.model";
 import {
   Pagination,
   PaginationContent,
@@ -16,9 +16,9 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
+} from "@/ui/pagination";
 
-import ProductCard from "../_components/productCard";
+import ProductCard from "../../features/product/productCard";
 
 const breadcrumbItems = [
   {
@@ -57,7 +57,7 @@ export default function Page() {
       setPagination(res.pagination);
     };
     getData();
-  }, [searchParams]);
+  }, [searchParams, searchQuery, pageNumber]);
 
   function updatePageNumber(pageNum: number) {
     const params = new URLSearchParams(searchParams);

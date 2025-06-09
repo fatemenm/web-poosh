@@ -9,8 +9,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
 
-import { Image as ProductImage } from "@/_lib/definitions";
-import { ProductModel } from "@/_models/product.model";
+import { Image as ProductImage } from "@/lib/definitions";
+import { ProductModel } from "@/models/product.model";
 
 export default function ProductDescription({
   product,
@@ -22,7 +22,7 @@ export default function ProductDescription({
   onClickSizeGuideLink: () => void;
 }) {
   return (
-    <div className="xs:p-6 flex flex-col bg-stone-100 p-4 md:flex-row md:items-stretch md:justify-center md:gap-8 lg:p-10 xl:gap-16">
+    <div className="flex flex-col bg-stone-100 p-4 xs:p-6 md:flex-row md:items-stretch md:justify-center md:gap-8 lg:p-10 xl:gap-16">
       <div className="hidden w-full md:inline md:w-3/12 md:grow xl:grow-0">
         <Image
           src={apiBaseUrl + images[0].url}
@@ -42,7 +42,7 @@ export default function ProductDescription({
         <div className="flex flex-col gap-2 md:gap-5">
           <span className="text-sm font-medium">روش شستشو و نگهداری</span>
           <div className="flex-row justify-between gap-12 pr-8 text-sm font-light leading-7">
-            <ul className="xs:columns-2 list-disc gap-8">
+            <ul className="list-disc gap-8 xs:columns-2">
               {product.data.category.careTips.map((item, index) => (
                 <li key={index}>{item}</li>
               ))}

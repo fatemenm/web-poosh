@@ -8,12 +8,12 @@ import classNames from "classnames";
 import Link from "next/link";
 import { useState } from "react";
 
-import Accordion from "@/_components/accordion";
-import ColorSelector from "@/_components/colorSelector";
-import GallerySlider from "@/_components/gallerySlider";
-import SizeSelector from "@/_components/sizeSelector";
-import { ProductModel } from "@/_models/product.model";
-import styles from "@/_styles/gallerySlider.module.css";
+import Accordion from "@/components/navigation/accordion";
+import GallerySlider from "@/components/slider/gallerySlider";
+import ColorSelector from "@/components/ui/colorSelector";
+import SizeSelector from "@/components/ui/sizeSelector";
+import { ProductModel } from "@/models/product.model";
+import styles from "@/styles/gallerySlider.module.css";
 
 export default function ProductModal({
   isOpen,
@@ -54,7 +54,7 @@ export default function ProductModal({
     >
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-20 flex justify-center overflow-y-auto bg-black/50">
-          <Dialog.Content className="xs:w-9/12 absolute z-20 my-6 flex w-11/12 max-w-5xl flex-col overflow-hidden border border-stone-500 bg-white p-0 sm:w-8/12 md:w-9/12 lg:min-w-[300px] xl:w-full">
+          <Dialog.Content className="absolute z-20 my-6 flex w-11/12 max-w-5xl flex-col overflow-hidden border border-stone-500 bg-white p-0 xs:w-9/12 sm:w-8/12 md:w-9/12 lg:min-w-[300px] xl:w-full">
             <VisuallyHidden.Root asChild>
               <Dialog.Title>مشاهده سریع محصول</Dialog.Title>
             </VisuallyHidden.Root>

@@ -8,8 +8,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ReactNode } from "react";
 import { CustomArrowProps } from "react-slick";
 
-import Slider from "@/_components/slider";
-import styles from "@/_styles/basicSlider.module.css";
+import Slider from "@/components/slider/slider";
+import styles from "@/styles/basicSlider.module.css";
 
 function LeftArrow(props: CustomArrowProps) {
   const { className, style, onClick } = props;

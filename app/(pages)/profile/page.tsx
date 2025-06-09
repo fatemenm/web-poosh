@@ -2,20 +2,20 @@
 
 import { useEffect } from "react";
 
-import { useAuth } from "@/_lib/context/authContext";
-import { useBreadcrumb } from "@/_lib/context/breadcrumbContext";
+import { useAuth } from "@/lib/context/authContext";
+import { useBreadcrumb } from "@/lib/context/breadcrumbContext";
 
 export default function Page() {
-  const breadCrumbItems = [
-    {
-      label: "وب پوش",
-      href: "/",
-    },
-    { label: "پروفایل", href: "/profile" },
-  ];
   const { user } = useAuth();
   const { setItems } = useBreadcrumb();
   useEffect(() => {
+    const breadCrumbItems = [
+      {
+        label: "وب پوش",
+        href: "/",
+      },
+      { label: "پروفایل", href: "/profile" },
+    ];
     setItems(breadCrumbItems);
   }, [setItems]);
   return (

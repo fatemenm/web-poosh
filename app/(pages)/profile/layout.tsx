@@ -12,8 +12,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-import BreadCrumb from "@/_components/breadcrumb";
-import { useAuth } from "@/_lib/context/authContext";
+import BreadCrumb from "@/components/layout/breadcrumb";
+import { useAuth } from "@/lib/context/authContext";
 
 export default function Layout({
   children,
@@ -24,7 +24,7 @@ export default function Layout({
   const router = useRouter();
   useEffect(() => {
     if (!user && !loading) router.replace("/login");
-  }, [user, loading]);
+  }, [user, loading, router]);
   if (loading) return <div>در حال بارگذاری...</div>;
   if (!loading && !user) return;
   return (

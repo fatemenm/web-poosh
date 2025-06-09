@@ -14,7 +14,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
 
-import { ProductModel } from "@/_models/product.model";
+import { ProductModel } from "@/models/product.model";
 
 export default function SearchBar({
   isOpen,

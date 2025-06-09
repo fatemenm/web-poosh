@@ -9,9 +9,9 @@ import classNames from "classnames";
 import Image from "next/image";
 import { useState } from "react";
 
-import Slider from "@/_components/slider";
-import { Image as ImageType } from "@/_lib/definitions";
-import styles from "@/_styles/gallerySlider.module.css";
+import Slider from "@/components/slider/slider";
+import { Image as ImageType } from "@/lib/definitions";
+import styles from "@/styles/gallerySlider.module.css";
 
 export default function GallerySlider({
   images,

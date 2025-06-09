@@ -15,16 +15,16 @@ import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import ProductCard from "@/(pages)/_components/productCard";
-import BasicSlider from "@/_components/basicSlider";
+import BasicSlider from "@/components/slider/basicSlider";
+import ProductCard from "@/features/product/productCard";
 import {
   getCategoryById,
   getCategoryColors,
   getCategorySizes,
   getProducts,
-} from "@/_lib/data";
-import { Category, Color } from "@/_lib/definitions";
-import { ProductModel } from "@/_models/product.model";
+} from "@/lib/data";
+import { Category, Color } from "@/lib/definitions";
+import { ProductModel } from "@/models/product.model";
 
 const sliderSetting = {
   infinite: true,
@@ -75,7 +75,14 @@ export default function Page({ params }: { params: { categoryId: string } }) {
       setProducts(res.products);
     };
     getData();
-  }, [params.categoryId, searchParams]);
+  }, [
+    params.categoryId,
+    searchParams,
+    onSale,
+    selectedColors,
+    selectedSizes,
+    subCategoryType,
+  ]);
 
   function updateFiltersInURL({
     colors = selectedColors,

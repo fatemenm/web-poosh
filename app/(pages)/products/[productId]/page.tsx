@@ -6,15 +6,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import BasicSlider from "@/_components/basicSlider";
-import BreadCrumb from "@/_components/breadcrumb";
-import { useBreadcrumb } from "@/_lib/context/breadcrumbContext";
-import { getProductById, getProducts } from "@/_lib/data";
-import { ProductModel } from "@/_models/product.model";
-
-import ProductDescription from "./_components/productDescription";
-import ProductDetails from "./_components/productDetails";
-import SizeGuideModal from "./_components/sizeGuideModal";
+import BreadCrumb from "@/components/layout/breadcrumb";
+import BasicSlider from "@/components/slider/basicSlider";
+import ProductDescription from "@/features/product/productDescription";
+import ProductDetails from "@/features/product/productDetails";
+import SizeGuideModal from "@/features/product/sizeGuideModal";
+import { useBreadcrumb } from "@/lib/context/breadcrumbContext";
+import { getProductById, getProducts } from "@/lib/data";
+import { ProductModel } from "@/models/product.model";
 
 const sliderSetting = {
   infinite: true,
@@ -103,7 +102,7 @@ export default function Product({ params }: { params: { productId: string } }) {
                 />
                 <div
                   style={{ direction: "rtl" }}
-                  className="xs:text-sm mt-4 flex flex-col items-center gap-2 text-center text-xs text-stone-600"
+                  className="mt-4 flex flex-col items-center gap-2 text-center text-xs text-stone-600 xs:text-sm"
                 >
                   <span className="font-medium">{item.data.name}</span>
                   <div className="flex flex-col items-center gap-3">

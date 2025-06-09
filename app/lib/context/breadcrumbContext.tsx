@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useContext, useState } from "react";
 
-import { BreadCrumbItem } from "@/_components/breadcrumb";
+import { BreadCrumbItem } from "@/components/layout/breadcrumb";
 
 export type breadcrumbContextType = {
   items: BreadCrumbItem[];

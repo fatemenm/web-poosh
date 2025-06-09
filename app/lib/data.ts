@@ -1,7 +1,7 @@
 import { apiBaseUrl } from "@config";
 import qs from "qs";
 
-import { ProductModel } from "@/_models/product.model";
+import { ProductModel } from "@/models/product.model";
 
 import {
   AuthResponseBody,
@@ -56,7 +56,7 @@ async function requestWithAuth({
   baseUrl: string;
   id?: string | number;
   method: "PUT" | "POST" | "GET";
-  body?: any;
+  body?: unknown;
   headers?: HeadersInit;
   query?: queryType;
 }) {
@@ -76,9 +76,9 @@ async function requestWithAuth({
     const data = await response.json();
     if (!response.ok) {
       const error = new Error(data.error.message || "Request failed");
-      (error as any).status = data.error.status;
-      (error as any).name = data.error.name || "RequestError";
-      (error as any).body = data.error.details;
+      (error as ErrorType).status = data.error.status;
+      (error as ErrorType).name = data.error.name || "RequestError";
+      (error as ErrorType).details = data.error.details;
       throw error;
     }
     return data;
@@ -130,7 +130,8 @@ export async function changePassword(
       },
     });
     return res;
-  } catch (error: any) {
+  } catch (e) {
+    const error = e as ErrorType;
     if (error.name === "ValidationError") {
       const translations: Record<string, string> = {
         "The provided current password is invalid": "رمز عبور فعلی اشتباه است",

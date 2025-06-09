@@ -7,12 +7,12 @@ import classNames from "classnames";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import BreadCrumb from "@/_components/breadcrumb";
-import { useBasket } from "@/_lib/context/basketContext";
-import { useBreadcrumb } from "@/_lib/context/breadcrumbContext";
-import { BasketItem } from "@/_lib/definitions";
+import BreadCrumb from "@/components/layout/breadcrumb";
+import { useBasket } from "@/lib/context/basketContext";
+import { useBreadcrumb } from "@/lib/context/breadcrumbContext";
+import { BasketItem } from "@/lib/definitions";
 
-import ProductModal from "../_components/productModal";
+import ProductModal from "../../features/product/productModal";
 
 const breadcrumbItems = [
   {
@@ -65,7 +65,7 @@ export default function Page() {
                         alt={item.image.alternativeText}
                       />
                     </div>
-                    <div className="xs:text-sm mb-4 flex w-1/2 flex-col justify-between gap-2 text-xs lg:w-auto">
+                    <div className="mb-4 flex w-1/2 flex-col justify-between gap-2 text-xs xs:text-sm lg:w-auto">
                       <span className="font-medium text-stone-900">
                         {item.product.data.name}
                       </span>
@@ -115,7 +115,7 @@ export default function Page() {
             )}
           </div>
         </div>
-        <div className="xs:text-sm xs:mx-auto xs:w-10/12 flex flex-col gap-20 text-xs sm:w-2/3 md:w-3/5 lg:mx-0 lg:w-1/2 xl:w-1/3">
+        <div className="flex flex-col gap-20 text-xs xs:mx-auto xs:w-10/12 xs:text-sm sm:w-2/3 md:w-3/5 lg:mx-0 lg:w-1/2 xl:w-1/3">
           <div className="flex flex-col gap-10 bg-stone-100 p-8">
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between">

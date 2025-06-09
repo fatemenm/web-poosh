@@ -7,16 +7,16 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import React from "react";
 
-import ProductCard from "@/(pages)/_components/productCard";
-import ProductModal from "@/(pages)/_components/productModal";
-import Accordion from "@/_components/accordion";
-import BreadCrumb from "@/_components/breadcrumb";
-import { useBasket } from "@/_lib/context/basketContext";
-import { useBreadcrumb } from "@/_lib/context/breadcrumbContext";
-import { getCategories, getProducts } from "@/_lib/data";
-import { Category } from "@/_lib/definitions";
-import { Pagination as PaginationType } from "@/_lib/definitions";
-import { ProductModel } from "@/_models/product.model";
+import BreadCrumb from "@/components/layout/breadcrumb";
+import Accordion from "@/components/navigation/accordion";
+import ProductCard from "@/features/product/productCard";
+import ProductModal from "@/features/product/productModal";
+import { useBasket } from "@/lib/context/basketContext";
+import { useBreadcrumb } from "@/lib/context/breadcrumbContext";
+import { getCategories, getProducts } from "@/lib/data";
+import { Category } from "@/lib/definitions";
+import { Pagination as PaginationType } from "@/lib/definitions";
+import { ProductModel } from "@/models/product.model";
 import {
   Pagination,
   PaginationContent,
@@ -24,7 +24,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
+} from "@/ui/pagination";
 
 const breadcrumbItems = [
   {
@@ -68,7 +68,7 @@ export default function Page() {
       setPagination(pagination);
     };
     getData();
-  }, [searchParams]);
+  }, [searchParams, pageNumber]);
 
   function updatePageNumber(pageNum: number) {
     const params = new URLSearchParams({ page: pageNum.toString() });

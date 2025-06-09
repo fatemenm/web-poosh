@@ -1,4 +1,4 @@
-import { Product } from "@/_lib/definitions";
+import { Product } from "@/lib/definitions";
 
 export class ProductModel {
   private colorToSizes: Record<string, string[]>;

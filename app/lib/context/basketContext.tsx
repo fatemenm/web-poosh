@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 
-import { ProductModel } from "@/_models/product.model";
+import { ProductModel } from "@/models/product.model";
 
 import { BasketItem, Image, Product } from "../definitions";
 

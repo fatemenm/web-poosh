@@ -1,7 +1,3 @@
-import { faFilter } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect } from "react";
-
 export default function Page() {
   return (
     <div className="mx-auto mb-10 flex w-10/12 flex-col gap-8 border-t pt-8">
