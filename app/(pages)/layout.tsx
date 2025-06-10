@@ -54,14 +54,8 @@ export default function RootLayout({
         <AuthProvider>
           <BasketProvider>
             <Toast.Provider swipeDirection="right">
-              {banner ? (
-                <PromoBanner data={banner} />
-              ) : (
-                <div className="box-border flex w-full justify-center bg-stone-800 py-4 text-xs font-light text-white sm:px-2 lg:text-sm">
-                  ... در حال بارگذاری
-                </div>
-              )}
-              <Header navbarItems={navbarItems} />
+              {banner && <PromoBanner data={banner} />}
+              {navbarItems && <Header navbarItems={navbarItems} />}
               <BreadcrumbProvider>
                 <main className="flex flex-1 flex-col items-center">
                   <Suspense fallback={<Loading />}>{children}</Suspense>

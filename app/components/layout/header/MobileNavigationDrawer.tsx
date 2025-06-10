@@ -17,7 +17,7 @@ import SiteLogo from "./SiteLogo";
 export default function MobileNavigationDrawer({
   navbarItems,
 }: {
-  navbarItems: NavbarItem[] | undefined;
+  navbarItems: NavbarItem[];
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const { user, openAuthModal } = useAuth();
