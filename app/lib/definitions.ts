@@ -58,6 +58,7 @@ export type UserSize = {
 
 export type NavbarItem = {
   id: number;
+  documentId: string;
   linkText: string;
   linkUrl: string;
   subLinks?: { items: NavigationLink[] } | null;
