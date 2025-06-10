@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import Accordion from "@/components/navigation/accordion";
-// import SearchBar from "@/components/navigation/searchBar";
+import SearchBar from "@/components/navigation/searchBar";
 import { useAuth } from "@/lib/context/authContext";
 import { NavbarItem } from "@/lib/definitions";
 
@@ -49,11 +49,8 @@ export default function MobileNavigationDrawer({
                   </Dialog.Description>
                 </VisuallyHidden.Root>
                 <div className="flex flex-col items-center gap-4">
-                  <div className="w-32">
-                    <SiteLogo onSelect={() => setIsMenuOpen(false)} />
-                  </div>
+                  <SiteLogo onSelect={() => setIsMenuOpen(false)} />
                   <hr className="w-full border-t-stone-200" />
-
                   {user ? (
                     <Link
                       onClick={() => setIsMenuOpen(false)}
@@ -83,17 +80,12 @@ export default function MobileNavigationDrawer({
                   )}
 
                   <div className="w-full px-4">
-                    {/* <SearchBar
+                    <SearchBar
                       OnChangeMenuOpen={(value: boolean) =>
                         setIsMenuOpen(value)
                       }
-                      variant="menu"
-                      isOpen={isSearchBarOpen}
-                      searchQuery={searchQuery}
-                      onChangeOpen={setIsSearchBarOpen}
-                      onChangeSearchQuery={setSearchQuery}
-                      items={products}
-                    /> */}
+                      variant="mobile"
+                    />
                   </div>
                   <hr className="w-full border-t-stone-200" />
                   {navbarItems && (

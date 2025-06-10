@@ -15,7 +15,7 @@ import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import MobileNavigationDrawer from "@/components/layout/header/MobileNavigationDrawer";
 import SiteLogo from "@/components/layout/header/SiteLogo";
@@ -23,9 +23,7 @@ import SearchBar from "@/components/navigation/searchBar";
 import AuthModal from "@/features/auth/authModal";
 import { useAuth } from "@/lib/context/authContext";
 import { useBasket } from "@/lib/context/basketContext";
-import { getProducts } from "@/lib/data";
 import { NavbarItem, NavigationLink } from "@/lib/definitions";
-import { ProductModel } from "@/models/product.model";
 
 export default function Header({
   navbarItems,
@@ -36,13 +34,9 @@ export default function Header({
     useState<NavbarItem | null>();
   const [hoveredLeftNavbarItem, setHoveredLeftNavbarItem] =
     useState<string>("");
-  const [isSearchBarOpen, setIsSearchBarOpen] = useState<boolean>(false);
   const [hoveredBasketItemId, setHoveredBasketItemId] = useState<number | null>(
     null
   );
-  // const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [products, setProducts] = useState<ProductModel[]>([]);
   const { items, removeItem } = useBasket();
   const { user, handleSignOut, openAuthModal } = useAuth();
   const router = useRouter();
@@ -50,21 +44,6 @@ export default function Header({
 
   let closeTimeOut: ReturnType<typeof setTimeout>;
   const handleSelect = () => setHoveredLeftNavbarItem("");
-
-  useEffect(() => {
-    const getData = async () => {
-      const res = await getProducts({
-        search: { name: searchQuery },
-        pagination: {
-          page: 1,
-          pageSize: 3,
-        },
-      });
-      setProducts(res.products);
-    };
-    if (searchQuery && isSearchBarOpen) getData();
-    return () => setProducts([]);
-  }, [searchQuery, isSearchBarOpen]);
 
   function createSublinkGrid(items: NavigationLink[] | undefined) {
     if (!items) return null;
@@ -79,11 +58,8 @@ export default function Header({
   return (
     <header className="sticky top-0 z-10 flex w-full flex-row items-center justify-center bg-white px-4 lg:px-0">
       <div className="flex w-full items-center justify-between bg-white py-2 lg:w-11/12 xl:w-10/12">
-        {/* Mobile - hamburger menu */}
         <MobileNavigationDrawer navbarItems={navbarItems} />
-        {/* Common - Logo && Desktop - right navbar */}
         <div className="lg:flex lg:gap-6">
-          {/* Logo */}
           <div className="w-24 pt-1 sm:h-auto sm:w-24 lg:w-28 xl:w-32">
             <SiteLogo />
           </div>
@@ -196,14 +172,7 @@ export default function Header({
         )}
         {/* Desktop - left navbar */}
         <div className="hidden w-1/4 grow items-center justify-end lg:flex lg:gap-4">
-          <SearchBar
-            variant="header"
-            isOpen={isSearchBarOpen}
-            searchQuery={searchQuery}
-            onChangeOpen={setIsSearchBarOpen}
-            onChangeSearchQuery={setSearchQuery}
-            items={products}
-          />
+          <SearchBar variant="desktop" />
           <NavigationMenu.Root
             dir="rtl"
             className="relative flex items-stretch justify-end [&>div]:w-full"

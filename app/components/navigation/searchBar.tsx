@@ -12,29 +12,38 @@ import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
+import { getProducts } from "@/lib/data";
 import { ProductModel } from "@/models/product.model";
 
 export default function SearchBar({
-  isOpen,
-  searchQuery,
-  onChangeOpen,
-  onChangeSearchQuery,
-  items,
-  variant = "header",
+  variant = "desktop",
   OnChangeMenuOpen,
 }: {
-  isOpen: boolean;
-  searchQuery: string;
-  onChangeOpen: (isOpen: boolean) => void;
-  onChangeSearchQuery: (value: string) => void;
-  items: ProductModel[];
-  variant: "header" | "menu";
-  OnChangeMenuOpen?: (value: boolean) => void;
+  variant: "desktop" | "mobile";
+  OnChangeMenuOpen?: (isOpen: boolean) => void;
 }) {
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [query, setQuery] = useState<string>("");
+  const [results, setResults] = useState<ProductModel[]>([]);
   const inputRef = useRef(null);
   const router = useRouter();
+
+  useEffect(() => {
+    const getData = async () => {
+      const res = await getProducts({
+        search: { name: query },
+        pagination: {
+          page: 1,
+          pageSize: 3,
+        },
+      });
+      setResults(res.products);
+    };
+    if (query && isExpanded) getData();
+    return () => setResults([]);
+  }, [query, isExpanded]);
   return (
     <div className="relative flex items-center justify-end">
       {/* search button */}
@@ -43,21 +52,21 @@ export default function SearchBar({
           "absolute top-2 w-fit text-stone-600 hover:text-stone-800",
           {
             "right-4 top-2 cursor-default text-stone-500":
-              isOpen && variant === "header",
+              isExpanded && variant === "desktop",
             "bottom-1 left-1 right-1 top-1 rounded-br-sm rounded-tr-sm border-l bg-stone-100 px-2 pt-1 text-stone-400 hover:bg-stone-200 hover:text-stone-800":
-              variant === "menu",
+              variant === "mobile",
           }
         )}
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => {
-          if (variant === "menu") {
-            router.push(nextServerUrl + "/search-result?search=" + searchQuery);
-            onChangeSearchQuery("");
-            onChangeOpen(false);
+          if (variant === "mobile") {
+            router.push(nextServerUrl + "/search-result?search=" + query);
+            setQuery("");
+            setIsExpanded(false);
             if (OnChangeMenuOpen) OnChangeMenuOpen(false);
-          } else if (variant === "header") {
-            if (!isOpen) {
-              onChangeOpen(true);
+          } else if (variant === "desktop") {
+            if (!isExpanded) {
+              setIsExpanded(true);
               if (inputRef && inputRef.current) {
                 const element = inputRef.current as HTMLInputElement;
                 element.focus();
@@ -71,23 +80,23 @@ export default function SearchBar({
       {/* input */}
       <input
         ref={inputRef}
-        value={searchQuery}
-        onFocus={() => onChangeOpen(true)}
+        value={query}
+        onFocus={() => setIsExpanded(true)}
         onBlur={() => {
-          onChangeOpen(false);
-          onChangeSearchQuery("");
+          setIsExpanded(false);
+          setQuery("");
         }}
-        onChange={(e) => onChangeSearchQuery(e.target.value)}
+        onChange={(e) => setQuery(e.target.value)}
         type="search"
         placeholder="جستجو..."
-        className={`rounded-sm bg-white py-2 placeholder:text-sm placeholder:text-stone-500 ${isOpen || variant === "menu" ? "block w-full border border-stone-300 pl-9 pr-11 focus:outline-none" : "w-0 p-0"}`}
+        className={`rounded-sm bg-white py-2 placeholder:text-sm placeholder:text-stone-500 ${isExpanded || variant === "mobile" ? "block w-full border border-stone-300 pl-9 pr-11 focus:outline-none" : "w-0 p-0"}`}
       />
       {/* close button */}
-      {isOpen && (
+      {isExpanded && (
         <button
           onMouseDown={(e) => e.preventDefault()}
           onClick={() => {
-            onChangeSearchQuery("");
+            setQuery("");
             if (inputRef && inputRef.current) {
               const element = inputRef.current as HTMLInputElement;
               element.focus();
@@ -102,7 +111,7 @@ export default function SearchBar({
         </button>
       )}
       {/* drop down menu */}
-      {isOpen && items?.length > 0 && (
+      {variant === "desktop" && results?.length > 0 && (
         <div className="absolute left-0 top-12 z-20 hidden w-full flex-col gap-5 rounded-sm border bg-white px-3 py-4 lg:flex xl:p-6">
           <p className="flex items-center gap-3 text-stone-600">
             <FontAwesomeIcon
@@ -115,14 +124,14 @@ export default function SearchBar({
             </span>
           </p>
           <div className="flex flex-col gap-2">
-            {items.map((p) => {
+            {results.map((p) => {
               const img = p.data.imagesByColor[0].images[0];
               return (
                 <Link
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => {
-                    onChangeOpen(false);
-                    onChangeSearchQuery("");
+                    setIsExpanded(false);
+                    setQuery("");
                   }}
                   href={nextServerUrl + "/products/" + p.data.documentId}
                   className="flex items-center gap-3 text-xs text-stone-600 hover:text-stone-900 xl:text-sm"
@@ -148,11 +157,11 @@ export default function SearchBar({
             />
             <Link
               onClick={() => {
-                onChangeOpen(false);
-                onChangeSearchQuery("");
+                setIsExpanded(false);
+                setQuery("");
               }}
               onMouseDown={(e) => e.preventDefault()}
-              href={nextServerUrl + "/search-result?search=" + searchQuery}
+              href={nextServerUrl + "/search-result?search=" + query}
               className="w-full text-xs font-medium underline underline-offset-8 xl:text-sm"
             >
               مشاهده همه نتایج محصول
