@@ -37,7 +37,7 @@ export default function DesktopUserActions() {
         <SearchBar variant="desktop" />
         <NavigationMenu.Root
           dir="rtl"
-          className="relative flex items-stretch justify-end [&>div]:w-full"
+          className="flex items-stretch justify-end [&>div]:w-full"
           value={hoveredLeftNavbarItem}
           onValueChange={setHoveredLeftNavbarItem}
         >
@@ -58,7 +58,7 @@ export default function DesktopUserActions() {
                   />
                 </div>
               </NavigationMenu.Trigger>
-              <NavigationMenu.Content className="absolute left-0 top-11 z-20 w-[18vw] rounded-sm border bg-white p-4">
+              <NavigationMenu.Content className="absolute left-0 top-12 z-20 w-[18vw] bg-white p-4 xl:top-14">
                 <div>
                   {user ? (
                     <div className="flex flex-col">
@@ -130,7 +130,7 @@ export default function DesktopUserActions() {
                   className="text-lg text-stone-600 hover:text-stone-800 xl:text-xl"
                 />
               </NavigationMenu.Trigger>
-              <NavigationMenu.Content className="absolute left-0 top-11 z-20 w-[21vw] rounded-sm border bg-white">
+              <NavigationMenu.Content className="absolute left-0 top-12 z-20 w-[21vw] bg-white xl:top-14">
                 <div>
                   {items?.length ? (
                     <ScrollArea.Root

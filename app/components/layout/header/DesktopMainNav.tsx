@@ -21,11 +21,10 @@ export default function DesktopMainNav({
     });
     return grid;
   }
-
   return (
     <>
       <div onMouseLeave={() => setActiveNavItem(null)}>
-        <div className="lg:flex lg:gap-6">
+        <div className="lg:flex lg:gap-3">
           <SiteLogo />
           <nav className="hidden sm:text-xs lg:flex lg:flex-row lg:justify-between lg:text-sm">
             {navbarItems.map((item) => {
@@ -48,7 +47,7 @@ export default function DesktopMainNav({
                     key={item.id}
                     href={item.linkUrl}
                     onMouseEnter={() => {
-                      setActiveNavItem(item);
+                      setActiveNavItem(null);
                     }}
                   >
                     {item.linkText}

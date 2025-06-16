@@ -14,7 +14,7 @@ export default function DesktopNavDropDown({
   onClose: () => void;
 }) {
   return (
-    <div className="absolute left-0 top-16 z-10 hidden w-screen flex-row justify-center bg-stone-100 lg:flex">
+    <div className="absolute left-0 top-full z-10 hidden w-screen flex-row justify-center bg-stone-100 lg:flex">
       <div className="flex flex-row justify-between p-5 lg:w-11/12 xl:w-10/12 2xl:w-9/12">
         <div className="flex flex-row justify-between gap-14 xl:gap-20 2xl:gap-32">
           {content.map((col, colNumber) => {
