@@ -6,7 +6,6 @@ import * as Form from "@radix-ui/react-form";
 import * as Toast from "@radix-ui/react-toast";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 
-import { useBreadcrumb } from "@/lib/context/breadcrumbContext";
 import { createUserSize, getUserSize, updateUserSize } from "@/lib/data";
 import { UserSize } from "@/lib/definitions";
 
@@ -39,25 +38,9 @@ export default function Page() {
   const [errors, setErrors] = useState<{ height?: string; weight?: string }>(
     {}
   );
-  const { setItems } = useBreadcrumb();
   const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string>("");
   const timerRef = useRef(0);
-
-  useEffect(() => {
-    const breadCrumbItems = [
-      {
-        label: "وب پوش",
-        href: "/",
-      },
-      { label: "پروفایل", href: "/profile" },
-      {
-        label: "سایزهای من",
-        href: "/sizes",
-      },
-    ];
-    setItems(breadCrumbItems);
-  }, [setItems]);
 
   useEffect(() => {
     const getData = async () => {

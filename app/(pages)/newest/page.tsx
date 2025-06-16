@@ -12,7 +12,6 @@ import Accordion from "@/components/navigation/accordion";
 import ProductCard from "@/features/product/productCard";
 import ProductModal from "@/features/product/productModal";
 import { useBasket } from "@/lib/context/basketContext";
-import { useBreadcrumb } from "@/lib/context/breadcrumbContext";
 import { getCategories, getProducts } from "@/lib/data";
 import { Category } from "@/lib/definitions";
 import { Pagination as PaginationType } from "@/lib/definitions";
@@ -27,10 +26,6 @@ import {
 } from "@/ui/pagination";
 
 const breadcrumbItems = [
-  {
-    label: "وب پوش",
-    href: "/",
-  },
   {
     label: "جدیدترین ها",
     href: "",
@@ -49,10 +44,6 @@ export default function Page() {
   const pathname = usePathname();
   const pageNumber = Number(searchParams.get("page") ?? 1);
   const { addItem, openBasketPopUp, closeBasketPopUp } = useBasket();
-  const { setItems } = useBreadcrumb();
-  useEffect(() => {
-    setItems(breadcrumbItems);
-  }, [setItems]);
 
   useEffect(() => {
     const getData = async () => {
@@ -79,7 +70,7 @@ export default function Page() {
 
   return (
     <div className="mx-auto flex w-full flex-col gap-8 px-4 lg:w-11/12 lg:gap-16 lg:px-0 xl:w-10/12">
-      <BreadCrumb />
+      <BreadCrumb items={breadcrumbItems} />
       <div className="flex flex-row gap-20 pb-10">
         {/* right navbar */}
         <div className="hidden lg:block lg:w-72">

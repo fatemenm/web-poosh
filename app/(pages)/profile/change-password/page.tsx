@@ -8,7 +8,6 @@ import { useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import { useAuth } from "@/lib/context/authContext";
-import { useBreadcrumb } from "@/lib/context/breadcrumbContext";
 import { Error as ErrorType } from "@/lib/definitions";
 
 type Inputs = {
@@ -92,22 +91,6 @@ export default function Page() {
     validate: (value: string) =>
       value === newPassword || "رمز عبور و تکرار آن یکسان نیستند",
   };
-
-  const { setItems } = useBreadcrumb();
-  useEffect(() => {
-    const breadCrumbItems = [
-      {
-        label: "وب پوش",
-        href: "/",
-      },
-      { label: "پروفایل", href: "/profile" },
-      {
-        label: "تغییر رمز عبور",
-        href: "/change-password",
-      },
-    ];
-    setItems(breadCrumbItems);
-  }, [setItems]);
 
   useEffect(() => {
     return () => clearTimeout(timerRef.current);

@@ -2,16 +2,19 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 
-import { useBreadcrumb } from "@/lib/context/breadcrumbContext";
-
 export type BreadCrumbItem = {
   label: string;
   href: string;
 };
 
-export default function BreadCrumb() {
-  const { items } = useBreadcrumb();
-  const trailItems = [...items];
+export default function BreadCrumb({ items }: { items: BreadCrumbItem[] }) {
+  const trailItems = [
+    {
+      label: "کایزن",
+      href: "/",
+    },
+    ...items,
+  ];
   const lastItem = trailItems.pop();
   return (
     <div className="flex flex-row items-center gap-4 bg-stone-100 px-2 py-3 text-xs text-stone-700 xs:text-sm sm:px-4 lg:px-10">

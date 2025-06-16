@@ -1,23 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
-
 import { useAuth } from "@/lib/context/authContext";
-import { useBreadcrumb } from "@/lib/context/breadcrumbContext";
 
 export default function Page() {
   const { user } = useAuth();
-  const { setItems } = useBreadcrumb();
-  useEffect(() => {
-    const breadCrumbItems = [
-      {
-        label: "وب پوش",
-        href: "/",
-      },
-      { label: "پروفایل", href: "/profile" },
-    ];
-    setItems(breadCrumbItems);
-  }, [setItems]);
+
   return (
     <div className="flex flex-col gap-10 md:gap-10">
       <p className="border-b-2 border-b-stone-700 text-lg md:max-w-60 md:text-2xl">

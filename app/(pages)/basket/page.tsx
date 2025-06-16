@@ -5,20 +5,15 @@ import { faPhoneFlip } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import BreadCrumb from "@/components/layout/breadcrumb";
 import { useBasket } from "@/lib/context/basketContext";
-import { useBreadcrumb } from "@/lib/context/breadcrumbContext";
 import { BasketItem } from "@/lib/definitions";
 
 import ProductModal from "../../features/product/productModal";
 
 const breadcrumbItems = [
-  {
-    label: "وب پوش",
-    href: "/",
-  },
   {
     label: "سبد خرید",
     href: "",
@@ -29,14 +24,10 @@ export default function Page() {
   const { items, removeItem, editItem } = useBasket();
   const [selectedItem, setSelectedItem] = useState<BasketItem | null>(null);
   const [isProductModalOpen, setIsProductModalOpen] = useState<boolean>(false);
-  const { setItems } = useBreadcrumb();
-  useEffect(() => {
-    setItems(breadcrumbItems);
-  }, [setItems]);
 
   return (
     <div className="mx-auto flex w-full flex-col gap-8 px-4 lg:w-11/12 xl:w-10/12">
-      <BreadCrumb />
+      <BreadCrumb items={breadcrumbItems} />
       <div className="mb-8 flex w-full flex-col gap-8 lg:mt-4 lg:flex-row lg:gap-16 xl:mx-0 xl:justify-center">
         <div className="flex flex-col lg:w-1/2 lg:gap-8">
           <div>
