@@ -210,7 +210,7 @@ export default function AuthTabs() {
       </Tabs.Content>
       <Tabs.Content value="sign-in" className="flex flex-col bg-white xs:gap-6">
         <p className="text-xs md:text-sm">
-          اگر قبلا در وب‌پوش ثبت ‌نام کرده‌اید وارد شوید در غیر این صورت{" "}
+          اگر قبلا در کایزن ثبت ‌نام کرده‌اید وارد شوید در غیر این صورت{" "}
           <button
             className="text-blue-500"
             onClick={() => setActiveTab("sign-up")}
