@@ -1,7 +1,7 @@
 import BannerGrid from "@/(pages)/(home)/components/BannerGrid";
 import CategorySlider from "@/(pages)/(home)/components/CategorySlider";
 import HeroBannerSection from "@/(pages)/(home)/components/HeroBannerSection";
-import NewProductsSlider from "@/(pages)/(home)/components/NewProductsSlider";
+import ProductsSlider from "@/(pages)/(home)/components/ProductsSlider";
 import {
   getCategories,
   getClotheSetBanners,
@@ -9,7 +9,6 @@ import {
   getProducts,
 } from "@/lib/data";
 
-// TODO: export this function for reusing in other pages
 async function getData() {
   const [heroBanners, categories, clothingSetBanners, products] =
     await Promise.all([
@@ -25,11 +24,14 @@ export default async function Page() {
   const { heroBanners, categories, clothingSetBanners, products } =
     await getData();
   return (
-    <div className="flex w-full flex-col items-center lg:w-11/12 xl:w-10/12">
+    <div className="flex w-full flex-col lg:w-11/12 xl:w-10/12">
       <HeroBannerSection banners={heroBanners} />
       <CategorySlider categories={categories} />
       <BannerGrid banners={clothingSetBanners} />
-      <NewProductsSlider products={products.map((p) => p.data)} />
+      <ProductsSlider
+        sliderTitle="محصولات جدید"
+        products={products.map((p) => p.data)}
+      />
     </div>
   );
 }

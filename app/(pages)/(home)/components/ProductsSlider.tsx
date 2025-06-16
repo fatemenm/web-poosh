@@ -14,16 +14,18 @@ const sliderSetting = {
   slidesToShow: 5,
 };
 
-export default function NewProductsSlider({
+export default function ProductsSlider({
   products,
+  sliderTitle,
 }: {
   products: Product[];
+  sliderTitle: string;
 }) {
   return (
-    <>
+    <div className="flex flex-col">
       <div className="mt-16 flex w-full flex-col gap-4 px-4 lg:mt-0 lg:px-0">
         <div className="flex flex-row items-center justify-between text-stone-800">
-          <span className="text-sm lg:text-lg">محصولات جدید</span>
+          <span className="text-sm lg:text-lg">{sliderTitle}</span>
           <Link href="/newest" className="text-xs">
             مشاهده همه
           </Link>
@@ -92,6 +94,6 @@ export default function NewProductsSlider({
           );
         }}
       />
-    </>
+    </div>
   );
 }
