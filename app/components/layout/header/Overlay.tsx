@@ -1,5 +1,9 @@
+import * as Portal from "@radix-ui/react-portal";
+
 export default function Overlay() {
   return (
-    <div className="absolute left-0 top-16 hidden h-screen w-screen bg-stone-800 bg-opacity-50 lg:block" />
+    <Portal.Root>
+      <div className="fixed left-0 top-0 h-screen w-screen bg-stone-800 bg-opacity-50" />
+    </Portal.Root>
   );
 }
