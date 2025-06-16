@@ -1,142 +1,34 @@
-"use client";
-
-import { apiBaseUrl, nextServerUrl } from "@config";
-import classNames from "classnames";
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-
+import ProductsSlider from "@/(pages)/(home)/components/ProductsSlider";
+import ProductView from "@/(pages)/products/components/ProductView";
 import BreadCrumb from "@/components/layout/breadcrumb";
-import BasicSlider from "@/components/slider/basicSlider";
-import ProductDescription from "@/features/product/productDescription";
-import ProductDetails from "@/features/product/productDetails";
-import SizeGuideModal from "@/features/product/sizeGuideModal";
-import { useBreadcrumb } from "@/lib/context/breadcrumbContext";
 import { getProductById, getProducts } from "@/lib/data";
-import { ProductModel } from "@/models/product.model";
 
-const sliderSetting = {
-  infinite: true,
-  slidesToScroll: 1,
-  slidesToShow: 5,
-};
+export default async function Product({
+  params,
+}: {
+  params: { productId: string };
+}) {
+  const product = await getProductById(params.productId);
+  const products = (await getProducts()).products;
 
-export default function Product({ params }: { params: { productId: string } }) {
-  const [product, setProduct] = useState<ProductModel | null>(null);
-  const [relatedProducts, setRelatedProducts] = useState<ProductModel[] | null>(
-    null
-  );
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  const defaultColor = product?.getAvailableColors()[0].name;
-  const [isSizeGuideModalOpen, setIsSizeGuideModalOpen] =
-    useState<boolean>(false);
-  const { setItems } = useBreadcrumb();
-
-  useEffect(() => {
-    if (!product) return;
-    const breadcrumbItems = [
-      {
-        label: "وب پوش",
-        href: "/",
-      },
-      {
-        label: product.data.category.name,
-        href: "/category/" + product?.data.category.documentId,
-      },
-      {
-        label: product?.data.name,
-        href: ".",
-      },
-    ];
-    setItems(breadcrumbItems);
-  }, [setItems, product]);
-
-  useEffect(() => {
-    const getData = async () => {
-      const product = await getProductById(params.productId);
-      const res = await getProducts();
-      setProduct(product);
-      setRelatedProducts(res.products);
-    };
-    getData();
-  }, [params.productId]);
-
-  if (!product || !relatedProducts || !defaultColor)
-    return <div>product is not available</div>;
+  const breadcrumbItems = [
+    {
+      label: product.data.category.name,
+      href: "/category/" + product?.data.category.documentId,
+    },
+    {
+      label: product?.data.name,
+      href: ".",
+    },
+  ];
 
   return (
     <div className="mx-auto flex w-full flex-col gap-8 px-4 sm:gap-8 lg:w-11/12 lg:gap-16 xl:w-10/12">
-      <BreadCrumb />
-      <ProductDetails
-        onClickSizeGuideLink={() => setIsSizeGuideModalOpen(true)}
-        product={product}
-        selectedColor={selectedColor ?? defaultColor}
-        onSelectColor={(value: string) => setSelectedColor(value)}
-      />
-      <ProductDescription
-        onClickSizeGuideLink={() => setIsSizeGuideModalOpen(true)}
-        product={product}
-        images={product.getImagesByColor(selectedColor ?? defaultColor)}
-      />
-      <div className="mb-20 flex w-full flex-col gap-4">
-        <span className="text-lg">محصولات مشابه دیگر</span>
-        <BasicSlider<ProductModel>
-          setting={sliderSetting}
-          items={relatedProducts}
-          renderItem={(item, ctx: { isSwiping: boolean }) => {
-            return (
-              <Link
-                href={`${nextServerUrl}/products/${item.data.documentId}`}
-                key={item.data.id}
-                className="flex cursor-pointer flex-col items-center px-1 outline-none"
-                onClick={(e) => {
-                  if (ctx.isSwiping) e.preventDefault();
-                }}
-              >
-                <Image
-                  src={apiBaseUrl + item.data.imagesByColor[0].images[0].url}
-                  alt={item.data.imagesByColor[0].images[0].alternativeText}
-                  width={item.data.imagesByColor[0].images[0].width}
-                  height={item.data.imagesByColor[0].images[0].height}
-                  quality={100}
-                />
-                <div
-                  style={{ direction: "rtl" }}
-                  className="mt-4 flex flex-col items-center gap-2 text-center text-xs text-stone-600 xs:text-sm"
-                >
-                  <span className="font-medium">{item.data.name}</span>
-                  <div className="flex flex-col items-center gap-3">
-                    <span
-                      className={classNames(
-                        item.data.salePrice && "line-through"
-                      )}
-                    >
-                      {item.data.originalPrice.toLocaleString("fa-IR")} تومان
-                    </span>
-                    {item.data.salePrice ? (
-                      <span className="text-red-600">
-                        {item.data.salePrice.toLocaleString("fa-IR")} تومان
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-              </Link>
-            );
-          }}
-        />
-      </div>
-      <SizeGuideModal
-        isOpen={isSizeGuideModalOpen}
-        onChangeOpen={(value: boolean) => setIsSizeGuideModalOpen(value)}
-        data={{
-          sizeTableInfo: product.data.category.sizeTable,
-          information: product.data.information,
-          sizeGuideImage: product.data.category.sizeGuideImage,
-          productName: product.data.name,
-          productImages: product.getImagesByColor(
-            selectedColor ?? defaultColor
-          ),
-        }}
+      <BreadCrumb items={breadcrumbItems} />
+      <ProductView data={product.data} />
+      <ProductsSlider
+        sliderTitle=" سایر محصولات"
+        products={products.map((p) => p.data)}
       />
     </div>
   );
