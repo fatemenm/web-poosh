@@ -1,6 +1,4 @@
-"use client";
-
-import AuthTabs from "../../features/auth/authTabs";
+import AuthTabs from "@/features/auth/authTabs";
 
 export default function Page() {
   return (

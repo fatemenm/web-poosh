@@ -9,13 +9,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 import { useAuth } from "@/lib/context/authContext";
 
 export default function ProfileNavbar() {
   const { user, handleSignOut } = useAuth();
-  const router = useRouter();
   return (
     <div className="flex w-full flex-col gap-8 bg-stone-100 px-8 py-10 sm:w-auto md:h-[540px]">
       <div className="flex flex-col items-center gap-2">
@@ -49,9 +47,6 @@ export default function ProfileNavbar() {
         </Link>
         <button
           onClick={() => {
-            router.push("/", {
-              scroll: false,
-            });
             handleSignOut();
           }}
           className="flex w-full gap-2 whitespace-nowrap py-3 text-stone-600 hover:bg-stone-200 hover:text-stone-700"

@@ -1,6 +1,6 @@
-import ProductsSlider from "@/(pages)/(home)/components/ProductsSlider";
-import ProductView from "@/(pages)/products/components/ProductView";
 import BreadCrumb from "@/components/layout/breadcrumb";
+import ProductsSlider from "@/components/slider/ProductsSlider";
+import ProductView from "@/features/product/ProductView";
 import { getProductById, getProducts } from "@/lib/data";
 
 export default async function Product({
@@ -27,7 +27,7 @@ export default async function Product({
       <BreadCrumb items={breadcrumbItems} />
       <ProductView data={product.data} />
       <ProductsSlider
-        sliderTitle=" سایر محصولات"
+        sliderTitle="سایر محصولات"
         products={products.map((p) => p.data)}
       />
     </div>

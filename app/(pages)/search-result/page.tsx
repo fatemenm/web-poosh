@@ -5,6 +5,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import BreadCrumb from "@/components/layout/breadcrumb";
+import ProductCard from "@/features/product/productCard";
 import { getProducts } from "@/lib/data";
 import { Pagination as PaginationType } from "@/lib/definitions";
 import { ProductModel } from "@/models/product.model";
@@ -16,8 +17,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/ui/pagination";
-
-import ProductCard from "../../features/product/productCard";
 
 const breadcrumbItems = [
   {
@@ -32,7 +31,7 @@ export default function Page() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const pageNumber = Number(searchParams.get("page") ?? 1);
-  // FIXME: handle type search query
+
   const searchQuery = searchParams.get("search") ?? "";
 
   useEffect(() => {

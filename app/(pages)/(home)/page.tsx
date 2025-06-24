@@ -1,7 +1,7 @@
-import BannerGrid from "@/(pages)/(home)/components/BannerGrid";
-import CategorySlider from "@/(pages)/(home)/components/CategorySlider";
-import HeroBannerSection from "@/(pages)/(home)/components/HeroBannerSection";
-import ProductsSlider from "@/(pages)/(home)/components/ProductsSlider";
+import BannerGrid from "@/components/layout/home/BannerGrid";
+import HeroBannerSection from "@/components/layout/home/HeroBannerSection";
+import CategorySlider from "@/components/slider/CategorySlider";
+import ProductsSlider from "@/components/slider/ProductsSlider";
 import {
   getCategories,
   getClotheSetBanners,

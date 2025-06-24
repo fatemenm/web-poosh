@@ -1,3 +1,5 @@
+"use client";
+
 import * as Form from "@radix-ui/react-form";
 import * as Tabs from "@radix-ui/react-tabs";
 import Link from "next/link";
