@@ -12,7 +12,6 @@ import { User } from "../definitions";
 export type authContextType = {
   user: User | null;
   isAuthModalOpen?: boolean;
-  loading: boolean;
   setAuthModalOpen: (isOpen: boolean) => void;
   openAuthModal: () => void;
   closeAuthModal?: () => void;
@@ -30,7 +29,6 @@ const authContext = createContext<authContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -44,7 +42,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUser(null);
         }
       }
-      setLoading(false);
     };
     fetchUser();
   }, []);
@@ -112,7 +109,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setAuthModalOpen,
         openAuthModal,
         closeAuthModal,
-        loading,
         handleSignIn,
         handleSignUp,
         handleSignOut,
