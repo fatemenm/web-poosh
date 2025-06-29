@@ -1,5 +1,8 @@
 "use client";
 
+import { faClose } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as Toast from "@radix-ui/react-toast";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -24,7 +27,8 @@ export default function ProductDetails({
 }) {
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [isSizeErrorVisible, setIsSizeErrorVisible] = useState<boolean>(false);
-  const { addItem, openBasketPopUp, closeBasketPopUp } = useBasket();
+  const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
+  const { addItem } = useBasket();
 
   const selectedProduct = {
     id: Math.ceil(Math.random() * 1000) + Date.now(),
@@ -101,8 +105,7 @@ export default function ProductDetails({
             if (!selectedProduct.size) setIsSizeErrorVisible(true);
             else {
               addItem(selectedProduct);
-              openBasketPopUp();
-              closeBasketPopUp();
+              setIsToastOpen(true);
             }
           }}
           className={"bg-green-700 py-5 text-sm text-white hover:bg-green-800"}
@@ -110,6 +113,21 @@ export default function ProductDetails({
           اضافه به سبد خرید
         </button>
       </div>
+      <Toast.Root
+        duration={3000}
+        dir="rtl"
+        open={isToastOpen}
+        onOpenChange={setIsToastOpen}
+        className="flex items-center justify-between gap-1 rounded-md border bg-green-100 p-4 data-[state=closed]:animate-hide data-[state=open]:animate-slideIn"
+      >
+        <Toast.Description className="">
+          محصول با موفقیت به سبد خرید اضافه شد.
+        </Toast.Description>
+        <Toast.Close asChild className="text-stone-500 hover:text-stone-600">
+          <FontAwesomeIcon icon={faClose} className="text-[16px]" />
+        </Toast.Close>
+      </Toast.Root>
+      <Toast.Viewport className="fixed bottom-0 right-0 z-50 m-0 flex w-[390px] max-w-[100vw] list-none flex-col gap-2.5 p-[var(--viewport-padding)] outline-none [--viewport-padding:25px]" />
     </div>
   );
 }

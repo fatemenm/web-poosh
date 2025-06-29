@@ -120,7 +120,7 @@ export default function DesktopUserActions() {
             </NavigationMenu.Item>
             <NavigationMenu.Item value="basket" className="pt-1">
               {items.length > 0 && (
-                <div className="absolute -top-4 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 p-1 text-sm text-white">
+                <div className="absolute -top-3 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 p-1 text-sm text-white">
                   {items.length.toLocaleString("fa-ir")}
                 </div>
               )}

@@ -14,12 +14,9 @@ import { BasketItem, Image, Product } from "../definitions";
 
 type basketContextType = {
   items: BasketItem[];
-  isBasketPopUpOpen: boolean;
   addItem: (item: BasketItem) => void;
   removeItem: (item: BasketItem) => void;
   editItem: (item: BasketItem) => void;
-  openBasketPopUp: () => void;
-  closeBasketPopUp: () => void;
 };
 
 type StorageBasketItems = {
@@ -34,9 +31,6 @@ const basketContext = createContext<basketContextType | null>(null);
 
 export function BasketProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<BasketItem[]>([]);
-  // TODO: rewrite it with registering a function to change the state of the pop-up in the header
-  const [isBasketPopUpOpen, setIsBasketPopUpOpen] = useState<boolean>(false);
-
   useEffect(() => {
     setItems(mapStorageToBasketItems());
   }, []);
@@ -105,22 +99,13 @@ export function BasketProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("basketItems", JSON.stringify(storageItems));
   };
 
-  const openBasketPopUp = () => setIsBasketPopUpOpen(true);
-
-  const closeBasketPopUp = async () => {
-    setTimeout(() => setIsBasketPopUpOpen(false), 3000);
-  };
-
   return (
     <basketContext.Provider
       value={{
         items,
-        isBasketPopUpOpen,
         addItem,
         removeItem,
         editItem,
-        openBasketPopUp,
-        closeBasketPopUp,
       }}
     >
       {children}

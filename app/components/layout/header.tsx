@@ -1,16 +1,12 @@
 "use client";
 
-import { nextServerUrl } from "@config";
-import { faBagShopping } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Link from "next/link";
-
 import MobileNavigationDrawer from "@/components/layout/header/MobileNavigationDrawer";
 import AuthModal from "@/features/auth/authModal";
 import { NavbarItem } from "@/lib/definitions";
 
 import DesktopMainNav from "./header/DesktopMainNav";
 import DesktopUserActions from "./header/DesktopUserActions";
+import MobileBasket from "./header/MobileBasket";
 
 export default function Header({ navbarItems }: { navbarItems: NavbarItem[] }) {
   return (
@@ -19,13 +15,7 @@ export default function Header({ navbarItems }: { navbarItems: NavbarItem[] }) {
         <MobileNavigationDrawer navbarItems={navbarItems} />
         <DesktopMainNav navbarItems={navbarItems} />
         <DesktopUserActions />
-        {/* Mobile - Basket Link */}
-        <Link className="lg:hidden" href={nextServerUrl + "/basket"}>
-          <FontAwesomeIcon
-            icon={faBagShopping}
-            className="text-xl text-stone-600 hover:text-stone-800"
-          />
-        </Link>
+        <MobileBasket />
       </div>
       <AuthModal />
     </header>
