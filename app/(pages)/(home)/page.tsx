@@ -21,6 +21,8 @@ async function getData() {
 }
 
 export default async function Page() {
+  // Simulate loading delay
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   const { heroBanners, categories, clothingSetBanners, products } =
     await getData();
   return (

@@ -8,6 +8,9 @@ export default async function Product({
 }: {
   params: { productId: string };
 }) {
+  // Simulate loading delay
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
   const product = await getProductById(params.productId);
   const products = (await getProducts()).products;
 
