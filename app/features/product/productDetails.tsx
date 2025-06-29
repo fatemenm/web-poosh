@@ -4,7 +4,7 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Toast from "@radix-ui/react-toast";
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import GallerySlider from "@/components/slider/gallerySlider";
 import ColorSelector from "@/components/ui/colorSelector";
@@ -29,6 +29,7 @@ export default function ProductDetails({
   const [isSizeErrorVisible, setIsSizeErrorVisible] = useState<boolean>(false);
   const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
   const { addItem } = useBasket();
+  const timerRef = useRef(0);
 
   const selectedProduct = {
     id: Math.ceil(Math.random() * 1000) + Date.now(),
@@ -37,6 +38,14 @@ export default function ProductDetails({
     size: selectedSize,
     image: product.getImagesByColor(selectedColor)?.[0],
   };
+
+  function showSuccessToast() {
+    setIsToastOpen(false);
+    window.clearTimeout(timerRef.current);
+    timerRef.current = window.setTimeout(() => {
+      setIsToastOpen(true);
+    }, 100);
+  }
 
   return (
     <div className="flex w-full flex-col gap-10 sm:flex-row lg:w-auto lg:gap-16 xl:justify-center">
@@ -105,7 +114,7 @@ export default function ProductDetails({
             if (!selectedProduct.size) setIsSizeErrorVisible(true);
             else {
               addItem(selectedProduct);
-              setIsToastOpen(true);
+              showSuccessToast();
             }
           }}
           className={"bg-green-700 py-5 text-sm text-white hover:bg-green-800"}
