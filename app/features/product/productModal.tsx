@@ -38,9 +38,7 @@ export default function ProductModal({
   onRequestClose: () => void;
 }) {
   const [selectedColor, setSelectedColor] = useState<string>(initialColor);
-  const [selectedSize, setSelectedSize] = useState<string | undefined>(
-    initialSize
-  );
+  const [selectedSize, setSelectedSize] = useState<string>(initialSize ?? "");
   const [isSizeErrorVisible, setIsSizeErrorVisible] = useState<boolean>(false);
 
   return (
@@ -132,7 +130,7 @@ export default function ProductModal({
                           colors={product.getAvailableColors()}
                           onSelect={(color: string) => {
                             setSelectedColor(color);
-                            setSelectedSize(undefined);
+                            setSelectedSize("");
                             setIsSizeErrorVisible(false);
                           }}
                         />
