@@ -13,7 +13,7 @@ import * as ToggleGroup from "@radix-ui/react-toggle-group";
 import classNames from "classnames";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import BasicSlider from "@/components/slider/basicSlider";
 import ProductCard from "@/features/product/productCard";
@@ -42,64 +42,69 @@ export default function Page({ params }: { params: { categoryId: string } }) {
   const [colors, setColors] = useState<Color[] | null>(null);
   const [sizes, setSizes] = useState<string[] | null>(null);
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
+  const [showModelImage, setShowImageModel] = useState<boolean>(false);
+  const [gridColumns, setGridColumns] = useState<number>(5);
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  const selectedColors = searchParams.getAll("color");
-  const selectedSizes = searchParams.getAll("size");
-  const onSale = Boolean(searchParams.get("on-sale"));
-  const subCategoryType = searchParams.get("jean") ?? "";
-  const [showModelImage, setShowImageModel] = useState<boolean>(false);
-  const [gridColumns, setGridColumns] = useState<number>(5);
 
+  const filters = useMemo(() => {
+    return {
+      color: searchParams.getAll("color"),
+      size: searchParams.getAll("size"),
+      onSale: searchParams.get("on-sale") === "true",
+      subCategory: searchParams.get("jean") || "",
+    };
+  }, [searchParams]);
+
+  // fetch category meta data
   useEffect(() => {
-    const getData = async () => {
-      const [category, colors, sizes, res] = await Promise.all([
+    const fetchCategoryData = async () => {
+      const [category, colors, sizes] = await Promise.all([
         getCategoryById(params.categoryId),
         getCategoryColors(params.categoryId),
         getCategorySizes(params.categoryId),
-        getProducts({
-          filters: {
-            categoryId: params.categoryId,
-            color: selectedColors,
-            size: selectedSizes,
-            onSale: onSale,
-            categoryFilter: subCategoryType,
-          },
-        }),
       ]);
-
       setCategory(category);
       setColors(colors);
       setSizes(sizes);
+    };
+    fetchCategoryData();
+  }, [params.categoryId]);
+
+  // fetch products
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const res = await getProducts({
+        filters: {
+          categoryId: params.categoryId,
+          color: filters.color,
+          size: filters.size,
+          onSale: filters.onSale,
+          categoryFilter: filters.subCategory,
+        },
+      });
       setProducts(res.products);
     };
-    getData();
-  }, [
-    params.categoryId,
-    searchParams,
-    onSale,
-    selectedColors,
-    selectedSizes,
-    subCategoryType,
-  ]);
+    fetchProducts();
+  }, [params.categoryId, filters]);
 
-  function updateFiltersInURL({
-    colors = selectedColors,
-    sizes = selectedSizes,
-    isOnSale = onSale,
-    subCategoryFilter = subCategoryType,
-  }: {
-    colors?: string[];
-    sizes?: string[];
+  function updateFiltersInURL(nextFilters: {
+    color?: string[];
+    size?: string[];
     isOnSale?: boolean;
     subCategoryFilter?: string;
   }) {
     const params = new URLSearchParams();
-    colors.forEach((c) => params.append(`color`, c));
-    sizes.forEach((s) => params.append(`size`, s));
-    if (isOnSale) params.append("on-sale", String(isOnSale));
-    if (subCategoryFilter?.length) params.append("jean", subCategoryFilter);
+    (nextFilters.color ?? filters.color).forEach((c) =>
+      params.append(`color`, c)
+    );
+    (nextFilters.size ?? filters.size).forEach((s) => params.append(`size`, s));
+    if (nextFilters.isOnSale ?? filters.onSale)
+      params.append("on-sale", "true");
+    if (nextFilters.subCategoryFilter)
+      params.append("jean", nextFilters.subCategoryFilter);
+    else if (filters.subCategory) params.append("jean", filters.subCategory);
     router.push(`${pathname}?${params.toString()}`, {
       scroll: false,
     });
@@ -111,7 +116,7 @@ export default function Page({ params }: { params: { categoryId: string } }) {
     <div className="mx-auto mb-10 flex w-full flex-col gap-8 border-t px-4 pt-4 lg:w-11/12 lg:gap-16 xl:w-10/12">
       <div className="flex flex-col items-center gap-4">
         <h4 className="text-lg font-normal">{category.name}</h4>
-        {category.preSetFilters.length ? (
+        {category.preSetFilters.length > 0 ? (
           <div className="flex w-full flex-col">
             <BasicSlider
               containerClass=""
@@ -119,7 +124,7 @@ export default function Page({ params }: { params: { categoryId: string } }) {
               items={category.preSetFilters.map((item) => item.image)}
               renderItem={(img, { isSwiping }) => (
                 <Image
-                  data-active={subCategoryType === img.alternativeText}
+                  data-active={filters.subCategory === img.alternativeText}
                   key={img.id}
                   className="cursor-pointer border-b-2 border-b-transparent px-2 pb-2 hover:border-b-2 hover:border-stone-700 data-[active=true]:border-b-2 data-[active=true]:border-stone-700"
                   onClick={(e) => {
@@ -199,12 +204,12 @@ export default function Page({ params }: { params: { categoryId: string } }) {
               <div className="flex flex-row items-center gap-2">
                 <ToggleGroup.Root
                   className="flex flex-row-reverse flex-wrap gap-2"
-                  value={selectedSizes}
+                  value={filters.size}
                   onValueChange={(sizes: string[]) =>
-                    updateFiltersInURL({ sizes })
+                    updateFiltersInURL({ size: sizes })
                   }
                   type="multiple"
-                  defaultValue={selectedSizes}
+                  defaultValue={filters.size}
                   aria-label="سایز محصول"
                 >
                   {sizes.map((size, index) => {
@@ -226,12 +231,12 @@ export default function Page({ params }: { params: { categoryId: string } }) {
               <div className="flex flex-row items-center gap-4">
                 <ToggleGroup.Root
                   className="flex flex-row-reverse flex-wrap gap-2"
-                  value={selectedColors}
+                  value={filters.color}
                   onValueChange={(colors: string[]) =>
-                    updateFiltersInURL({ colors })
+                    updateFiltersInURL({ color: colors })
                   }
                   type="multiple"
-                  defaultValue={selectedColors}
+                  defaultValue={filters.color}
                   aria-label="رنگ محصول"
                 >
                   {colors.map((color, index) => {
@@ -252,7 +257,7 @@ export default function Page({ params }: { params: { categoryId: string } }) {
             <div className="flex flex-col justify-start gap-4 pb-6">
               نمایش
               <Toggle.Root
-                pressed={onSale}
+                pressed={filters.onSale}
                 onPressedChange={(isOnSale: boolean) =>
                   updateFiltersInURL({ isOnSale })
                 }
