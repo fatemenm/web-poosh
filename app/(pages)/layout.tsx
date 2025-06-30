@@ -1,6 +1,5 @@
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { Vazirmatn } from "next/font/google";
-import Head from "next/head";
 import { Suspense } from "react";
 
 import Providers from "@/(pages)/Providers";
@@ -11,6 +10,38 @@ import "@/globals.css";
 import { getNavbarItems, getPromoBannerData } from "@/lib/data";
 
 import Loading from "./loading";
+
+export const metadata = {
+  title: "Kaizen Clothing Store",
+  description:
+    "Shop men's fashion including shirts, pants, and essentials — designed for comfort, built for style.",
+  icons: {
+    shortcut: "/favicon.ico",
+  },
+  openGraph: {
+    title: "Kaizen Clothing Store",
+    description:
+      "Shop men's fashion including shirts, pants, and essentials — designed for comfort, built for style.",
+    url: "https://kaizen.fatemenoori.ir",
+    siteName: "Kaizen",
+    images: [
+      {
+        url: "https://kaizen.fatemenoori.ir/preview.png",
+        width: 1536,
+        height: 1024,
+        alt: "Kaizen store preview",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kaizen Clothing Store",
+    description:
+      "Shop men's fashion including shirts, pants, and essentials — designed for comfort, built for style.",
+    images: ["https://kaizen.fatemenoori.ir/preview.jpg"],
+  },
+};
 
 const vazirmatn = Vazirmatn({
   subsets: ["latin"],
@@ -28,15 +59,16 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const [banner, navbarItems] = await fetchData();
+
   return (
     <html
       lang="fa-IR"
       className={vazirmatn.className}
       style={{ direction: "rtl" }}
     >
-      <Head>
+      {/* <Head>
         <link rel="icon" href="/icon.ico" sizes="any" />
-      </Head>
+      </Head> */}
       <body className="flex min-h-screen flex-col">
         <Providers>
           {banner && <PromoBanner data={banner} />}
