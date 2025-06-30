@@ -26,7 +26,7 @@ export const metadata = {
     siteName: "Kaizen",
     images: [
       {
-        url: "https://kaizen.fatemenoori.ir/preview.png",
+        url: "https://kaizen.fatemenoori.ir/preview.jpg",
         width: 1536,
         height: 1024,
         alt: "Kaizen store preview",
@@ -66,9 +66,6 @@ export default async function RootLayout({
       className={vazirmatn.className}
       style={{ direction: "rtl" }}
     >
-      {/* <Head>
-        <link rel="icon" href="/icon.ico" sizes="any" />
-      </Head> */}
       <body className="flex min-h-screen flex-col">
         <Providers>
           {banner && <PromoBanner data={banner} />}
