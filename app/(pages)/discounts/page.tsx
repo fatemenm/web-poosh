@@ -17,7 +17,7 @@ export default function Page() {
   );
   const [isProductModalOpen, setIsProductModalOpen] = useState<boolean>(false);
   const searchParams = useSearchParams();
-  const { addItem, openBasketPopUp, closeBasketPopUp } = useBasket();
+  const { addItem } = useBasket();
   useEffect(() => {
     const getData = async () => {
       const { products } = await getProducts({ filters: { onSale: true } });
@@ -86,8 +86,6 @@ export default function Page() {
               size: selectedSize,
               image: selectedProduct.getImagesByColor(selectedColor)?.[0],
             });
-            openBasketPopUp();
-            closeBasketPopUp();
           }}
         />
       )}
