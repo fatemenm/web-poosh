@@ -26,7 +26,7 @@ export const metadata = {
     siteName: "Kaizen",
     images: [
       {
-        url: "https://kaizen.fatemenoori.ir/preview.jpg",
+        url: "https://kaizen.fatemenoori.ir/preview.png",
         width: 1536,
         height: 1024,
         alt: "Kaizen store preview",
@@ -39,7 +39,7 @@ export const metadata = {
     title: "Kaizen Clothing Store",
     description:
       "Shop men's fashion including shirts, pants, and essentials — designed for comfort, built for style.",
-    images: ["https://kaizen.fatemenoori.ir/preview.jpg"],
+    images: ["https://kaizen.fatemenoori.ir/preview.png"],
   },
 };
 
