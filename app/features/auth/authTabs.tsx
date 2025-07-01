@@ -127,6 +127,7 @@ export default function AuthTabs() {
           شوید
         </p>
         <Form.Root
+          noValidate
           className="flex flex-col gap-3 px-0 xs:gap-6 xs:px-6"
           onSubmit={handleSubmitSignUp(onSignUp)}
         >
@@ -278,9 +279,6 @@ export default function AuthTabs() {
                 onClick={() => clearErrorsSignIn("root")}
               />
             </Form.Control>
-            {/* <Link href="" className="text-xs md:text-sm text-blue-500">
-                رمز عبور خود را فراموش کرده ام
-              </Link> */}
           </Form.Field>
           <hr />
           <Form.Submit asChild>
