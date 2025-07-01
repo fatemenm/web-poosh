@@ -12,23 +12,23 @@ import { getNavbarItems, getPromoBannerData } from "@/lib/data";
 import Loading from "./loading";
 
 export const metadata = {
-  title: "Kaizen Clothing Store",
+  title: "فروشگاه آنلاین لباس مردانه کایزن",
   description:
-    "Shop men's fashion including shirts, pants, and essentials — designed for comfort, built for style.",
+    "پوشاک مردانه با استایل شیک و راحتی بی‌نظیر — از پیراهن و شلوار تا آیتم‌های ضروری، با طراحی مدرن و کاربردی",
   icons: {
     shortcut: "/favicon.ico",
   },
   openGraph: {
-    title: "Kaizen Clothing Store",
+    title: "فروشگاه آنلاین لباس مردانه کایزن",
     description:
-      "Shop men's fashion including shirts, pants, and essentials — designed for comfort, built for style.",
+      "پوشاک مردانه با استایل شیک و راحتی بی‌نظیر — از پیراهن و شلوار تا آیتم‌های ضروری، با طراحی مدرن و کاربردی",
     url: "https://kaizen.fatemenoori.ir",
-    siteName: "Kaizen",
+    siteName: "کایزن",
     images: [
       {
         url: "https://kaizen.fatemenoori.ir/preview.png",
-        width: 1536,
-        height: 1024,
+        width: 1200,
+        height: 630,
         alt: "Kaizen store preview",
       },
     ],
@@ -36,9 +36,9 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kaizen Clothing Store",
+    title: "فروشگاه آنلاین لباس مردانه کایزن",
     description:
-      "Shop men's fashion including shirts, pants, and essentials — designed for comfort, built for style.",
+      "پوشاک مردانه با استایل شیک و راحتی بی‌نظیر — از پیراهن و شلوار تا آیتم‌های ضروری، با طراحی مدرن و کاربردی",
     images: ["https://kaizen.fatemenoori.ir/preview.png"],
   },
 };
