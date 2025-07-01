@@ -26,7 +26,7 @@ export const metadata = {
     siteName: "کایزن",
     images: [
       {
-        url: "https://kaizen.fatemenoori.ir/preview.png",
+        url: "https://kaizen.fatemenoori.ir/preview-v2.png",
         width: 1200,
         height: 630,
         alt: "Kaizen store preview",
@@ -39,7 +39,7 @@ export const metadata = {
     title: "فروشگاه آنلاین لباس مردانه کایزن",
     description:
       "پوشاک مردانه با استایل شیک و راحتی بی‌نظیر — از پیراهن و شلوار تا آیتم‌های ضروری، با طراحی مدرن و کاربردی",
-    images: ["https://kaizen.fatemenoori.ir/preview.png"],
+    images: ["https://kaizen.fatemenoori.ir/preview-v2.png"],
   },
 };
 
