@@ -1,3 +1,5 @@
+"use client";
+
 import { apiBaseUrl, nextServerUrl } from "@config";
 import {
   faArrowRightFromBracket,
@@ -45,7 +47,11 @@ export default function DesktopUserActions() {
             <NavigationMenu.Item value="user">
               <NavigationMenu.Trigger className="h-full">
                 <div className="flex gap-2">
-                  {user && <span>{user.username}</span>}
+                  {user && (
+                    <span>
+                      {user.username.slice(0, user.username.indexOf("@"))}
+                    </span>
+                  )}
                   <FontAwesomeIcon
                     icon={faUser}
                     className={classNames(

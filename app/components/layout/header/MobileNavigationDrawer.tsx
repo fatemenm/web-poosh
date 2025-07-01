@@ -61,7 +61,10 @@ export default function MobileNavigationDrawer({
                         icon={faUser}
                         className="text-lg text-stone-600 hover:text-stone-800"
                       />
-                      <span>{user.username}</span>
+                      <span>
+                        {" "}
+                        {user.username.slice(0, user.username.indexOf("@"))}
+                      </span>
                     </Link>
                   ) : (
                     <button
