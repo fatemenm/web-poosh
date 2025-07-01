@@ -65,13 +65,13 @@ export default function Footer() {
         <div className="flex w-full flex-col">
           {/* container logo and sections */}
           <div className="flex flex-col items-center gap-4 lg:flex-row lg:items-start lg:justify-between lg:gap-10 lg:py-12">
-            <div className="w-6/12 xs:w-4/12 md:w-3/12 lg:w-2/12">
+            <Link href="/" className="w-6/12 xs:w-4/12 md:w-3/12 lg:w-2/12">
               <Image
                 src={logo}
                 alt="logo"
                 className="aspect-[2/1] w-full object-cover"
               />
-            </div>
+            </Link>
             <div className="sm:max-lg:grid sm:max-lg:w-full sm:max-lg:grid-cols-3 sm:max-lg:grid-rows-1 lg:flex lg:shrink lg:grow lg:basis-1/3 lg:flex-row lg:items-start lg:justify-between xl:grow-0">
               <div className="mb-10 flex flex-col items-center gap-2 text-stone-700 lg:mb-0 lg:items-start lg:gap-6">
                 <span className="text-md font-medium">درباره کایزن</span>
