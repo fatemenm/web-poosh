@@ -14,7 +14,6 @@ import * as ScrollArea from "@radix-ui/react-scroll-area";
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 import Overlay from "@/components/layout/header/Overlay";
@@ -30,8 +29,6 @@ export default function DesktopUserActions() {
   );
   const { items, removeItem } = useBasket();
   const { user, handleSignOut, openAuthModal } = useAuth();
-  const router = useRouter();
-  const pathname = usePathname();
   const handleSelect = () => setHoveredLeftNavbarItem("");
   return (
     <>
@@ -92,10 +89,6 @@ export default function DesktopUserActions() {
                       </Link>
                       <button
                         onClick={() => {
-                          if (pathname.includes("profile"))
-                            router.push("/", {
-                              scroll: false,
-                            });
                           handleSelect();
                           handleSignOut();
                         }}
