@@ -3,13 +3,6 @@ import ProductsSlider from "@/components/slider/ProductsSlider";
 import ProductView from "@/features/product/ProductView";
 import { getProductById, getProducts } from "@/lib/data";
 
-export async function generateStaticParams() {
-  const products = (await getProducts()).products;
-  return products.map((product) => ({
-    productId: product.data.documentId,
-  }));
-}
-
 export default async function Page({
   params,
 }: {
