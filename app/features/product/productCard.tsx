@@ -139,7 +139,10 @@ export default function ProductCard({
             <span
               key={index}
               className="h-4 w-4 rounded-full"
-              style={{ backgroundColor: color.hexCode }}
+              style={{
+                backgroundColor: color.hexCode,
+                border: "1px solid black",
+              }}
             />
           ))}
         </div>
