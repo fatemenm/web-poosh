@@ -68,7 +68,7 @@ export default function SizeGuideModal({
             {/* row 1 */}
             <div className="flex flex-col-reverse border-b-[1px] md:flex-row">
               <div className="flex w-full flex-row items-center justify-center rounded-tr-md md:w-1/2 md:bg-stone-100 md:px-6 md:py-3">
-                <div className="flex w-fit flex-col gap-2 rounded-md bg-white px-4 py-5 shadow-sm">
+                <div className="flex w-fit flex-col gap-2 rounded-md bg-white px-4 py-5 shadow-sm sm:w-full">
                   <span className="text-base font-normal text-stone-800 lg:text-xl">
                     {productName}
                   </span>

@@ -28,7 +28,7 @@ export default function SizeSelector({
             value={size.value}
             key={index}
             className={classNames(
-              "relative flex w-12 flex-wrap items-center justify-center border border-stone-400 px-4 py-2 text-sm text-neutral-500 last:border-l data-[state=on]:bg-stone-800 data-[state=on]:text-stone-50",
+              "relative flex w-fit flex-wrap items-center justify-center border border-stone-400 px-4 py-2 text-sm text-neutral-500 last:border-l data-[state=on]:bg-stone-800 data-[state=on]:text-stone-50",
               {
                 "hover:bg-stone-800 hover:text-stone-50": size.isAvailable,
               }
